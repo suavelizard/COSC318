@@ -1,9 +1,9 @@
 CLIENT
 TODO: Implement Player class
-TODO: Implement Client class
-TODO: Implement Weapon class
-TODO: Implement Projectile class
+TODO: Implement tests.client.Client class
+TODO: Implement tests.client.Weapon class
+TODO: Implement tests.client.Projectile class
 
 SERVER
-TODO:Implement Server class
-TODO:Implement Connection class
+TODO:Implement tests.server.Server class
+TODO:Implement tests.server.tests.client.Connection class

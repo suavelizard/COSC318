@@ -1,9 +1,8 @@
 /**
  * Created by Zane on 2014-11-06.
  */
+package tests.client;
 public class Player {
-    // Player does stuff
-
     private int health;
     private int moveSpeed;
     private boolean alive;
@@ -11,6 +10,7 @@ public class Player {
 
     public int getHealth() {
         return health;
+
     }
 
     public void setHealth(int health) {
@@ -47,8 +47,5 @@ public class Player {
         this.setScore(0);
         this.setMoveSpeed(10);
     }
-    
 
-
-    //hello world
 }
