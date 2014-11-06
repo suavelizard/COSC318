@@ -45,6 +45,9 @@ public class Player {
         this.setScore(0);
         this.setMoveSpeed(10);
     }
+    
+   // Player does stuff
+    
 
     //hello world
 }
