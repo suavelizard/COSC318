@@ -2,6 +2,8 @@
  * Created by Zane on 2014-11-06.
  */
 public class Player {
+    // Player does stuff
+
     private int health;
     private int moveSpeed;
     private boolean alive;
@@ -46,8 +48,7 @@ public class Player {
         this.setMoveSpeed(10);
     }
     
-   // Player does stuff
-    
+
 
     //hello world
 }
