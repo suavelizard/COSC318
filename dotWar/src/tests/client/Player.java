@@ -1,16 +1,18 @@
 /**
  * Created by Zane on 2014-11-06.
  */
-package tests.client;
 public class Player {
+    //hello world
+
+    
+
     private int health;
     private int moveSpeed;
     private boolean alive;
     private int score;
-
+    // Player does stuff
     public int getHealth() {
         return health;
-
     }
 
     public void setHealth(int health) {
@@ -47,5 +49,9 @@ public class Player {
         this.setScore(0);
         this.setMoveSpeed(10);
     }
+    
+   // Player does stuff
+    
 
+    //hello world
 }
