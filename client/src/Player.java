@@ -4,11 +4,13 @@
 public class Player {
     //hello world
 
+    
+
     private int health;
     private int moveSpeed;
     private boolean alive;
     private int score;
-
+    // Player does stuff
     public int getHealth() {
         return health;
     }
@@ -47,8 +49,9 @@ public class Player {
         this.setScore(0);
         this.setMoveSpeed(10);
     }
+    
+   // Player does stuff
+    
 
-    // Player does stuff
-
+    //hello world
 }
-
