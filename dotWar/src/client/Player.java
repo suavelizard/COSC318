@@ -1,16 +1,12 @@
 /**
  * Created by Zane on 2014-11-06.
  */
+package client;
 public class Player {
-    //hello world
-
-    
-
     private int health;
     private int moveSpeed;
     private boolean alive;
     private int score;
-    // Player does stuff
     public int getHealth() {
         return health;
     }

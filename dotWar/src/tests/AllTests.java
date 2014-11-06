@@ -13,6 +13,7 @@ public class AllTests {
     }
     public static junit.framework.Test suite (){
         TestSuite suite = new TestSuite("All JUnit Tests");
+        suite.addTest(new TestSuite(TestPlayer.class));
         return suite;
     }
 
