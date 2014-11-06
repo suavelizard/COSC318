@@ -1,7 +1,7 @@
 package tests;
 
 import junit.framework.TestCase;
-import tests.client.Player;
+import client.Player;
 /**
  * Created by Zane on 2014-11-06.
  */

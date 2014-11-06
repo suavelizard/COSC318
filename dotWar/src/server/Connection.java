@@ -1,7 +1,7 @@
-package tests.client;
+package server;
 
 /**
  * Created by Zane on 2014-11-06.
  */
-public class Powerup {
+public class Connection {
 }

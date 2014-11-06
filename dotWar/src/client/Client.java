@@ -1,4 +1,4 @@
-package tests.client;
+package client;
 
 /**
  * Created by Zane on 2014-11-06.
@@ -6,7 +6,7 @@ package tests.client;
 public class Client {
     public static void main(String args[]){
         //Start GUI
-        //Create tests.client.Connection
+        //Create client.Connection
         //
     }
 }
