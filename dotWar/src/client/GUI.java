@@ -2,29 +2,44 @@ package client;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 /**
  * Created by Zane on 2014-11-06.
  */
 public class GUI extends JFrame {
-    private JTextArea text = new JTextArea();
+    public String getServerIp() {
+        return serverIp;
+    }
 
+    private String serverIp;
     // Class constructor
     public GUI( String titleText ) {
-        super( titleText );
-        setJMenuBar( buildMenuBar() );
-        text.setEditable( false );
+        super(titleText);
+        setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
-        cp.add( new JScrollPane( text ),
-                BorderLayout.CENTER );
         setBounds(600,400, 600, 400 );
         setVisible( true );
     }
     public JMenuBar buildMenuBar() {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu( "File" );
+        JMenuItem connectItem = new JMenuItem( "Connect to Server" );
         JMenuItem exitItem = new JMenuItem( "Exit" );
+        connectItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                serverIp = JOptionPane.showInputDialog("Enter server address:");
+            }
+        });
+        exitItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent event) {
+                System.exit(0);
+            }
+        });
 
         JMenu editMenu = new JMenu( "Edit" );
         JMenuItem editSettings = new JMenuItem( "Settings" );
@@ -34,10 +49,12 @@ public class GUI extends JFrame {
         fileMenu.setMnemonic( KeyEvent.VK_F );
         exitItem.setMnemonic( KeyEvent.VK_X );
 
-        menuBar.add( fileMenu );
+        menuBar.add(fileMenu);
         menuBar.add( editMenu );
 
         //fileMenu.add(fileNewPeer);
+        fileMenu.add(connectItem);
+
         fileMenu.add(exitItem);
         editMenu.add(editSettings);
 
