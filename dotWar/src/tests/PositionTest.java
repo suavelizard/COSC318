@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class PositionPacketTest {
+public class PositionTest {
 
     @Before
     public void setUp() throws Exception {

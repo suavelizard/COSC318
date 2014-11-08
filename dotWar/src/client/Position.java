@@ -3,7 +3,7 @@ package client;
 /**
  * Created by Zane on 2014-11-06.
  */
-public class PositionPacket {
+public class Position {
     private double x;
     private double y;
 
@@ -23,7 +23,7 @@ public class PositionPacket {
         this.y = y;
     }
 
-    public PositionPacket(double x, double y) {
+    public Position(double x, double y) {
         this.x = x;
         this.y = y;
     }

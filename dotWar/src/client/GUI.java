@@ -20,7 +20,10 @@ public class GUI extends JFrame {
         super(titleText);
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
-        setBounds(600,400, 600, 400 );
+        JPanel game = new JPanel();
+        game.setBackground(Color.black);
+        cp.add(game);
+        setBounds(0,0, 1366, 768 );
         setVisible( true );
     }
     public JMenuBar buildMenuBar() {
@@ -28,12 +31,14 @@ public class GUI extends JFrame {
         JMenu fileMenu = new JMenu( "File" );
         JMenuItem connectItem = new JMenuItem( "Connect to Server" );
         JMenuItem exitItem = new JMenuItem( "Exit" );
+
         connectItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
                 serverIp = JOptionPane.showInputDialog("Enter server address:");
             }
         });
+
         exitItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event) {
@@ -43,8 +48,6 @@ public class GUI extends JFrame {
 
         JMenu editMenu = new JMenu( "Edit" );
         JMenuItem editSettings = new JMenuItem( "Settings" );
-
-
 
         fileMenu.setMnemonic( KeyEvent.VK_F );
         exitItem.setMnemonic( KeyEvent.VK_X );
