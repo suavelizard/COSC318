@@ -2,27 +2,38 @@ package client;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 /**
  * Created by Zane on 2014-11-06.
  */
-public class GUI extends JFrame {
+public class GUI extends JFrame{
     public String getServerIp() {
         return serverIp;
     }
 
     private String serverIp;
+    private JTextArea statusTextarea = null;
+    public void updateStatusTextareaText(String s){
+        statusTextarea.setText(statusTextarea.getText() +"\n"+ s);
+    }
     // Class constructor
     public GUI( String titleText ) {
         super(titleText);
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
+        cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
         JPanel game = new JPanel();
+        JPanel chatPane = new JPanel();
+        statusTextarea = new JTextArea();
         game.setBackground(Color.black);
         cp.add(game);
+
+        chatPane.add(statusTextarea);
+        cp.add(chatPane);
+
+        //addWindowListener(this);
+
         setBounds(0,0, 1366, 768 );
         setVisible( true );
     }
@@ -64,4 +75,5 @@ public class GUI extends JFrame {
 
         return menuBar;
     }
+
 }

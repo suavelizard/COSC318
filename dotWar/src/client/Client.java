@@ -1,6 +1,8 @@
 package client;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,14 +17,14 @@ public class Client {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private static Socket clientSocket;
-
+    static Client client = null;
 
     public Client() throws IOException, ClassNotFoundException{
-        System.out.println("Attempting to connect to server...");
+        //System.out.println("Attempting to connect to server...");
         clientSocket = new Socket(SERVER_ADDRESS,SERVER_PORT);
         setUpStreams(clientSocket);
-        Object o = in.readObject();
-        System.out.println((String)o);
+//        Object o = in.readObject();
+//        System.out.println((String)o);
     }
 
     //set up streams
@@ -32,10 +34,26 @@ public class Client {
     }
 
     public static void main(String args[]){
-        GUI mainUI = new GUI( "dotWar" );
+        final GUI mainUI = new GUI( "dotWar" );
+        mainUI.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent windowEvent) {
+                if (JOptionPane.showConfirmDialog(mainUI,
+                        "Are you sure to close this window?", "Really Closing?",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                    //client.out.writeObject();
+                    System.exit(0);
+                }
+            }
+        });
+
         mainUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         try{
-            new Client();
+            mainUI.updateStatusTextareaText("Attempting to Connect to Server..");
+
+            client = new Client();
+            mainUI.updateStatusTextareaText((String) client.in.readObject());
         } catch(IOException ioe){
             ioe.printStackTrace();
         } catch(ClassNotFoundException cnfe){

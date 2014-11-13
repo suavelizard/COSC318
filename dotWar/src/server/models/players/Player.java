@@ -33,7 +33,9 @@ public class Player extends Entity implements Runnable{
     public void setName(String name) {
         this.name = name;
     }
-
+    public Player(String name){
+        this.setName(name);
+    }
     public Player(String IPAddress, int port, String name){
         this.setIPAddress(IPAddress);
         this.setName(name);
