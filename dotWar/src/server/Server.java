@@ -26,7 +26,7 @@ public class Server {
     private ObjectInputStream in;
 
     private static ArrayList<Player> connectedPlayers = new ArrayList<Player>();
-
+    private static ArrayList<PlayerHandler> playerHandlers= new ArrayList<PlayerHandler>();
     public static void main(String args[]) {
         //connectedPlayers = new ArrayList<Player>();
         try {
@@ -43,45 +43,12 @@ public class Server {
         System.out.println("Server started successfully on port: " + SERVER_SOCKET);
         while (SERVER_RUNNING) {
             try {
-                while (true) {
-                    new PlayerHandler(serverSocket.accept(),connectedPlayers).start();
-                }
+                new PlayerHandler(serverSocket.accept(),connectedPlayers).start();
             } finally {
                 serverSocket.close();
             }
-            //clientSocket = serverSocket.accept(); //creates new sockets from the serverSocket connections this needs to be threaded
-            //System.out.println("Client connection from: " + clientSocket.getInetAddress());
-//            connectedPlayers.add(new Player(clientSocket.getInetAddress().toString(), SERVER_SOCKET, "Player"));
-//            setUpStreams(clientSocket);
-            //out.writeObject("[SERVER]: Welcome!");
-//            String connectedPlayersString = "";
-//            for (Player connectedPlayer : connectedPlayers) {
-//                connectedPlayersString += connectedPlayer.getIPAddress() + ":\n";
-//            }
-//            out.writeObject("[SERVER]: " + connectedPlayersString);
         }
     }
 
-//    public void sendData(byte[] data, InetAddress ipAddress, int port) {
-//        DatagramPacket packetToPlayer = new DatagramPacket(data, data.length, ipAddress, port);
-//        try {
-//            out.writeObject(packetToPlayer);
-//        } catch (IOException ioe) {
-//            ioe.printStackTrace();
-//        }
-//    }
-
-//    public void sendDataToAllPlayers(byte[] data) {
-//        for (Player connectedPlayer : connectedPlayers) {
-//            //sendData(data, connectedPlayer.getIPAddress(),connectedPlayer.getPort());
-//            // out.writeObject();
-//        }
-//    }
-
-    //set up streams
-    private void setUpStreams(Socket s) throws IOException {
-        out = new ObjectOutputStream(clientSocket.getOutputStream());
-        in = new ObjectInputStream(clientSocket.getInputStream());
-    }
 
 }

@@ -1,24 +1,32 @@
 package client;
 
+import client.packets.Packet;
+import client.packets.connectPacket;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOError;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 
 /**
  * Created by Zane on 2014-11-06.
  */
-public class GUI extends JFrame{
+public class GUI extends JFrame implements ActionListener{
     public String getServerIp() {
         return serverIp;
     }
+    private String SERVER_ADDRESS = "localhost";
+    private int SERVER_PORT = 9264;
 
     private String serverIp;
     private JTextArea statusTextarea = null;
-    public void updateStatusTextareaText(String s){
-        statusTextarea.setText(statusTextarea.getText() +"\n"+ s);
-    }
+
     // Class constructor
-    public GUI( String titleText ) {
+    public GUI( String titleText, Socket clientSocket ) throws IOException, ClassNotFoundException{
         super(titleText);
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
@@ -32,23 +40,18 @@ public class GUI extends JFrame{
         chatPane.add(statusTextarea);
         cp.add(chatPane);
 
-        //addWindowListener(this);
-
         setBounds(0,0, 1366, 768 );
         setVisible( true );
+
     }
+
     public JMenuBar buildMenuBar() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu( "File" );
-        JMenuItem connectItem = new JMenuItem( "Connect to Server" );
-        JMenuItem exitItem = new JMenuItem( "Exit" );
+        JMenu fileMenu = new JMenu("File");
+        JMenuItem connectItem = new JMenuItem("Connect to Server");
+        JMenuItem exitItem = new JMenuItem("Exit");
 
-        connectItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent event) {
-                serverIp = JOptionPane.showInputDialog("Enter server address:");
-            }
-        });
+        connectItem.addActionListener(this);
 
         exitItem.addActionListener(new ActionListener() {
             @Override
@@ -66,14 +69,30 @@ public class GUI extends JFrame{
         menuBar.add(fileMenu);
         menuBar.add( editMenu );
 
-        //fileMenu.add(fileNewPeer);
         fileMenu.add(connectItem);
 
         fileMenu.add(exitItem);
         editMenu.add(editSettings);
 
-
         return menuBar;
     }
+    public void actionPerformed(ActionEvent e){
+        JMenuItem source = (JMenuItem)(e.getSource());
+        System.out.println(source.getText());
+        if(source.getText() == "Connect to Server") {
+            serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address:");
+            if(isValidIP(serverIp)){
+                new ClientConnection();
+            }
+        }
+    }
+    public boolean isValidIP(String ip){
+        //test for valid ip
+        return true;
+    }
+    public void sendPacket(Packet p){
+
+    }
+
 
 }

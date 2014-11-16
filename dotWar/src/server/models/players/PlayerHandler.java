@@ -1,9 +1,6 @@
 package server.models.players;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,8 +11,8 @@ import java.util.HashSet;
 public class PlayerHandler extends Thread{
     private Player player;
     private Socket socket;
-    private BufferedReader in;
-    private PrintWriter out;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
     //private static HashSet<String> names = new HashSet<String>();
     private static ArrayList<Player> playerList = new ArrayList<Player>();
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
@@ -26,6 +23,7 @@ public class PlayerHandler extends Thread{
      * All the interesting work is done in the run method.
      */
     public PlayerHandler(Socket socket, ArrayList<Player> playerList) {
+        System.out.println("New client attempting to connect..");
         this.socket = socket;
     }
 
@@ -38,20 +36,31 @@ public class PlayerHandler extends Thread{
      */
     public void run() {
         try {
-
+            System.out.println("New thread for client at "+socket.getInetAddress()+" spawned.");
             // Create character streams for the socket.
-            in = new BufferedReader(new InputStreamReader(
-                    socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
+            out = new ObjectOutputStream(socket.getOutputStream());
+            in = new ObjectInputStream(socket.getInputStream());
+            System.out.println("Streams set up for new client.");
 
             // Request a name from this client.  Keep requesting until
             // a name is submitted that is not already used.  Note that
             // checking for the existence of a name and adding the name
             // must be done while locking the set of names.
-            while (true) {
-                out.println("[SERVER]: Enter Player Name:");
+            System.out.println("Requesting unique name for player..");
+            out.writeObject((Object)"[SERVER]: Enter Player Name:");
 
-                player = new Player(in.readLine()); //use limited constructor for a temporary player (could jsut use a string..)
+            while (true) {
+                //player = new Player(); //use limited constructor for a temporary player (could jsut use a string..)
+                String input = null;
+                try {
+
+                     input = in.readObject().toString();
+                }catch (ClassNotFoundException clnfe){
+                    clnfe.printStackTrace();
+                }
+                //System.out.println(input);
+                player = new Player(socket.getInetAddress().toString(),socket.getPort(), input);
+                //System.out.println(player.getName());
                 if (player.getName() == null) {
                     return;
                 }
@@ -63,7 +72,7 @@ public class PlayerHandler extends Thread{
                         }
                     }
                     if (!doesPlayerExist) {
-                        playerList.add(new Player(socket.getInetAddress().toString(),socket.getPort(), player.getName()));
+                        playerList.add(player);
                         break;
                     }
                 }
@@ -72,8 +81,10 @@ public class PlayerHandler extends Thread{
             // Now that a successful name has been chosen, add the
             // socket's print writer to the set of all writers so
             // this client can receive broadcast messages.
-            out.println("[SERVER]: Name accepted.");
-            writers.add(out);
+            System.out.println("Name accepted: " + player.getName());
+
+            out.writeObject((Object)"[SERVER]: Name accepted.");
+            //writers.add(out);
 
             // Accept messages from this client and broadcast them.
             // Ignore other clients that cannot be broadcast to.
