@@ -59,9 +59,8 @@ public class Player {
         this.setMoveSpeed(10);
         this.setPosition(new Position(400.0,400.0));
     }
-
+    
     //I don't think we need this, I added methods to the position class to handle movement
-    //
     public void updatePosition(){
         //movement
     }
