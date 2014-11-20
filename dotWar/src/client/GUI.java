@@ -25,13 +25,14 @@ public class GUI extends JFrame implements ActionListener{
     private String serverIp;
     private JTextArea statusTextarea = null;
 
+
     // Class constructor
     public GUI( String titleText, Socket clientSocket ) throws IOException, ClassNotFoundException{
         super(titleText);
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
-        JPanel game = new JPanel();
+        JPanel game = new GamePanel();
         JPanel chatPane = new JPanel();
         statusTextarea = new JTextArea();
         game.setBackground(Color.black);
@@ -82,7 +83,7 @@ public class GUI extends JFrame implements ActionListener{
         if(source.getText() == "Connect to Server") {
             serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address:");
             if(isValidIP(serverIp)){
-                new ClientConnection();
+                //new ClientConnection();
             }
         }
     }

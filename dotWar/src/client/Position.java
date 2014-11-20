@@ -23,6 +23,26 @@ public class Position {
         this.y = y;
     }
 
+    //Move right r
+    public void moveRight(double r) {
+        this.x += r;
+    }
+
+    //Move left l
+    public void moveLeft(double l) {
+        this.x -= l;
+    }
+
+    //Move up u
+    public void moveUp(double u) {
+        this.y -= u;
+    }
+
+    //Move down d
+    public void moveDown(double d) {
+        this.y += d;
+    }
+
     public Position(double x, double y) {
         this.x = x;
         this.y = y;

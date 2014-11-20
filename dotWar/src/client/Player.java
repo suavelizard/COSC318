@@ -59,7 +59,10 @@ public class Player {
         this.setMoveSpeed(10);
         this.setPosition(new Position(400.0,400.0));
     }
-    public void updatePoisition(){
+
+    //I don't think we need this, I added methods to the position class to handle movement
+    //
+    public void updatePosition(){
         //movement
     }
     public void attack(){
@@ -74,12 +77,28 @@ public class Player {
                 attack();
             case KeyEvent.VK_LEFT:
                 //move left
+                position.moveLeft(moveSpeed);
             case KeyEvent.VK_RIGHT:
                 //move right
+                position.moveRight(moveSpeed);
             case KeyEvent.VK_UP:
                 //move up
+                position.moveUp(moveSpeed);
             case KeyEvent.VK_DOWN:
                 //move down
+                position.moveDown(moveSpeed);
+            case KeyEvent.VK_D:
+                //move right
+                position.moveRight(moveSpeed);
+            case KeyEvent.VK_A:
+                //move left
+                position.moveLeft(moveSpeed);
+            case KeyEvent.VK_W:
+                //move up
+                position.moveUp(moveSpeed);
+            case KeyEvent.VK_S:
+                //move down
+                position.moveDown(moveSpeed);
         }
     }
 }
