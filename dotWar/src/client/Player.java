@@ -64,40 +64,48 @@ public class Player {
     public void updatePosition(){
         //movement
     }
-    public void attack(){
+    public void attack(Position mousePos){
         //attack
+        Projectile projectile = new Projectile(position,mousePos,2,2);
+
     }
     //control keys
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
+
         switch (key){
-            case KeyEvent.VK_SPACE:
-                //Do attack
-                attack();
             case KeyEvent.VK_LEFT:
                 //move left
                 position.moveLeft(moveSpeed);
+                break;
             case KeyEvent.VK_RIGHT:
                 //move right
                 position.moveRight(moveSpeed);
+                break;
             case KeyEvent.VK_UP:
                 //move up
                 position.moveUp(moveSpeed);
+                break;
             case KeyEvent.VK_DOWN:
                 //move down
                 position.moveDown(moveSpeed);
+                break;
             case KeyEvent.VK_D:
                 //move right
                 position.moveRight(moveSpeed);
+                break;
             case KeyEvent.VK_A:
                 //move left
                 position.moveLeft(moveSpeed);
+                break;
             case KeyEvent.VK_W:
                 //move up
                 position.moveUp(moveSpeed);
+                break;
             case KeyEvent.VK_S:
                 //move down
                 position.moveDown(moveSpeed);
+                break;
         }
     }
 }
