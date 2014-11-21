@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * Created by Zane on 2014-11-06.
@@ -42,7 +43,7 @@ public class GUI extends JFrame implements ActionListener{
         cp.add(chatPane);
 
         setBounds(0,0, 1366, 768 );
-        setVisible( true );
+        setVisible(true);
 
     }
 
@@ -83,7 +84,12 @@ public class GUI extends JFrame implements ActionListener{
         if(source.getText() == "Connect to Server") {
             serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address:");
             if(isValidIP(serverIp)){
-                //new ClientConnection();
+                try {
+                    Socket clientSocket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+
+                }catch(Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }

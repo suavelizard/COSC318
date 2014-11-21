@@ -53,4 +53,14 @@ public class Projectile {
         this.setMoveSpeed(moveSpeed);
         this.setDamage(damage);
     }
+
+    public void move() {
+        double differenceX = position.getX() - targetPos.getX();
+        double differenceY = position.getY() - targetPos.getY();
+
+        double angle = (float)Math.atan2(differenceY, differenceX) * 180 / Math.PI;
+
+        position.setX(position.getX()+ Math.cos(angle * Math.PI/180) * moveSpeed);
+        position.setY(position.getY()+ Math.sin(angle * Math.PI /180) * moveSpeed);
+    }
 }

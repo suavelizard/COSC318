@@ -25,6 +25,7 @@ public class PlayerHandler extends Thread{
     public PlayerHandler(Socket socket, ArrayList<Player> playerList) {
         System.out.println("New client attempting to connect..");
         this.socket = socket;
+
     }
 
     /**
@@ -39,7 +40,7 @@ public class PlayerHandler extends Thread{
             System.out.println("New thread for client at "+socket.getInetAddress()+" spawned.");
             // Create character streams for the socket.
             out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
+            //in = new ObjectInputStream(socket.getInputStream());
             System.out.println("Streams set up for new client.");
 
             // Request a name from this client.  Keep requesting until
