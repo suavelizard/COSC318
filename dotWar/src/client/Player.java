@@ -81,7 +81,14 @@ public class Player {
     public void setScore(int score) {
         this.score = score;
     }
-
+    public void takeDamage(double damage){
+        if(this.getHealth() - damage <= 0){
+            setAlive(false);
+            this.setHealth(0);
+        }else {
+            this.setHealth(this.getHealth() - (int) damage);
+        }
+    }
     public Player() {
         this.setPlayerHeight(10);
         this.setPlayerWidth(10);

@@ -24,10 +24,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
+        playerStats = new JLabel("" + player.getHealth());
         enemyStats = new JLabel("" + enemy.getHealth());
         enemyStats.setSize(100, 100);
         enemyStats.setBackground(Color.WHITE);
         add(enemyStats);
+//        playerStats.setVerticalAlignment((int)player.getPosition().getY());
+        add(playerStats);
     }
 
     public void initPlayers() {
@@ -43,8 +46,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
         g2d.setColor(Color.WHITE);
-        g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),player.getPlayerWidth(),player.getPlayerHeight());
+        g2d.fillRect((int) player.getPosition().getX(), (int) player.getPosition().getY(), player.getPlayerWidth(), player.getPlayerHeight());
+        g2d.drawString("" + player.getHealth(), (int) player.getPosition().getX() + 15, (int) player.getPosition().getY());
         g2d.fillRect((int) enemy.getPosition().getX(), (int) enemy.getPosition().getY(), 10, 10);
+        g2d.drawString(""+enemy.getHealth(),(int)enemy.getPosition().getX()+15,(int)enemy.getPosition().getY());
         if(checkOutOfBounds(player.getPosition()) !=0){
             switch (checkOutOfBounds(player.getPosition())){
                 case 1:
@@ -61,26 +66,28 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     break;
             }
             player.updatePosition();
+            //playerStats.setVerticalAlignment((int)player.getPosition().getY());
         } else {
             player.updatePosition();
+            //playerStats.setVerticalAlignment((int)player.getPosition().getY());
         }
         for (Projectile p : projectileArray) {
             g2d.fillRect((int) p.getPosition().getX(), (int) p.getPosition().getY(), 4, 4);
             p.move();
-            if(checkOutOfBounds(p.getPosition()) != 0) {
+            if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
             int c = collision(enemy.getPosition(), p.getPosition());
             if(c == 0){
 
-                enemy.setHealth((int) (enemy.getHealth() - p.getDamage()));
+                enemy.takeDamage(p.getDamage());
                 projectileArray.remove(p);
             }
         }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }
-    //TODO: Try todo
+
     public int collision(Position p1,Position p2) {
         int side = 0;
         //Check if left side of p1 is more than right side of p2
@@ -100,13 +107,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         return side;
     }
+
+    /*
+    DEFAULT not out of bounds 0
+    TOP 1
+    BOTTOM 2
+    RIGHT 3
+    LEFT 4
+    */
     public int checkOutOfBounds(Position p){
-        //default no collision 0
-        //top 1
-        //bottom 2
-        //right 3
-        //left 4
-        //TODO: move player width and height inside player object
         if(p.getY() < 0) {
             return 1;
         }
