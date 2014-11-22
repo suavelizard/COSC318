@@ -37,16 +37,38 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         super.paint(g2d);
         g2d.setColor(Color.WHITE);
         g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),10,10);
-        player.updatePosition();
+        if(checkOutOfBounds(player.getPosition()) == 0) {
+            player.updatePosition();
+        }
         for (Projectile p : projectileArray) {
             g2d.fillRect((int) p.getPosition().getX(), (int) p.getPosition().getY(), 4, 4);
             p.move();
-            if(p.getPosition().getX() > this.getBounds().getWidth() || p.getPosition().getY() > this.getBounds().getHeight()) {
+            if(checkOutOfBounds(p.getPosition()) != 0) {
                 projectileArray.remove(p);
             }
         }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
+    }
+    public int checkOutOfBounds(Position p){
+        //default no collision 0
+        //top 1
+        //bottom 2
+        //right 3
+        //left 4
+        if(player.getPosition().getY() < 0) {
+            return 1;
+        }
+        if(player.getPosition().getY() > this.getBounds().getHeight()) {
+            return 2;
+        }
+        if(player.getPosition().getX() > this.getBounds().getWidth()) {
+            return 3;
+        }
+        if(player.getPosition().getX() < 0) {
+            return 4;
+        }
+        return 0;
     }
 
     public void keyPressed(KeyEvent e){
