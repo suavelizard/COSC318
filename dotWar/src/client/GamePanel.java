@@ -134,7 +134,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
-            if(collision(p.getPosition(),enemy.getPosition()) >0 ){ //reverted back from the new checkCollision method..
+            if(collision(p.getPosition(), enemy.getPosition()) ){ //reverted back from the new checkCollision method..
                 enemy.takeDamage(p.getDamage());
                //projectileArray.remove(p);
                 //enemyStats.setText("" + enemy.getHealth());
@@ -151,23 +151,23 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         g2d.dispose();
     }
 
-    public int collision(Position p1,Position p2) {
-        int side = 0;
+    public boolean collision(Position p1,Position p2) {
+        boolean collide = true;
         //Check if left side of p1 is more than right side of p2
         if(p1.getX() > p2.getX()+5) {
-            side = 1;
+            collide = false;
         }
         //Check if right side of p1 is less than left side of p2
         else if(p1.getX()+5 < p2.getX()) {
-            side = 2;
+            collide = false;
         }
         else if(p1.getY() > p2.getY()+5) {
-            side = 3;
+            collide = false;
         }
         else if(p1.getY()+5 < p2.getY()) {
-            side = 4;
+            collide = false;
         }
-        return side;
+        return collide;
     }
     //GENERAL COLLISION DETECTION FOR ALL ENTITIES - MAY BE BROKEN
     public boolean checkCollisions(Entity e1, Entity e2) {
