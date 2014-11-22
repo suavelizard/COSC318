@@ -11,25 +11,32 @@ import java.util.ArrayList;
  */
 public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private Player player;
+    private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
+    private JLabel playerStats;
+    private JLabel enemyStats;
 
     public GamePanel() {
         //Get player information from server
         initPlayers();
         setPreferredSize(new Dimension(800, 768));
-        setBounds(0,0, 800, 768 );
+        setBounds(0, 0, 800, 768);
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
+        enemyStats = new JLabel("" + enemy.getHealth());
+        enemyStats.setSize(100, 100);
+        enemyStats.setBackground(Color.WHITE);
+        add(enemyStats);
     }
 
     public void initPlayers() {
 
         //Placeholders
         player = new Player();
-        //enemy = new Player();
+        enemy = new Player();
         player.setPosition(new Position(20, 20));
-        //enemy.setPosition(new Position(300,300));
+        enemy.setPosition(new Position(300,300));
     }
 
     public void paint(Graphics g) {
@@ -37,6 +44,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         super.paint(g2d);
         g2d.setColor(Color.WHITE);
         g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),player.getPlayerWidth(),player.getPlayerHeight());
+        g2d.fillRect((int) enemy.getPosition().getX(), (int) enemy.getPosition().getY(), 10, 10);
         if(checkOutOfBounds(player.getPosition()) !=0){
             switch (checkOutOfBounds(player.getPosition())){
                 case 1:
@@ -62,9 +70,35 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(checkOutOfBounds(p.getPosition()) != 0) {
                 projectileArray.remove(p);
             }
+            int c = collision(enemy.getPosition(), p.getPosition());
+            if(c == 0){
+
+                enemy.setHealth((int) (enemy.getHealth() - p.getDamage()));
+                projectileArray.remove(p);
+            }
         }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
+    }
+    //TODO: Try todo
+    public int collision(Position p1,Position p2) {
+        int side = 0;
+        //Check if left side of p1 is more than right side of p2
+        if(p1.getX()-3 > p2.getX()+3) {
+            side = 1;
+        }
+        //Check if right side of p1 is less than left side of p2
+        if(p1.getX()+3 < p2.getX()-3) {
+            side = 2;
+        }
+        if(p1.getY()-3 > p2.getY()+3) {
+            side = 3;
+        }
+        if(p1.getY()+3 < p2.getX()-3) {
+            side = 4;
+        }
+
+        return side;
     }
     public int checkOutOfBounds(Position p){
         //default no collision 0
