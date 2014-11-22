@@ -134,7 +134,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
-            if(checkCollisions(p,enemy) ){ //reverted back from the new checkCollision method..
+            if(checkCollisions(p,enemy) ){
                 enemy.takeDamage(p.getDamage());
                 System.out.println("Enemy took damage");
                //projectileArray.remove(p);
@@ -142,7 +142,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                 //projectileArray.remove(p);
             }
                 projectileArray.remove(p);
-            }*/
+            
 //            int c = collision(enemy.getPosition(), p.getPosition());
 //            if(c == 0){
 //                enemy.takeDamage(p.getDamage());
