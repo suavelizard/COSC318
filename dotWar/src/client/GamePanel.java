@@ -134,12 +134,18 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
-            if(collision(p.getPosition(), enemy.getPosition()) ){ //reverted back from the new checkCollision method..
+                if(checkCollisions(p,enemy)){
+                    enemy.takeDamage(p.getDamage());
+                    //projectileArray.remove(p);
+                    //enemyStats.setText("" + enemy.getHealth());
+                    projectileArray.remove(p);
+                }
+            /*if(collision(p.getPosition(), enemy.getPosition()) ){ //reverted back from the new checkCollision method..
                 enemy.takeDamage(p.getDamage());
                //projectileArray.remove(p);
                 //enemyStats.setText("" + enemy.getHealth());
                 projectileArray.remove(p);
-            }
+            }*/
 //            int c = collision(enemy.getPosition(), p.getPosition());
 //            if(c == 0){
 //                enemy.takeDamage(p.getDamage());
@@ -171,7 +177,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     }
     //GENERAL COLLISION DETECTION FOR ALL ENTITIES - MAY BE BROKEN
     public boolean checkCollisions(Entity e1, Entity e2) {
-        Rectangle r1 = e2.getBounds();
+        Rectangle r1 = e1.getBounds();
         Rectangle r2 = e2.getBounds();
         //cant get hit by your own bullets?
         if(e1.equals(player) || e1.equals(player)){
