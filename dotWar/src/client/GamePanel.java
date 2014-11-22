@@ -37,7 +37,23 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         super.paint(g2d);
         g2d.setColor(Color.WHITE);
         g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),player.getPlayerWidth(),player.getPlayerHeight());
-        if(checkOutOfBounds(player.getPosition()) == 0) {
+        if(checkOutOfBounds(player.getPosition()) !=0){
+            switch (checkOutOfBounds(player.getPosition())){
+                case 1:
+                    player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY()+15));
+                    break;
+                case 2:
+                    player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY() - 15));
+                    break;
+                case 3:
+                    player.setPosition(new Position(player.getPosition().getX() -15, player.getPosition().getY()));
+                    break;
+                case 4:
+                    player.setPosition(new Position(player.getPosition().getX()+15, player.getPosition().getY()));
+                    break;
+            }
+            player.updatePosition();
+        } else {
             player.updatePosition();
         }
         for (Projectile p : projectileArray) {
@@ -57,16 +73,16 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         //right 3
         //left 4
         //TODO: move player width and height inside player object
-        if(player.getPosition().getY() < 0) {
+        if(p.getY() < 0) {
             return 1;
         }
-        if(player.getPosition().getY()+player.getPlayerHeight() > this.getBounds().getHeight()) {
+        if(p.getY()+player.getPlayerHeight() > this.getBounds().getHeight()) {
             return 2;
         }
-        if(player.getPosition().getX()+player.getPlayerWidth() > this.getBounds().getWidth()) {
+        if(p.getX()+player.getPlayerWidth() > this.getBounds().getWidth()) {
             return 3;
         }
-        if(player.getPosition().getX() < 0) {
+        if(p.getX() < 0) {
             return 4;
         }
         return 0;
