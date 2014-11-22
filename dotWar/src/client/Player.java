@@ -24,6 +24,14 @@ public class Player {
         this.position = position;
     }
 
+    public int getRightMove() {
+        return rightMove;
+    }
+
+    public void setRightMove(int rightMove) {
+        this.rightMove = rightMove;
+    }
+
     public int getHealth() {
         return health;
     }
