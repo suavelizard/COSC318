@@ -14,6 +14,8 @@ public class Player {
     private int downMove;
     private boolean alive;
     private int score;
+    private int playerHeight;
+    private int playerWidth;
     private Position position;
 
     public Position getPosition() {
@@ -22,6 +24,22 @@ public class Player {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public int getPlayerWidth() {
+        return playerWidth;
+    }
+
+    public void setPlayerWidth(int playerWidth) {
+        this.playerWidth = playerWidth;
+    }
+
+    public int getPlayerHeight() {
+        return playerHeight;
+    }
+
+    public void setPlayerHeight(int playerHeight) {
+        this.playerHeight = playerHeight;
     }
 
     public int getRightMove() {
@@ -65,13 +83,24 @@ public class Player {
     }
 
     public Player() {
+        this.setPlayerHeight(10);
+        this.setPlayerWidth(10);
         this.setHealth(100);
         this.setAlive(true);
         this.setScore(0);
         this.setMoveSpeed(3);
         this.setPosition(new Position(400.0,400.0));
     }
-    
+    //constructor with player size
+    public Player(int width,int height){
+        this.setPlayerHeight(width);
+        this.setPlayerWidth(height);
+        this.setHealth(100);
+        this.setAlive(true);
+        this.setScore(0);
+        this.setMoveSpeed(3);
+        this.setPosition(new Position(400.0, 400.0));
+    }
     //I don't think we need this, I added methods to the position class to handle movement
     public void updatePosition(){
         //movement
