@@ -8,8 +8,10 @@ import java.awt.event.KeyEvent;
 public class Player {
     private int health;
     private int moveSpeed;
-    private int xMove;
-    private int yMove;
+    private int rightMove;
+    private int leftMove;
+    private int upMove;
+    private int downMove;
     private boolean alive;
     private int score;
     private Position position;
@@ -65,8 +67,8 @@ public class Player {
     //I don't think we need this, I added methods to the position class to handle movement
     public void updatePosition(){
         //movement
-        position.moveRight(xMove);
-        position.moveDown(yMove);
+        position.moveRight(rightMove - leftMove);
+        position.moveDown(downMove - upMove);
     }
     public void attack(Position mousePos){
         //attack
@@ -81,42 +83,42 @@ public class Player {
             case KeyEvent.VK_LEFT:
                 //move left
                 //position.moveLeft(moveSpeed);
-                xMove = -moveSpeed;
+                leftMove = moveSpeed;
                 break;
             case KeyEvent.VK_RIGHT:
                 //move right
                 //position.moveRight(moveSpeed);
-                xMove = moveSpeed;
+                rightMove = moveSpeed;
                 break;
             case KeyEvent.VK_UP:
                 //move up
                 //position.moveUp(moveSpeed);
-                yMove = -moveSpeed;
+                upMove = moveSpeed;
                 break;
             case KeyEvent.VK_DOWN:
                 //move down
                 //position.moveDown(moveSpeed);
-                yMove = moveSpeed;
+                downMove = moveSpeed;
                 break;
             case KeyEvent.VK_D:
                 //move right
                 //position.moveRight(moveSpeed);
-                xMove = moveSpeed;
+                rightMove = moveSpeed;
                 break;
             case KeyEvent.VK_A:
                 //move left
                 //position.moveLeft(moveSpeed);
-                xMove = -moveSpeed;
+                leftMove = moveSpeed;
                 break;
             case KeyEvent.VK_W:
                 //move up
                 //position.moveUp(moveSpeed);
-                yMove = -moveSpeed;
+                upMove = moveSpeed;
                 break;
             case KeyEvent.VK_S:
                 //move down
                 //position.moveDown(moveSpeed);
-                yMove = moveSpeed;
+                downMove = moveSpeed;
                 break;
         }
     }
@@ -128,42 +130,42 @@ public class Player {
             case KeyEvent.VK_LEFT:
                 //move left
                 //position.moveLeft(0);
-                xMove = -0;
+                leftMove = 0;
                 break;
             case KeyEvent.VK_RIGHT:
                 //move right
                 //position.moveRight(0);
-                xMove = 0;
+                rightMove = 0;
                 break;
             case KeyEvent.VK_UP:
                 //move up
                 //position.moveUp(0);
-                yMove = -0;
+                upMove = 0;
                 break;
             case KeyEvent.VK_DOWN:
                 //move down
                 //position.moveDown(0);
-                yMove = 0;
+                downMove = 0;
                 break;
             case KeyEvent.VK_D:
                 //move right
                 //position.moveRight(0);
-                xMove = 0;
+                rightMove = 0;
                 break;
             case KeyEvent.VK_A:
                 //move left
                 //position.moveLeft(0);
-                xMove = -0;
+                leftMove = 0;
                 break;
             case KeyEvent.VK_W:
                 //move up
                 //position.moveUp(0);
-                yMove = -0;
+                upMove = 0;
                 break;
             case KeyEvent.VK_S:
                 //move down
                 //position.moveDown(0);
-                yMove = 0;
+                downMove = 0;
                 break;
         }
     }
