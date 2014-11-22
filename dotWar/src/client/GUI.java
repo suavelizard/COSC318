@@ -45,9 +45,24 @@ public class GUI extends JFrame implements ActionListener{
         setBounds(0,0, 1366, 768 );
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        while(true) {
-//            game.repaint();
-//        }
+
+        long start, elapsed, wait;
+        while(true) {
+            start = System.currentTimeMillis();
+            game.repaint();
+            elapsed = System.currentTimeMillis() - start;
+            try {
+                if (elapsed < 20) {
+                    Thread.sleep(20 - elapsed);
+                } else {
+                    // don't starve the garbage collector
+                    Thread.sleep(5);
+                }
+            }
+            catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public JMenuBar buildMenuBar() {

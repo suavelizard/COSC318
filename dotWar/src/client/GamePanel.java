@@ -53,7 +53,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         int key = e.getKeyCode();
         int moveSpeed = 2;
         player.keyPressed(e);
-        repaint();
+        //repaint();
     }
 
     public void keyReleased(KeyEvent e){
@@ -73,7 +73,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Position mousePos = new Position(e.getX(), e.getY());
         Position playerPos = new Position(player.getPosition().getX(),player.getPosition().getY());
         projectileArray.add(new Projectile(playerPos, mousePos, 5, 5));
-        repaint();
+        //repaint();
     }
 
     @Override
