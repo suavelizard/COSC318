@@ -1,5 +1,30 @@
+/*
+ * Copyright (c) 2014 Zane Ouimet, Nicholas Wilkinson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package client;
 
+import client.entities.Entity;
+import client.entities.Player;
+import client.entities.Projectile;
 import client.entities.Wall;
 
 import javax.swing.*;
@@ -99,9 +124,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             //playerStats.setVerticalAlignment((int)player.getPosition().getY());
         }
 
-        for (Projectile p : projectileArray) {
-            p.draw(g2d);
+        //for (int i =0; i < projectileArray.size(); i++) {
+
+            for(Projectile p:projectileArray){
             p.move();
+            p.draw(g2d);
             if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
@@ -116,6 +143,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 //                enemy.takeDamage(p.getDamage());
 //                projectileArray.remove(p);
 //            }
+
         }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
@@ -139,10 +167,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         }
         return side;
     }
-
+    //GENERAL COLLISION DETECTION FOR ALL ENTITIES - MAY BE BROKEN
     public boolean checkCollisions(Entity e1, Entity e2) {
         Rectangle r1 = e2.getBounds();
         Rectangle r2 = e2.getBounds();
+        //cant get hit by your own bullets?
         if(e1.equals(player) || e1.equals(player)){
             System.out.println("pew");
             return false;
@@ -153,8 +182,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             return false;
         }
     }
-    //public int checkCollision(Ob)
-
     /*
     DEFAULT not out of bounds 0
     TOP 1
@@ -163,19 +190,14 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     LEFT 4
     */
     public int checkOutOfBounds(Position p){
-        //default no collision 0
-        //top 1
-        //bottom 2
-        //right 3
-        //left 4
         //TODO: move player width and height inside player object
         if(p.getY() < 0) {
             return 1;
         }
-        if(p.getY()+player.getHeight() > this.getBounds().getHeight()) {
+        if(p.getY()+player.getHeight() > this.getHeight()) {
             return 2;
         }
-        if(p.getX()+player.getWidth() > this.getBounds().getWidth()) {
+        if(p.getX()+player.getWidth() > this.getWidth()) {
             return 3;
         }
         if(p.getX() < 0) {
@@ -206,9 +228,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         Position mousePos = new Position(e.getX(), e.getY());
-        Position playerPos = new Position(player.getPosition().getX(),player.getPosition().getY());
-        projectileArray.add(new Projectile(playerPos, mousePos, 5, 5));
-        //repaint();
+        projectileArray.add(new Projectile(player.getPosition(), mousePos, 5, 5));
     }
 
     @Override

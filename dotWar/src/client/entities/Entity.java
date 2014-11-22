@@ -29,6 +29,10 @@ import java.awt.*;
 /**
  * Created by Zane on 2014-11-21.
  */
+
+/**
+ * This class is used to create game entities like walls, players, bullets, powerups, etc.
+ */
 public abstract class Entity {
     private Position position;
     private int width;

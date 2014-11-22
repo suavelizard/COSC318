@@ -70,6 +70,8 @@ public class Projectile extends Entity{
 
     public Projectile(Position position, Position targetPos, int moveSpeed, double damage) {
         super.setPosition(position);
+        super.setWidth(3);
+        super.setHeight(3);
         this.setTargetPos(targetPos);
         this.setMoveSpeed(moveSpeed);
         this.setDamage(damage);
@@ -86,6 +88,7 @@ public class Projectile extends Entity{
 
         this.setPosition(new Position((int)this.getPosition().getX() - Math.cos(angle * Math.PI / 180) * moveSpeed,
                 (int)this.getPosition().getY() - Math.sin(angle * Math.PI / 180) * moveSpeed));
+
 
     }
     public void draw(Graphics g){

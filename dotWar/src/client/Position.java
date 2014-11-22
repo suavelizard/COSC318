@@ -69,4 +69,8 @@ public class Position {
         this.x = x;
         this.y = y;
     }
+    public Position(Position p){
+        this.setX(p.getX());
+        this.setY(p.getY());
+    }
 }
