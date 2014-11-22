@@ -128,17 +128,18 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         //for (int i =0; i < projectileArray.size(); i++) {
 
-            for(Projectile p:projectileArray){
+        for(Projectile p:projectileArray){
             p.move();
             p.draw(g2d);
             if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
-            if(collision(p.getPosition(),enemy.getPosition()) >0 ){ //reverted back from the new checkCollision method..
+            if(checkCollisions(p,enemy) ){ //reverted back from the new checkCollision method..
                 enemy.takeDamage(p.getDamage());
+                System.out.println("Enemy took damage");
                //projectileArray.remove(p);
                 //enemyStats.setText("" + enemy.getHealth());
-                projectileArray.remove(p);
+                //projectileArray.remove(p);
             }
 //            int c = collision(enemy.getPosition(), p.getPosition());
 //            if(c == 0){
@@ -169,15 +170,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         }
         return side;
     }
-    //GENERAL COLLISION DETECTION FOR ALL ENTITIES - MAY BE BROKEN
+    //GENERAL COLLISION DETECTION FOR ALL ENTITIES
     public boolean checkCollisions(Entity e1, Entity e2) {
-        Rectangle r1 = e2.getBounds();
+        Rectangle r1 = e1.getBounds();
         Rectangle r2 = e2.getBounds();
-        //cant get hit by your own bullets?
-        if(e1.equals(player) || e1.equals(player)){
-            System.out.println("pew");
-            return false;
-        } else if(r1.intersects(r2)){
+        if(r1.intersects(r2)){
             //collision occurred!
             return true;
         } else{

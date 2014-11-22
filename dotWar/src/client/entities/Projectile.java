@@ -92,6 +92,7 @@ public class Projectile extends Entity{
 
     }
     public void draw(Graphics g){
+        g.setColor(Color.BLACK);
         g.fillRect((int) this.getPosition().getX(), (int) this.getPosition().getY(), 4, 4);
     }
 }
