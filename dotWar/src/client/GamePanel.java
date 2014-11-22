@@ -20,6 +20,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private JProgressBar playerHealth;
     public GamePanel() {
         //Get player information from server
+
         this.setLayout(null);
         initPlayers();
         setPreferredSize(new Dimension(800, 768));
@@ -27,10 +28,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
+
         initLabels();
         
     }
-    
+
     public void initLabels() {
         int width = this.getWidth();
         int height = this.getHeight();
@@ -65,7 +67,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         //Placeholders
         player = new client.entities.Player(100,100,"Zane");
         enemy = new Player();
-        wall1 = new client.entities.Wall(new Position(400,300),15,300);
+        //wall1 = new client.entities.Wall(new Position(400,300),15,300);
+        System.out.println("Got Here");
         player.setPosition(new Position(20, 20));
         enemy.setPosition(new Position(300,300));
     }
@@ -74,7 +77,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
 
-        wall1.draw(g2d);
+        //wall1.draw(g2d);
 //        g2d.drawImage(player.getPlayerImage(), (int) player.getPosition().getX(), (int) player.getPosition().getY(), this);
 //        g2d.setColor(new Color(255,107,107));
 //        g2d.fillRect((int) player.getPosition().getX() + 10, (int) player.getPosition().getY()-5, 50, 5);
