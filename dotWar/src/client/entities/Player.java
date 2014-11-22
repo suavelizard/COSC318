@@ -1,10 +1,31 @@
+/*
+ * Copyright (c) 2014 Zane Ouimet, Nicholas Wilkinson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 /**
  * Created by Zane on 2014-11-06.
  */
 package client.entities;
 
 import client.Position;
-import client.Projectile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +42,15 @@ public class Player extends Entity{
     private int score;
     private Position position;
     private String name;
-    private String playerImageString = "/assets/players/player.png";
+    private String playerImageString = "/assets/players/player-default.png";
 
+    public String getPlayerImageString() {
+        return playerImageString;
+    }
+
+    public void setPlayerImageString(String playerImageString) {
+        this.playerImageString = playerImageString;
+    }
 
     public String getName() {
         return name;
@@ -90,6 +118,7 @@ public class Player extends Entity{
         }
     }
     public Player() {
+        super();
         super.setHeight(10);
         super.setWidth(10);
         this.setHealth(100);
@@ -121,7 +150,23 @@ public class Player extends Entity{
         ImageIcon ii = new ImageIcon(this.getClass().getResource(playerImageString));
         //super.setImage(ii.getImage());
         Image img = ii.getImage();
-        Image newimg = img.getScaledInstance(10, 10,  java.awt.Image.SCALE_SMOOTH);
+        Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
+        super.setImage(new ImageIcon(newimg).getImage());
+    }
+    //FULL CONSTRUCTOR
+    public Player(int width, int height,String name,String imageString){
+        super.setWidth(width);
+        super.setHeight(height);
+        this.setHealth(100);
+        this.setAlive(true);
+        this.setScore(0);
+        this.setMoveSpeed(3);
+        super.setPosition(new Position(400.0, 400.0));
+        this.name = name;
+        this.setPlayerImageString(imageString);
+        ImageIcon ii = new ImageIcon(this.getClass().getResource(playerImageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
     }
     public void draw(Graphics g){

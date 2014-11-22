@@ -1,5 +1,30 @@
+/*
+ * Copyright (c) 2014 Zane Ouimet, Nicholas Wilkinson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package client;
 
+import client.entities.Entity;
+import client.entities.Player;
+import client.entities.Projectile;
 import client.entities.Wall;
 
 import javax.swing.*;
@@ -11,8 +36,8 @@ import java.util.ArrayList;
  * Created by Nicholas on 20/11/2014.
  */
 public class GamePanel extends JPanel implements KeyListener, MouseListener {
-    private client.entities.Player player;
-    private client.entities.Wall wall1;
+    private Player player;
+    private Wall wall1;
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
     private JLabel playerStats;
@@ -21,8 +46,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public GamePanel() {
         //Get player information from server
         initPlayers();
-        setPreferredSize(new Dimension(800, 768));
-        setBounds(0, 0, 800, 768);
+        setPreferredSize(new Dimension(1000, 768));
+        setBounds(0, 0, 1000, 720);
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
@@ -38,31 +63,20 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public void initPlayers() {
 
         //Placeholders
-        player = new client.entities.Player(100,100,"Zane");
-        enemy = new Player();
+        player = new Player(15,15,"Zane","/assets/players/player.png");
+        enemy = new Player(15,15,"Enemy");
+        enemy.setHealth(90);
         wall1 = new client.entities.Wall(new Position(400,300),15,300);
         player.setPosition(new Position(20, 20));
-        enemy.setPosition(new Position(300,300));
+        enemy.setPosition(new Position(950,690));
     }
 
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
-
-        wall1.draw(g2d);
-//        g2d.drawImage(player.getPlayerImage(), (int) player.getPosition().getX(), (int) player.getPosition().getY(), this);
-//        g2d.setColor(new Color(255,107,107));
-//        g2d.fillRect((int) player.getPosition().getX() + 10, (int) player.getPosition().getY()-5, 50, 5);
-//        g2d.setColor(new Color(199,244,100));
-//        g2d.fillRect((int) player.getPosition().getX() + 10, (int) player.getPosition().getY()-5, player.getHealth()/2, 5);
-//        g2d.drawString("" + player.getName(), (int) player.getPosition().getX() + 10, (int) player.getPosition().getY() - 10);
+        enemy.draw(g2d);
         player.draw(g2d);
-        g2d.setColor(Color.BLACK);
-        g2d.fillRect((int) enemy.getPosition().getX(), (int) enemy.getPosition().getY(), 10, 10);
-        g2d.setColor(new Color(255,107,107));
-        g2d.fillRect((int) enemy.getPosition().getX() + 10, (int) enemy.getPosition().getY()-5, 50, 5);
-        g2d.setColor(new Color(199,244,100));
-        g2d.fillRect((int) enemy.getPosition().getX() + 10, (int) enemy.getPosition().getY()-5, enemy.getHealth()/2, 5);
+        wall1.draw(g2d);
         if(checkOutOfBounds(player.getPosition()) !=0){
             switch (checkOutOfBounds(player.getPosition())){
                 case 1:
@@ -86,17 +100,20 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         }
 
         for (Projectile p : projectileArray) {
-            g2d.fillRect((int) p.getPosition().getX(), (int) p.getPosition().getY(), 4, 4);
+            p.draw(g2d);
             p.move();
             if(checkOutOfBounds(p.getPosition()) > 0) {
                 projectileArray.remove(p);
             }
-            int c = collision(enemy.getPosition(), p.getPosition());
-            if(c == 0){
-
+            if(checkCollisions(p,enemy)){
                 enemy.takeDamage(p.getDamage());
-                projectileArray.remove(p);
+               //projectileArray.remove(p);
             }
+//            int c = collision(enemy.getPosition(), p.getPosition());
+//            if(c == 0){
+//                enemy.takeDamage(p.getDamage());
+//                projectileArray.remove(p);
+//            }
         }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
@@ -119,6 +136,20 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             side = 4;
         }
         return side;
+    }
+
+    public boolean checkCollisions(Entity e1, Entity e2) {
+        Rectangle r1 = e2.getBounds();
+        Rectangle r2 = e2.getBounds();
+        if(e1.equals(player) || e1.equals(player)){
+            System.out.println("pew");
+            return false;
+        } else if(r1.intersects(r2)){
+            //collision occurred!
+            return true;
+        } else{
+            return false;
+        }
     }
     //public int checkCollision(Ob)
 
