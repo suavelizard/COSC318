@@ -38,6 +38,9 @@ import java.util.Iterator;
  */
 public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private Player player;
+    private Player player1;
+    private Player player2;
+
     private Wall wall1;
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
@@ -89,13 +92,16 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     }
 
     public void initPlayers() {
-
         //Placeholders
-        player = new Player(15,15,"Zane","/assets/players/player.png");
-        enemy = new Player(15,15,"Enemy");
+        player = new Player(15,15,"Zane","0");
+        player1 = new Player(15,15,"Joe","1");
+        player2 = new Player(15,15,"Bob");
+        enemy = new Player(15,15,"Enemy","2");
         enemy.setHealth(90);
         wall1 = new client.entities.Wall(new Position(400,300),15,300);
         player.setPosition(new Position(20, 20));
+        player1.setPosition(new Position(203, 340));
+        player2.setPosition(new Position(300, 204));
         enemy.setPosition(new Position(950,690));
     }
 
@@ -104,6 +110,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         super.paint(g2d);
         enemy.draw(g2d);
         player.draw(g2d);
+        player1.draw(g2d);
+        player2.draw(g2d);
         wall1.draw(g2d);
         if(checkOutOfBounds(player.getPosition()) !=0){
             switch (checkOutOfBounds(player.getPosition())){
@@ -121,13 +129,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     break;
             }
             player.updatePosition();
-            //playerStats.setVerticalAlignment((int)player.getPosition().getY());
         } else {
             player.updatePosition();
-            //playerStats.setVerticalAlignment((int)player.getPosition().getY());
         }
-
-        //for (int i =0; i < projectileArray.size(); i++) {
 
         for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext();) {
             Projectile p = iterator.next();
@@ -202,7 +206,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         int key = e.getKeyCode();
         int moveSpeed = 2;
         player.keyPressed(e);
-        //repaint();
+
     }
 
     public void keyReleased(KeyEvent e){
@@ -236,11 +240,5 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
-    }
-    public void checkCollisions(){
-//        Rectangle playerBounds = player.getBounds();
-//            if (r3.intersects(r2)) {
-//                //player has been hit or touched another player
-//        }
     }
 }

@@ -163,7 +163,7 @@ public class Player extends Entity{
         this.setMoveSpeed(3);
         super.setPosition(new Position(400.0, 400.0));
         this.name = name;
-        this.setPlayerImageString(imageString);
+        this.setPlayerImageString("/assets/players/player-"+imageString+".png");
         ImageIcon ii = new ImageIcon(this.getClass().getResource(playerImageString));
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
