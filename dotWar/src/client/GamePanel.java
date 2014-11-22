@@ -128,7 +128,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         //for (int i =0; i < projectileArray.size(); i++) {
 
-        for(Projectile p:projectileArray){
+            for(Projectile p:projectileArray){
             p.move();
             p.draw(g2d);
             if(checkOutOfBounds(p.getPosition()) > 0) {
@@ -141,6 +141,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                 //enemyStats.setText("" + enemy.getHealth());
                 //projectileArray.remove(p);
             }
+                projectileArray.remove(p);
+            }*/
 //            int c = collision(enemy.getPosition(), p.getPosition());
 //            if(c == 0){
 //                enemy.takeDamage(p.getDamage());
@@ -152,23 +154,23 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         g2d.dispose();
     }
 
-    public int collision(Position p1,Position p2) {
-        int side = 0;
+    public boolean collision(Position p1,Position p2) {
+        boolean collide = true;
         //Check if left side of p1 is more than right side of p2
         if(p1.getX() > p2.getX()+5) {
-            side = 1;
+            collide = false;
         }
         //Check if right side of p1 is less than left side of p2
         else if(p1.getX()+5 < p2.getX()) {
-            side = 2;
+            collide = false;
         }
         else if(p1.getY() > p2.getY()+5) {
-            side = 3;
+            collide = false;
         }
         else if(p1.getY()+5 < p2.getY()) {
-            side = 4;
+            collide = false;
         }
-        return side;
+        return collide;
     }
     //GENERAL COLLISION DETECTION FOR ALL ENTITIES
     public boolean checkCollisions(Entity e1, Entity e2) {
