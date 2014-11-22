@@ -18,16 +18,44 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
     public GamePanel() {
         //Get player information from server
+        this.setLayout(null);
         initPlayers();
         setPreferredSize(new Dimension(800, 768));
         setBounds(0, 0, 800, 768);
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
+        initLabels();
+        
+    }
+    
+    public void initLabels() {
+        int width = this.getWidth();
+        int height = this.getHeight();
+        
+        JLabel enemyLabel = new JLabel("Enemy Health:");
+        enemyLabel.setSize(100, 25);
+        enemyLabel.setLocation(width - 130, height - 150);
+        enemyLabel.setForeground(Color.WHITE);
+        add(enemyLabel);
         enemyStats = new JLabel("" + enemy.getHealth());
-        enemyStats.setSize(100, 100);
+        enemyStats.setSize(25, 25);
+        enemyStats.setLocation(width - 50, height - 150);
+        enemyStats.setForeground(Color.WHITE);
         enemyStats.setBackground(Color.WHITE);
         add(enemyStats);
+
+        JLabel playerLabel = new JLabel("Player Health:");
+        playerLabel.setSize(100, 25);
+        playerLabel.setLocation(25, height - 150);
+        playerLabel.setForeground(Color.WHITE);
+        add(playerLabel);
+        playerStats = new JLabel("" + player.getHealth());
+        playerStats.setSize(25, 25);
+        playerStats.setLocation(105, height - 150);
+        playerStats.setForeground(Color.WHITE);
+        playerStats.setBackground(Color.WHITE);
+        add(playerStats);
     }
 
     public void initPlayers() {
@@ -43,8 +71,14 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
         g2d.setColor(Color.WHITE);
+        //player draw
         g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),player.getPlayerWidth(),player.getPlayerHeight());
-        g2d.fillRect((int) enemy.getPosition().getX(), (int) enemy.getPosition().getY(), 10, 10);
+        g2d.fillRect((int) enemy.getPosition().getX(), (int) enemy.getPosition().getY(), enemy.getPlayerWidth(),enemy.getPlayerHeight());
+        //player health draw
+        g2d.setColor(Color.GREEN);
+        g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY() - 3,player.getHealth()/10,2);
+        g2d.fillRect((int) enemy.getPosition().getX(), (int) enemy.getPosition().getY() - 3, enemy.getHealth()/10,2);
+        g2d.setColor(Color.WHITE);
         if(checkOutOfBounds(player.getPosition()) !=0){
             switch (checkOutOfBounds(player.getPosition())){
                 case 1:
@@ -74,6 +108,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(c == 0){
 
                 enemy.setHealth((int) (enemy.getHealth() - p.getDamage()));
+                enemyStats.setText("" + enemy.getHealth());
                 projectileArray.remove(p);
             }
         }

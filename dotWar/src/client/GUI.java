@@ -37,9 +37,6 @@ public class GUI extends JFrame implements ActionListener{
         JPanel chatPane = new JPanel();
         statusTextarea = new JTextArea();
         game.setBackground(Color.black);
-        JLabel test = new JLabel("TEST");
-        test.setBackground(Color.WHITE);
-        game.add(test);
         cp.add(game);
 
         chatPane.add(statusTextarea);
