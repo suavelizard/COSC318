@@ -144,17 +144,17 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public int collision(Position p1,Position p2) {
         int side = 0;
         //Check if left side of p1 is more than right side of p2
-        if(p1.getX()-3 > p2.getX()+3) {
+        if(p1.getX() > p2.getX()+5) {
             side = 1;
         }
         //Check if right side of p1 is less than left side of p2
-        if(p1.getX()+3 < p2.getX()-3) {
+        else if(p1.getX()+5 < p2.getX()) {
             side = 2;
         }
-        if(p1.getY()-3 > p2.getY()+3) {
+        else if(p1.getY() > p2.getY()+5) {
             side = 3;
         }
-        if(p1.getY()+3 < p2.getX()-3) {
+        else if(p1.getY()+5 < p2.getY()) {
             side = 4;
         }
         return side;
