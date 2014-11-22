@@ -55,11 +55,12 @@ public class GUI extends JFrame implements ActionListener{
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
+
         JPanel game = new GamePanel();
         JPanel chatPane = new JPanel();
         statusTextarea = new JTextArea();
         game.setBackground(new Color(85,98,112));
-        //game.add(test);
+
         cp.add(game);
 
         chatPane.add(statusTextarea);
