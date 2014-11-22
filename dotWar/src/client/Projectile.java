@@ -59,10 +59,6 @@ public class Projectile {
     }
 
     public void move() {
-
-
-
-
         if(!angleSet) {
             double differenceX = position.getX() - targetPos.getX();
             double differenceY = position.getY() - targetPos.getY();

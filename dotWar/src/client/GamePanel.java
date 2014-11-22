@@ -16,6 +16,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public GamePanel() {
         //Get player information from server
         initPlayers();
+        setPreferredSize(new Dimension(800, 768));
+        setBounds(0,0, 800, 768 );
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
@@ -26,7 +28,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         //Placeholders
         player = new Player();
         //enemy = new Player();
-        player.setPosition(new Position(20,20));
+        player.setPosition(new Position(20, 20));
         //enemy.setPosition(new Position(300,300));
     }
 
@@ -34,12 +36,12 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
         g2d.setColor(Color.WHITE);
-        g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),8,8);
+        g2d.fillRect((int)player.getPosition().getX(),(int)player.getPosition().getY(),10,10);
         player.updatePosition();
         for (Projectile p : projectileArray) {
             g2d.fillRect((int) p.getPosition().getX(), (int) p.getPosition().getY(), 4, 4);
             p.move();
-            if(p.getPosition().getX() > 1366 || p.getPosition().getY() > 768) {
+            if(p.getPosition().getX() > this.getBounds().getWidth() || p.getPosition().getY() > this.getBounds().getHeight()) {
                 projectileArray.remove(p);
             }
         }
@@ -88,7 +90,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public void mouseExited(MouseEvent e) {
 
     }
-
-
-
+    public void checkCollisions(){
+//        Rectangle playerBounds = player.getBounds();
+//            if (r3.intersects(r2)) {
+//                //player has been hit or touched another player
+//        }
+    }
 }
