@@ -1,30 +1,5 @@
-/*
- * Copyright (c) 2014 Zane Ouimet, Nicholas Wilkinson
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
-
 package client;
 
-import client.entities.Entity;
-import client.entities.Player;
-import client.entities.Projectile;
 import client.entities.Wall;
 
 import javax.swing.*;
@@ -45,18 +20,43 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private JProgressBar playerHealth;
     public GamePanel() {
         //Get player information from server
+        this.setLayout(null);
         initPlayers();
         setPreferredSize(new Dimension(1000, 768));
         setBounds(0, 0, 1000, 720);
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
-        playerStats = new JLabel("" + player.getHealth());
+        initLabels();
+        
+    }
+    
+    public void initLabels() {
+        int width = this.getWidth();
+        int height = this.getHeight();
+        
+        JLabel enemyLabel = new JLabel("Enemy Health:");
+        enemyLabel.setSize(100, 25);
+        enemyLabel.setLocation(width - 130, height - 150);
+        enemyLabel.setForeground(Color.WHITE);
+        add(enemyLabel);
         enemyStats = new JLabel("" + enemy.getHealth());
-        enemyStats.setSize(100, 100);
+        enemyStats.setSize(25, 25);
+        enemyStats.setLocation(width - 50, height - 150);
+        enemyStats.setForeground(Color.WHITE);
         enemyStats.setBackground(Color.WHITE);
         add(enemyStats);
-//        playerStats.setVerticalAlignment((int)player.getPosition().getY());
+
+        JLabel playerLabel = new JLabel("Player Health:");
+        playerLabel.setSize(100, 25);
+        playerLabel.setLocation(25, height - 150);
+        playerLabel.setForeground(Color.WHITE);
+        add(playerLabel);
+        playerStats = new JLabel("" + player.getHealth());
+        playerStats.setSize(25, 25);
+        playerStats.setLocation(105, height - 150);
+        playerStats.setForeground(Color.WHITE);
+        playerStats.setBackground(Color.WHITE);
         add(playerStats);
     }
 
@@ -108,6 +108,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(checkCollisions(p,enemy)){
                 enemy.takeDamage(p.getDamage());
                //projectileArray.remove(p);
+                //enemyStats.setText("" + enemy.getHealth());
+                projectileArray.remove(p);
             }
 //            int c = collision(enemy.getPosition(), p.getPosition());
 //            if(c == 0){
@@ -161,6 +163,12 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     LEFT 4
     */
     public int checkOutOfBounds(Position p){
+        //default no collision 0
+        //top 1
+        //bottom 2
+        //right 3
+        //left 4
+        //TODO: move player width and height inside player object
         if(p.getY() < 0) {
             return 1;
         }

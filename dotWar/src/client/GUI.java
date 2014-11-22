@@ -59,8 +59,6 @@ public class GUI extends JFrame implements ActionListener{
         JPanel chatPane = new JPanel();
         statusTextarea = new JTextArea();
         game.setBackground(new Color(85,98,112));
-        JLabel test = new JLabel("TEST");
-        test.setBackground(Color.WHITE);
         game.add(test);
         cp.add(game);
 
