@@ -46,7 +46,7 @@ public class GUI extends JFrame implements ActionListener{
     private int SERVER_PORT = 9264;
 
     private String serverIp;
-    private JTextArea statusTextarea = null;
+    private JTextArea chatHistory = null;
 
 
     // Class constructor
@@ -57,13 +57,35 @@ public class GUI extends JFrame implements ActionListener{
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
 
         JPanel game = new GamePanel();
+        JScrollPane chatScroll = new JScrollPane();
         JPanel chatPane = new JPanel();
-        statusTextarea = new JTextArea();
+        JPanel composePanel = new JPanel();
+        chatPane.setLayout(new BoxLayout(chatPane,BoxLayout.Y_AXIS));
+        //chatPane.setPreferredSize(new Dimension(366,768));
+        JTextField sendMessageField = new JTextField();
+        JButton sendButton = new JButton("Send");
+        chatHistory = new JTextArea();
+        //chatScroll.setBounds(0,0,360,400);
+        chatScroll.add(chatHistory);
+        chatHistory.setEditable(true);
+        //chatHistory.setBackground(Color.black);
+        //chatHistory.setRows(20);
+        //sendMessageField.setBackground(Color.red);
+        //sendMessageField.setMaximumSize(new Dimension(366,50));
         game.setBackground(new Color(85,98,112));
 
         cp.add(game);
-
-        chatPane.add(statusTextarea);
+        chatPane.add(chatScroll);
+        chatPane.add(sendMessageField);
+        chatPane.add(sendButton);
+//
+        //chatPane.add(chatScroll);
+//        composePanel.setBounds(0,401,360,200);
+//        composePanel.add(sendMessageField,BorderLayout.NORTH);
+//        composePanel.add(sendButton,BorderLayout.SOUTH);
+//        chatPane.add(composePanel,BorderLayout.NORTH);
+        chatHistory.setText("hello");
+        //statusTextarea.setText("heel");
         cp.add(chatPane);
         setResizable(false);
         setBounds(0,0, 1366, 768 );

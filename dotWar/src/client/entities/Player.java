@@ -26,6 +26,7 @@
 package client.entities;
 
 import client.Position;
+import client.Settings;
 
 import javax.swing.*;
 import java.awt.*;
@@ -46,7 +47,7 @@ public class Player extends Entity{
     private String name;
     private boolean isVisible= true;
 
-    private String playerImageString = "/assets/players/player-default.png";
+    private String playerImageString = "default";
 
     public String getPlayerImageString() {
         return playerImageString;
@@ -189,6 +190,13 @@ public class Player extends Entity{
     }
     public void draw(Graphics g){
         //draw player
+        //HARDCODED SHADOW
+//        g.setColor(Settings.getSHADOW_COLOR());
+//        g.fillOval((int) this.getPosition().getX() - 3, (int) this.getPosition().getY() - 3, 15, 15);
+//        g.setColor(Settings.getSHADOW_COLOR());
+//        g.fillRect((int) this.getPosition().getX() + 13, (int) this.getPosition().getY()-8, 50, 5);
+//
+        //END SHADOW
         g.drawImage(this.getImage(), (int) this.getPosition().getX(), (int) this.getPosition().getY(), null);
         g.setColor(new Color(255, 107, 107));
         g.fillRect((int) this.getPosition().getX() + 10, (int) this.getPosition().getY()-5, 50, 5);

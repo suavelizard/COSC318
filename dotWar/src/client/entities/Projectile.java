@@ -97,12 +97,13 @@ public class Projectile extends Entity{
     public void bounce(int direction){
         if(direction == 1 || direction == 2){
             angle = angle -180;
-        } else {
-            angle = angle -180;
         }
     }
     public void draw(Graphics g){
-        g.setColor(Color.BLACK);
+        //hardcoded shadow
+//        g.setColor(Color.darkGray);
+//        g.fillRect((int) this.getPosition().getX()-3, (int) this.getPosition().getY()-3, 4, 4);
+        g.setColor(new Color(78,205,196));
         g.fillRect((int) this.getPosition().getX(), (int) this.getPosition().getY(), 4, 4);
     }
 }
