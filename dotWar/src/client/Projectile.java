@@ -8,6 +8,8 @@ public class Projectile {
     private double damage;
     private Position targetPos;
     private int moveSpeed;
+    private double angle;
+    private boolean angleSet;
 
     public Position getTargetPos() {
         return targetPos;
@@ -45,6 +47,7 @@ public class Projectile {
         this.setPosition(new Position(400.0,400.0));
         this.setMoveSpeed(50);
         this.setDamage(1);
+        angleSet = false;
     }
 
     public Projectile(Position position, Position targetPos, int moveSpeed, double damage) {
@@ -52,15 +55,22 @@ public class Projectile {
         this.setTargetPos(targetPos);
         this.setMoveSpeed(moveSpeed);
         this.setDamage(damage);
+        angleSet = false;
     }
 
     public void move() {
-        double differenceX = position.getX() - targetPos.getX();
-        double differenceY = position.getY() - targetPos.getY();
 
-        double angle = (float)Math.atan2(differenceY, differenceX) * 180 / Math.PI;
 
-        position.setX(position.getX()+ Math.cos(angle * Math.PI/180) * moveSpeed);
-        position.setY(position.getY()+ Math.sin(angle * Math.PI /180) * moveSpeed);
+
+
+        if(!angleSet) {
+            double differenceX = position.getX() - targetPos.getX();
+            double differenceY = position.getY() - targetPos.getY();
+            angle = (float) Math.atan2(differenceY, differenceX) * 180 / Math.PI;
+            angleSet = true;
+        }
+
+        position.setX(position.getX() - Math.cos(angle * Math.PI/180) * moveSpeed);
+        position.setY(position.getY()- Math.sin(angle * Math.PI /180) * moveSpeed);
     }
 }
