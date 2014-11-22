@@ -85,9 +85,9 @@ public class Projectile extends Entity{
             angle = (float) Math.atan2(differenceY, differenceX) * 180 / Math.PI;
             angleSet = true;
         }
-
-        this.setPosition(new Position((int)this.getPosition().getX() - Math.cos(angle * Math.PI / 180) * moveSpeed,
-                (int)this.getPosition().getY() - Math.sin(angle * Math.PI / 180) * moveSpeed));
+        
+        this.setPosition(new Position(this.getPosition().getX() - Math.cos(angle * Math.PI / 180) * moveSpeed,
+                this.getPosition().getY() - Math.sin(angle * Math.PI / 180) * moveSpeed));
 
 
     }
