@@ -31,6 +31,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Nicholas on 20/11/2014.
@@ -128,27 +129,17 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         //for (int i =0; i < projectileArray.size(); i++) {
 
-            for(Projectile p:projectileArray){
+        for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext();) {
+            Projectile p = iterator.next();
             p.move();
             p.draw(g2d);
             if(checkOutOfBounds(p.getPosition()) > 0) {
-                projectileArray.remove(p);
+                iterator.remove();
             }
             if(checkCollisions(p,enemy) ){
                 enemy.takeDamage(p.getDamage());
-                System.out.println("Enemy took damage");
-               //projectileArray.remove(p);
-                //enemyStats.setText("" + enemy.getHealth());
-                //projectileArray.remove(p);
+                iterator.remove();
             }
-                projectileArray.remove(p);
-            
-//            int c = collision(enemy.getPosition(), p.getPosition());
-//            if(c == 0){
-//                enemy.takeDamage(p.getDamage());
-//                projectileArray.remove(p);
-//            }
-
         }
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
