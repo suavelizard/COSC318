@@ -30,6 +30,8 @@ import client.Position;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 public class Player extends Entity{
     private int health;
@@ -42,6 +44,8 @@ public class Player extends Entity{
     private int score;
     private Position position;
     private String name;
+    private boolean isVisible= true;
+
     private String playerImageString = "/assets/players/player-default.png";
 
     public String getPlayerImageString() {
@@ -108,11 +112,22 @@ public class Player extends Entity{
         this.score = score;
     }
 
+    public boolean isVisible() {
+        return isVisible;
+    }
+
+    public void setVisible(boolean isVisible) {
+        this.isVisible = isVisible;
+    }
+
     //calculates damage
     public void takeDamage(double damage){
+
         if(this.getHealth() - damage <= 0){
             setAlive(false);
             this.setHealth(0);
+            this.setAlive(false);
+            this.setVisible(false);
         }else {
             this.setHealth(this.getHealth() - (int) damage);
         }
@@ -136,6 +151,7 @@ public class Player extends Entity{
         this.setScore(0);
         this.setMoveSpeed(3);
         super.setPosition(new Position(400.0, 400.0));
+
     }
     //
     public Player(int width, int height,String name){
@@ -152,6 +168,7 @@ public class Player extends Entity{
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
+
     }
     //FULL CONSTRUCTOR
     public Player(int width, int height,String name,String imageString){
@@ -168,15 +185,30 @@ public class Player extends Entity{
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
+
     }
     public void draw(Graphics g){
         //draw player
-        g.drawImage(this.getImage(), (int)this.getPosition().getX(), (int) this.getPosition().getY(), null);
-        g.setColor(new Color(255,107,107));
+        g.drawImage(this.getImage(), (int) this.getPosition().getX(), (int) this.getPosition().getY(), null);
+        g.setColor(new Color(255, 107, 107));
         g.fillRect((int) this.getPosition().getX() + 10, (int) this.getPosition().getY()-5, 50, 5);
         g.setColor(new Color(199,244,100));
         g.fillRect((int) this.getPosition().getX() + 10, (int) this.getPosition().getY()-5, this.getHealth()/2, 5);
         g.drawString("" + this.getName(), (int) this.getPosition().getX() + 10, (int) this.getPosition().getY() - 10);
+
+//        g.setColor(Color.BLACK);
+//        int centerX = (int)this.getPosition().getX()+this.getWidth()/2;
+//        int centerY = (int)this.getPosition().getY()+this.getHeight()/2 ;
+//        double angle = Math.atan2(centerY - this.mousepos.getY() - this.mousepos.getX(), centerX - this.mousepos.getX()- this.mousepos.getY()) - Math.PI / 2;
+//        ((Graphics2D)g).rotate(angle, centerX, centerY);
+//        int[] pointsX= {(int)this.getPosition().getX()+this.getWidth(),(int)this.getPosition().getX()+this.getWidth(),(int)this.getPosition().getX()+this.getWidth()+5,};
+//        int[] pointsY = {(int)this.getPosition().getY()-3, (int)this.getPosition().getY()-this.getHeight()+3,(int)this.getPosition().getY() -(this.getHeight()/2)};
+//        g.fillPolygon(pointsX,pointsY,3);
+//
+//
+//        //((Graphics2D)g).rotate(angle, centerX, centerY);
+//        //g.fillRect((int) this.mousepos.getX() + 10, (int) this.mousepos.getY()-5, 50, 5);
+//        ((Graphics2D)g).rotate(-angle, centerX, centerY);
     }
     //I don't think we need this, I added methods to the position class to handle movement
     public void updatePosition(){
@@ -283,4 +315,12 @@ public class Player extends Entity{
                 break;
         }
     }
+//    public void mouseMoved(MouseEvent e) {
+//        this.mousepos = new Position(e.getX(),e.getY());
+//
+//    }
+//
+//    public void mouseDragged(MouseEvent e) {
+//
+//    }
 }

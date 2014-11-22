@@ -82,14 +82,24 @@ public class Projectile extends Entity{
         if(!angleSet) {
             double differenceX = this.getPosition().getX() - targetPos.getX();
             double differenceY = this.getPosition().getY() - targetPos.getY();
-            angle = (float) Math.atan2(differenceY, differenceX) * 180 / Math.PI;
+//            angle = (float) Math.atan2(differenceY, differenceX) * 180 / Math.PI;
+            angle = (float) Math.atan2(differenceY, differenceX);
+
             angleSet = true;
         }
         
-        this.setPosition(new Position(this.getPosition().getX() - Math.cos(angle * Math.PI / 180) * moveSpeed,
-                this.getPosition().getY() - Math.sin(angle * Math.PI / 180) * moveSpeed));
+//        this.setPosition(new Position(this.getPosition().getX() - Math.cos(angle * Math.PI / 180) * moveSpeed,
+//                this.getPosition().getY() - Math.sin(angle * Math.PI / 180) * moveSpeed));
+        this.setPosition(new Position(this.getPosition().getX() - Math.cos(angle) * moveSpeed,
+                this.getPosition().getY() - Math.sin(angle) * moveSpeed));
 
-
+    }
+    public void bounce(int direction){
+        if(direction == 1 || direction == 2){
+            angle = angle -180;
+        } else {
+            angle = angle -180;
+        }
     }
     public void draw(Graphics g){
         g.setColor(Color.BLACK);

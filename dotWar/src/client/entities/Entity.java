@@ -69,8 +69,9 @@ public abstract class Entity {
     public void setImage(Image image) {
         this.image = image;
     }
+    //calculates and returns the boundries of an entity
     public Rectangle getBounds() {
-        return new Rectangle((int)this.getPosition().getX(), (int)this.getPosition().getY(), this.getWidth(), this.getHeight());
+        return new Rectangle((int)this.getPosition().getX(), (int)this.getPosition().getX(), this.getWidth(), this.getHeight());
     }
 
     public void draw(Graphics g){

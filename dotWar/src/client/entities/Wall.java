@@ -35,19 +35,40 @@ public class Wall extends Entity {
 
     private String type;
     private String wallImageString = "/assets/walls/wall1.gif";
+    //0 is VERTICAL
+    //1 is HORIZONTAL
+    private int wallOrientation = 0;
+
+    public int getWallOrientation() {
+        return wallOrientation;
+    }
+    public void setWallOrientation(int wallOrientation) {
+        this.wallOrientation = wallOrientation;
+    }
+
     public Wall(Position p, int w,int h){
         super(p, w, h);
         ImageIcon ii = new ImageIcon(this.getClass().getResource(wallImageString));
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
-   }
+    }
+    public Wall(Position p, int w,int h,int wallOrientation){
+        super(p, w, h);
+        ImageIcon ii = new ImageIcon(this.getClass().getResource(wallImageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
+        super.setImage(new ImageIcon(newimg).getImage());
+        this.setWallOrientation(1);
+    }
 
     public void draw(Graphics g) {
-        BufferedImage bim = new BufferedImage(10,21,BufferedImage.TYPE_INT_RGB);
-        bim.getGraphics().drawImage(this.getImage(),0,0,null);
-        TexturePaint tp = new TexturePaint(bim, new Rectangle(bim.getWidth(), bim.getHeight(), 10, 21));
-        ((Graphics2D) g).setPaint(tp);
+
+//        BufferedImage bim = new BufferedImage(10,21,BufferedImage.TYPE_INT_RGB);
+//        bim.getGraphics().drawImage(this.getImage(),0,0,null);
+//        TexturePaint tp = new TexturePaint(bim, new Rectangle(bim.getWidth(), bim.getHeight(), 10, 21));
+//        ((Graphics2D) g).setPaint(tp);
+        g.setColor(Color.BLACK);
         g.fillRect((int)this.getPosition().getX(), (int)this.getPosition().getX(), this.getWidth(), this.getHeight());
     }
     public void drawImage(Graphics g) {
