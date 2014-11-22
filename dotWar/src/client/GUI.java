@@ -36,12 +36,13 @@ public class GUI extends JFrame implements ActionListener{
         JPanel game = new GamePanel();
         JPanel chatPane = new JPanel();
         statusTextarea = new JTextArea();
-        game.setBackground(Color.black);
+        game.setBackground(new Color(85,98,112));
+        game.add(test);
         cp.add(game);
 
         chatPane.add(statusTextarea);
         cp.add(chatPane);
-
+        setResizable(false);
         setBounds(0,0, 1366, 768 );
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);

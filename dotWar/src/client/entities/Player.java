@@ -1,13 +1,16 @@
 /**
  * Created by Zane on 2014-11-06.
  */
-package client;
+package client.entities;
+
+import client.Position;
+import client.Projectile;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
-public class Player {
+public class Player extends Entity{
     private int health;
     private int moveSpeed;
     private int rightMove;
@@ -16,12 +19,10 @@ public class Player {
     private int downMove;
     private boolean alive;
     private int score;
-    private int playerHeight;
-    private int playerWidth;
     private Position position;
     private String name;
-    private String playerImageString = "player.png";
-    private Image playerImage;
+    private String playerImageString = "/assets/players/player.png";
+
 
     public String getName() {
         return name;
@@ -31,36 +32,12 @@ public class Player {
         this.name = name;
     }
 
-    public Image getPlayerImage() {
-        return playerImage;
-    }
-
-    public void setPlayerImage(Image playerImage) {
-        this.playerImage = playerImage;
-    }
-
     public Position getPosition() {
         return position;
     }
 
     public void setPosition(Position position) {
         this.position = position;
-    }
-
-    public int getPlayerWidth() {
-        return playerWidth;
-    }
-
-    public void setPlayerWidth(int playerWidth) {
-        this.playerWidth = playerWidth;
-    }
-
-    public int getPlayerHeight() {
-        return playerHeight;
-    }
-
-    public void setPlayerHeight(int playerHeight) {
-        this.playerHeight = playerHeight;
     }
 
     public int getRightMove() {
@@ -113,39 +90,48 @@ public class Player {
         }
     }
     public Player() {
-        this.setPlayerHeight(10);
-        this.setPlayerWidth(10);
+        super.setHeight(10);
+        super.setWidth(10);
         this.setHealth(100);
         this.setAlive(true);
         this.setScore(0);
         this.setMoveSpeed(3);
-        this.setPosition(new Position(400.0,400.0));
+        super.setPosition(new Position(400.0, 400.0));
     }
     //constructor with player size
     public Player(int width,int height){
-        this.setPlayerHeight(width);
-        this.setPlayerWidth(height);
+        super.setWidth(width);
+       super.setHeight(height);
         this.setHealth(100);
         this.setAlive(true);
         this.setScore(0);
         this.setMoveSpeed(3);
-        this.setPosition(new Position(400.0, 400.0));
+        super.setPosition(new Position(400.0, 400.0));
     }
     //
-    public Player(String name,int width, int height ){
-        this.setPlayerHeight(width);
-        this.setPlayerWidth(height);
+    public Player(int width, int height,String name){
+        super.setWidth(width);
+        super.setHeight(height);
         this.setHealth(100);
         this.setAlive(true);
         this.setScore(0);
         this.setMoveSpeed(3);
-        this.setPosition(new Position(400.0, 400.0));
+        super.setPosition(new Position(400.0, 400.0));
         this.name = name;
         ImageIcon ii = new ImageIcon(this.getClass().getResource(playerImageString));
-        this.playerImage = ii.getImage();
+        //super.setImage(ii.getImage());
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(10, 10,  java.awt.Image.SCALE_SMOOTH);
-        this.playerImage = new ImageIcon(newimg).getImage();
+        super.setImage(new ImageIcon(newimg).getImage());
+    }
+    public void draw(Graphics g){
+        //draw player
+        g.drawImage(this.getImage(), (int)this.getPosition().getX(), (int) this.getPosition().getY(), null);
+        g.setColor(new Color(255,107,107));
+        g.fillRect((int) this.getPosition().getX() + 10, (int) this.getPosition().getY()-5, 50, 5);
+        g.setColor(new Color(199,244,100));
+        g.fillRect((int) this.getPosition().getX() + 10, (int) this.getPosition().getY()-5, this.getHealth()/2, 5);
+        g.drawString("" + this.getName(), (int) this.getPosition().getX() + 10, (int) this.getPosition().getY() - 10);
     }
     //I don't think we need this, I added methods to the position class to handle movement
     public void updatePosition(){
