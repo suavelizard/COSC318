@@ -52,6 +52,7 @@ public class Wall extends Entity {
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
+        this.setWallOrientation(0);
     }
     public Wall(Position p, int w,int h,int wallOrientation){
         super(p, w, h);
@@ -59,7 +60,7 @@ public class Wall extends Entity {
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
-        this.setWallOrientation(1);
+        this.setWallOrientation(wallOrientation);
     }
 
     public void draw(Graphics g) {
@@ -69,7 +70,7 @@ public class Wall extends Entity {
 //        TexturePaint tp = new TexturePaint(bim, new Rectangle(bim.getWidth(), bim.getHeight(), 10, 21));
 //        ((Graphics2D) g).setPaint(tp);
         g.setColor(Color.BLACK);
-        g.fillRect((int)this.getPosition().getX(), (int)this.getPosition().getX(), this.getWidth(), this.getHeight());
+        g.fillRect((int)this.getPosition().getX(), (int)this.getPosition().getY(), this.getWidth(), this.getHeight());
     }
     public void drawImage(Graphics g) {
         //g.drawImage(img, x, y, null);

@@ -203,7 +203,6 @@ public class Player extends Entity{
         g.setColor(new Color(199,244,100));
         g.fillRect((int) this.getPosition().getX() + 10, (int) this.getPosition().getY()-5, this.getHealth()/2, 5);
         g.drawString("" + this.getName(), (int) this.getPosition().getX() + 10, (int) this.getPosition().getY() - 10);
-
 //        g.setColor(Color.BLACK);
 //        int centerX = (int)this.getPosition().getX()+this.getWidth()/2;
 //        int centerY = (int)this.getPosition().getY()+this.getHeight()/2 ;

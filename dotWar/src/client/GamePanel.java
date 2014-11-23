@@ -37,29 +37,12 @@ import java.util.Iterator;
  * Created by Nicholas on 20/11/2014.
  */
 public class GamePanel extends JPanel implements KeyListener, MouseListener {
-    //Lighting stuff
-    protected final static float GRADIENT_SIZE = 200f;
-
-    /** The fractions for our shadow gradient, going from 0.0 (black) to 1.0 (transparent). */
-    protected final static float[] GRADIENT_FRACTIONS = new float[]{0f, 1f};
-
-    /** The colors for our shadow, going from opaque black to transparent black. */
-    protected final static Color[] GRADIENT_COLORS = new Color[] { new Color(36,43,51), new Color(0f,0f,0f,0f) };
-
-    /** A Polygon object which we will re-use for each shadow geometry. */
-    protected final static Polygon POLYGON = new Polygon();
-    protected int mouseX =300, mouseY =300;
-   // protected ArrayList<Shape> entities = new ArrayList<Shape>();
-    //END LIGHTING STUFF
-
-
     private Player player;
     private Wall wall1;
     private Wall wall2;
 
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
-    private ArrayList<Entity> entities = new ArrayList<Entity>(); //ARRAY OF ENTITIES TO RENDER LIGHTING ON
     private JLabel playerStats;
     private JLabel enemyStats;
     private JProgressBar playerHealth;
@@ -73,7 +56,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
-        this.addMouseMotionListener(new MouseMoveListener());
+
 
         initLabels();
         
@@ -111,17 +94,16 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public void initPlayers() {
         //Placeholders
 
-        player = new Player(15,15,"Zane","3");
-        entities.add(player);
+        player = new Player(15,15,"Zane","1");
         enemy = new Player(15,15,"Enemy","2");
         enemy.setHealth(90);
         wall1 = new client.entities.Wall(new Position(400,300),15,300);
         wall2 = new client.entities.Wall(new Position(200,300),15,300,1);
-        //entities.add(wall1);
-        entities.add(wall2);
+
 
         player.setPosition(new Position(20, 20));
         enemy.setPosition(new Position(950,690));
+
     }
 
     public void paint(Graphics g) {
@@ -129,17 +111,12 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         super.paint(g2d);
 
         if(enemy.isVisible()){
-            render((Graphics2D)g);
-
             enemy.draw(g2d);
         }
         if(player.isVisible()){
-            render((Graphics2D)g); //lighting stuff
             player.draw(g2d);
         }
-        //light
-        Light light1 = new Light(new Position(300,300),25,25);
-        light1.draw(g);
+
         wall2.draw(g2d);
 
         if(checkOutOfBounds(player.getPosition()) !=0){
@@ -179,6 +156,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             if(checkCollisions(p, wall2)){
                 p.bounce(wall2.getWallOrientation());
             }
+            if(checkCollisions(player,wall2)){
+
+            }
         }
 
         Toolkit.getDefaultToolkit().sync();
@@ -215,6 +195,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             return false;
         }
     }
+
     /*
     DEFAULT not out of bounds 0
     TOP 1
@@ -279,133 +260,4 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
     }
 
-//    EXPERIMENTAL SHAD0W/LIGHTING STUFF
-    /** Called to render the frame. */
-    protected void render(Graphics2D g) {
-        //we'll use nice quality interpolation
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-//        g.setColor(Color.white);
-//        g.drawString("FPS: "+fps, 10, 20);
-
-        //render the shadows first
-        renderShadows(g);
-
-        //render each entity
-//        for (int i=0; i<entities.size(); i++) {
-//            Entity e = entities.get(i);
-//            g.setColor(Color.WHITE);
-//            //g.draw(e);
-//        }
-    }
-
-    protected void renderShadows(Graphics2D g) {
-        //old Paint object for resetting it later
-        Paint oldPaint = g.getPaint();
-        //System.out.println("oobo");
-        //minimum distance (squared) which will save us some checks
-        float minDistSq = GRADIENT_SIZE*GRADIENT_SIZE;
-        //amount to extrude our shadow polygon by
-        //use a large enough value to ensure that it is way off screen
-        final float SHADOW_EXTRUDE = GRADIENT_SIZE*GRADIENT_SIZE;
-
-        //we'll use a radial gradient from the mouse center
-        final Paint GRADIENT_PAINT = new RadialGradientPaint(new Point2D.Float(mouseX, mouseY),
-                GRADIENT_SIZE, GRADIENT_FRACTIONS, GRADIENT_COLORS);
-
-        final Point2D.Float mouse = new Point2D.Float(mouseX, mouseY);
-
-        //for each entity
-        for (int i=0; i<entities.size(); i++) {
-            Entity e = entities.get(i);
-
-            Rectangle bounds = e.getBounds();
-
-            //radius of Entity's bounding circle
-            float r = (float)bounds.getWidth()/2f;
-
-            //get center of entity
-            float cx = (float)bounds.getX() + r;
-            float cy = (float)bounds.getY() + r;
-
-            //get direction from mouse to entity center
-            float dx = cx - mouse.x;
-            float dy = cy - mouse.y;
-
-            //get euclidean distance from mouse to center
-            float distSq = dx * dx + dy * dy; //avoid sqrt for performance
-
-            //if the entity is outside of the shadow radius, then ignore
-            if (distSq > minDistSq)
-                continue;
-
-            //normalize the direction to a unit vector
-            float len = (float)Math.sqrt(distSq);
-            float nx = dx;
-            float ny = dy;
-            if (len != 0) { //avoid division by 0
-                nx /= len;
-                ny /= len;
-            }
-
-            //get perpendicular of unit vector
-            float px = -ny;
-            float py = nx;
-
-            //our perpendicular points in either direction from radius
-            Point2D.Float A = new Point2D.Float(cx - px * r, cy - py * r);
-            Point2D.Float B = new Point2D.Float(cx + px * r, cy + py * r);
-
-            //project the points by our SHADOW_EXTRUDE amount
-            Point2D.Float C = project(mouse, A, SHADOW_EXTRUDE);
-            Point2D.Float D = project(mouse, B, SHADOW_EXTRUDE);
-
-            //construct a polygon from our points
-            POLYGON.reset();
-            POLYGON.addPoint((int)A.x, (int)A.y);
-            POLYGON.addPoint((int)B.x, (int)B.y);
-            POLYGON.addPoint((int)D.x, (int)D.y);
-            POLYGON.addPoint((int)C.x, (int)C.y);
-
-            //fill the polygon with the gradient paint
-            g.setPaint(GRADIENT_PAINT);
-            g.fill(POLYGON);
-        }
-
-        //reset to old Paint object
-        g.setPaint(oldPaint);
-    }
-
-    /** Projects a point from end along the vector (end - start) by the given scalar amount. */
-    private Point2D.Float project(Point2D.Float start, Point2D.Float end, float scalar) {
-        float dx = end.x - start.x;
-        float dy = end.y - start.y;
-        //euclidean length
-        float len = (float)Math.sqrt(dx * dx + dy * dy);
-        //normalize to unit vector
-        if (len != 0) { //avoid division by 0
-            dx /= len;
-            dy /= len;
-        }
-        //multiply by scalar amount
-        dx *= scalar;
-        dy *= scalar;
-        return new Point2D.Float(end.x + dx, end.y + dy);
-    }
-
-    /** Mouse motion listener for dynamic 2D shadows. */
-    private class MouseMoveListener extends MouseMotionAdapter {
-
-        public void mouseMoved(MouseEvent e) {
-//            mouseX = e.getX();
-//            mouseY = e.getY();
-        }
-
-        public void mouseDragged(MouseEvent e) {
-//            mouseX = e.getX();
-//            mouseY = e.getY();
-        }
-    }
 }
