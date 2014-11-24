@@ -38,6 +38,7 @@ public abstract class Entity {
     private int width;
     private int height;
     private Image image;
+    private boolean visible = true;
     public Position getPosition() {
         return position;
     }
@@ -69,6 +70,15 @@ public abstract class Entity {
     public void setImage(Image image) {
         this.image = image;
     }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     //calculates and returns the boundries of an enttiy
     public Rectangle getBounds() {
         return new Rectangle((int)this.getPosition().getX(), (int)this.getPosition().getY(), this.getWidth(), this.getHeight());

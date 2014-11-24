@@ -76,20 +76,14 @@ public class Position {
         return "X: " + this.getX() + " Y: "+this.getY();
     }
     public Position add(Position p){
-        System.out.println(this.toString());
-        System.out.println(p.toString());
-
         Position pNew = new Position(this.getX() + p.getX(), this.getY() + p.getY());
-        System.out.println(pNew.toString());
+        System.out.println("Doing math: "+this.toString()+" + "+ p.toString() + " = "+pNew.toString());
         return pNew;
     }
 
     public Position subtract(Position p){
-        System.out.println(this.toString());
-        System.out.println(p.toString());
-
         Position pNew = new Position(this.getX() - p.getX(), this.getY() - p.getY());
-        System.out.println(pNew.toString());
+        System.out.println("Doing math: "+this.toString()+"  "+ p.toString() + " = "+pNew.toString());
         return pNew;
     }
 }

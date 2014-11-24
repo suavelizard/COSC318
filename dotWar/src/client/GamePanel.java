@@ -46,6 +46,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
     private ArrayList<Wall> wallArray = new ArrayList();
+    private ArrayList<Player> playerArray = new ArrayList();
+    private ArrayList<Weapon> weaponArray = new ArrayList();
+
     private JLabel playerStats;
     private JLabel enemyStats;
     private JProgressBar playerHealth;
@@ -70,17 +73,17 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         int width = this.getWidth();
         int height = this.getHeight();
         
-        JLabel enemyLabel = new JLabel("Enemy Health:");
-        enemyLabel.setSize(100, 25);
-        enemyLabel.setLocation(width - 130, height - 150);
-        enemyLabel.setForeground(Color.WHITE);
-        add(enemyLabel);
-        enemyStats = new JLabel("" + enemy.getHealth());
-        enemyStats.setSize(25, 25);
-        enemyStats.setLocation(width - 50, height - 150);
-        enemyStats.setForeground(Color.WHITE);
-        enemyStats.setBackground(Color.WHITE);
-        add(enemyStats);
+//        JLabel enemyLabel = new JLabel("Enemy Health:");
+//        enemyLabel.setSize(100, 25);
+//        enemyLabel.setLocation(width - 130, height - 150);
+//        enemyLabel.setForeground(Color.WHITE);
+//        add(enemyLabel);
+//        enemyStats = new JLabel("" + enemy.getHealth());
+//        enemyStats.setSize(25, 25);
+//        enemyStats.setLocation(width - 50, height - 150);
+//        enemyStats.setForeground(Color.WHITE);
+//        enemyStats.setBackground(Color.WHITE);
+//        add(enemyStats);
 
         JLabel playerLabel = new JLabel("Player Health:");
         playerLabel.setSize(100, 25);
@@ -99,8 +102,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Random rnd = new Random();
         for(int i = 0; i < numWalls; i++) {
             int r = rnd.nextInt(700-25) + 25;
-            int rposX = rnd.nextInt(768);
-            int rposY = rnd.nextInt(1000);
+            int rposX = rnd.nextInt(700);
+            int rposY = rnd.nextInt(900);
             wallArray.add(new Wall(new Position(rposX,rposY),15,200,1));
             wallArray.add(new Wall(new Position(rposX,rposY),400,15,0));
 
@@ -108,18 +111,40 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     }
     public void initPlayers() {
         //Placeholders
+        Random rnd = new Random();
 
         player = new Player(15,15,"Zane","1");
-        player.setWeapon(new Weapon(2,5,Color.RED));
-        enemy = new Player(15,15,"Enemy","2");
-        enemy.setHealth(90);
+        //player.setWeapon(new Weapon(2,10,1,Color.RED));
+        playerArray.add(new Player(15, 15, "Enemy", "" + (rnd.nextInt(3))));
+        playerArray.add(new Player(15,15,"Bob",""+(rnd.nextInt(3))));
+        playerArray.add(new Player(15,15,"Steve",""+(rnd.nextInt(3))));
 
+        Weapon w = new Weapon(5,15,0,Color.ORANGE);
+        Weapon w1 = new Weapon(10,5,1,Color.RED);
+        Weapon w2 = new Weapon(5,20,2,Color.BLUE);
+        w.setPosition(new Position(300,400));
+        w1.setPosition(new Position(400,200));
+        w2.setPosition(new Position(200,500));
+
+        weaponArray.add(w);
+        weaponArray.add(w1);
+        weaponArray.add(w2);
+//
+//        enemy = new Player(15,15,"Joe","2");
+//        enemy.setHealth(90);
+
+        player.setPosition(new Position(20, 20));
+        for(Player eP:playerArray){
+            int rposX = rnd.nextInt(768);
+            int rposY = rnd.nextInt(1000);
+            eP.setPosition(new Position(rposX,rposY));
+        }
         Position p1 = new Position(10,10);
         Position p2 = new Position(10,10);
         p1.add(p2);
 
         player.setPosition(new Position(20, 20));
-        enemy.setPosition(new Position(950,690));
+       // enemy.setPosition(new Position(950,690));
 
     }
 
@@ -129,8 +154,24 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         for(Wall w:wallArray){
             w.draw(g2d);
         }
-        if(enemy.isVisible()){
-            enemy.draw(g2d);
+//        if(enemy.isVisible()){
+//            enemy.draw(g2d);
+//        }
+        for(Player eP:playerArray){
+            if(eP.isVisible()) {
+                eP.draw(g2d);
+            }
+        }
+        for(Weapon w:weaponArray){
+            if(w.isVisible()){
+                w.draw(g);
+            }
+            if(checkCollisions(player, w)){
+                player.setWeapon(w);
+                w.setVisible(false);
+                System.out.println(player.getName()+" picked up a power up");
+
+            }
         }
         if(player.isVisible()){
             player.draw(g2d);
@@ -155,31 +196,42 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         } else {
             player.updatePosition();
         }
-
         for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext();) {
             Projectile p = iterator.next();
             p.move();
             p.draw(g2d);
-            if(checkOutOfBounds(p) > 0) {
+            if (checkOutOfBounds(p) > 0) {
                 System.out.println("Projectile flew out of bounds!");
                 iterator.remove();
             }
-            if(checkCollisions(p,enemy) ){
-                enemy.takeDamage(p.getDamage());
-                iterator.remove();
-            }
-//            if(checkCollisions(p, wall1)){
-//                p.bounce(wall1.getWallOrientation());
-//            }
-            for(Wall w :wallArray) {
+            for (Wall w : wallArray) {
                 if (checkCollisions(p, w)) {
-                    System.out.println("wall interaction");
+                    System.out.println("Projectile bounced off wall!");
                     p.bounce(w.getWallOrientation());
                 }
             }
-
+            for (Player eP : playerArray) {
+                if (checkCollisions(p, eP)) {
+                    System.out.println("Projectile hit " + eP.getName());
+                    eP.takeDamage(p.getDamage());
+                    iterator.remove();
+                }
+            }
+            //Hacky code to limit range!
+            if(player.getWeapon().getType() == 1){
+                if(Math.abs(player.getPosition().getX() - p.getPosition().getX())> 200 ||Math.abs(player.getPosition().getY() - p.getPosition().getY())> 200){
+                    iterator.remove();
+                }
+            } else if(player.getWeapon().getType() == 0){
+                if(Math.abs(player.getPosition().getX() - p.getPosition().getX())> 1000 ||Math.abs(player.getPosition().getY() - p.getPosition().getY())> 1000) {
+                    iterator.remove();
+                }
+            }else if(player.getWeapon().getType() == 2) {
+                if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 400) {
+                    iterator.remove();
+                }
+            }
         }
-
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }

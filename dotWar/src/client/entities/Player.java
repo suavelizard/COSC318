@@ -155,6 +155,7 @@ public class Player extends Entity{
         this.setScore(0);
         this.setMoveSpeed(3);
         super.setPosition(new Position(400.0, 400.0));
+
     }
     //constructor with player size
     public Player(int width,int height){
@@ -165,7 +166,6 @@ public class Player extends Entity{
         this.setScore(0);
         this.setMoveSpeed(3);
         super.setPosition(new Position(400.0, 400.0));
-
     }
     //
     public Player(int width, int height,String name){
@@ -240,13 +240,21 @@ public class Player extends Entity{
         //attack
         ArrayList<Projectile> firedProjectiles = new ArrayList<Projectile>();
         if(this.getWeapon() == null){
-            Projectile projectile = new Projectile(position, mousePos, 2, this.getWeapon());
-        } else {
-            //reload timer ??
+            Projectile projectile = new Projectile(position, mousePos);
+        } else if(this.getWeapon().getType() == 1) {
+            //got ourselves a shotgun?!
             Position pmod = new Position(20,20);
-            firedProjectiles.add(new Projectile(position, mousePos.add(pmod), 2,this.getWeapon()));
-            firedProjectiles.add(new Projectile(position, mousePos, 2,this.getWeapon()));
-            firedProjectiles.add(new Projectile(position, mousePos.subtract(pmod), 2,this.getWeapon()));
+            firedProjectiles.add(new Projectile(position, mousePos.add(pmod),this.getWeapon()));
+            firedProjectiles.add(new Projectile(position, mousePos,this.getWeapon()));
+            firedProjectiles.add(new Projectile(position, mousePos.subtract(pmod), this.getWeapon()));
+
+        } else if(this.getWeapon().getType() == 2) {
+            //got ourselves a pulse gun
+            Position pmod = new Position(20,20);
+            firedProjectiles.add(new Projectile(position, mousePos, this.getWeapon()));
+            firedProjectiles.add(new Projectile(position.add(pmod), mousePos,this.getWeapon()));
+        }else{
+            firedProjectiles.add(new Projectile(position, mousePos,this.getWeapon()));
 
         }
         return firedProjectiles;

@@ -9,6 +9,12 @@ import java.awt.*;
  */
 public class Weapon extends Entity{
     private int damageModifier;
+    /*weapon types:
+    0 = default
+    1 = shotgun
+    2 = 2 pulse
+
+     */
     private int type;
     private Color color;
     private  int sizeModifier;
@@ -67,17 +73,19 @@ public class Weapon extends Entity{
         super.setPosition(new Position(0, 0));
         super.setWidth(3);
         super.setHeight(3);
+        this.setType(0);
+        this.setColor(Color.black);
     }
-    public Weapon(int damageModifier,int moveSpeedModifer, Color color){
+    public Weapon(int damageModifier,int moveSpeedModifer,int type, Color color){
         super.setPosition(new Position(0, 0));
         super.setWidth(3);
         super.setHeight(3);
         this.setColor(color);
         this.setDamageModifier(damageModifier);
         this.setMoveSpeedModifer(moveSpeedModifer);
-        this.setType(1);
+        this.setType(type);
     }
     public void draw(Graphics g){
-        g.fillOval(0,0,25,25);
+        g.fillOval((int)this.getPosition().getX(),(int)this.getPosition().getY(),25,25);
     }
 }

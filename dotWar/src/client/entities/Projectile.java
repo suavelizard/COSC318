@@ -78,24 +78,24 @@ public class Projectile extends Entity{
         angleSet = false;
     }
 
-    public Projectile(Position position, Position targetPos, double damage) {
+    public Projectile(Position position, Position targetPos) {
         super.setPosition(position);
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);
         this.setMoveSpeed(10);
-        this.setDamage(damage);
+        this.setDamage(5);
         angleSet = false;
         this.setColor(new Color(78,205,196));
     }
     //with weapon modifer
-    public Projectile(Position position, Position targetPos, double damage,Weapon w) {
+    public Projectile(Position position, Position targetPos,Weapon w) {
         super.setPosition(position);
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);
         this.setMoveSpeed(w.getMoveSpeedModifer());
-        this.setDamage(damage);
+        this.setDamage(w.getDamageModifier());
         angleSet = false;
         this.setColor(w.getColor());
         this.setDamage(w.getDamageModifier());
