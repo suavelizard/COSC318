@@ -33,6 +33,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Ellipse2D;
+import java.util.ArrayList;
+import java.util.TimerTask;
 
 public class Player extends Entity{
     private int health;
@@ -43,6 +46,7 @@ public class Player extends Entity{
     private int downMove;
     private boolean alive;
     private int score;
+    private Weapon weapon = null;
     private Position position;
     private String name;
     private boolean isVisible= true;
@@ -121,6 +125,14 @@ public class Player extends Entity{
         this.isVisible = isVisible;
     }
 
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
+
     //calculates damage
     public void takeDamage(double damage){
 
@@ -133,6 +145,7 @@ public class Player extends Entity{
             this.setHealth(this.getHealth() - (int) damage);
         }
     }
+
     public Player() {
         super();
         super.setHeight(10);
@@ -146,7 +159,7 @@ public class Player extends Entity{
     //constructor with player size
     public Player(int width,int height){
         super.setWidth(width);
-       super.setHeight(height);
+        super.setHeight(height);
         this.setHealth(100);
         this.setAlive(true);
         this.setScore(0);
@@ -186,16 +199,16 @@ public class Player extends Entity{
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
-
     }
     public void draw(Graphics g){
         //draw player
         //HARDCODED SHADOW
 //        g.setColor(Settings.getSHADOW_COLOR());
-//        g.fillOval((int) this.getPosition().getX() - 3, (int) this.getPosition().getY() - 3, 15, 15);
-//        g.setColor(Settings.getSHADOW_COLOR());
-//        g.fillRect((int) this.getPosition().getX() + 13, (int) this.getPosition().getY()-8, 50, 5);
-//
+//        g.fillOval((int) this.getPosition().getX() - 5, (int) this.getPosition().getY() - 3, 15, 15);
+        g.setColor(Settings.getSHADOW_COLOR());
+        g.fillRect((int) this.getPosition().getX() + 5, (int) this.getPosition().getY() - 8, 50, 5);
+        g.drawString("" + this.getName(), (int) this.getPosition().getX() + 5, (int) this.getPosition().getY() - 10);
+
         //END SHADOW
         g.drawImage(this.getImage(), (int) this.getPosition().getX(), (int) this.getPosition().getY(), null);
         g.setColor(new Color(255, 107, 107));
@@ -223,10 +236,20 @@ public class Player extends Entity{
         position.moveRight(rightMove - leftMove);
         position.moveDown(downMove - upMove);
     }
-    public void attack(Position mousePos){
+    public ArrayList<Projectile> attack(Position mousePos){
         //attack
-        Projectile projectile = new Projectile(position,mousePos,2,2);
+        ArrayList<Projectile> firedProjectiles = new ArrayList<Projectile>();
+        if(this.getWeapon() == null){
+            Projectile projectile = new Projectile(position, mousePos, 2, this.getWeapon());
+        } else {
+            //reload timer ??
+            Position pmod = new Position(20,20);
+            firedProjectiles.add(new Projectile(position, mousePos.add(pmod), 2,this.getWeapon()));
+            firedProjectiles.add(new Projectile(position, mousePos, 2,this.getWeapon()));
+            firedProjectiles.add(new Projectile(position, mousePos.subtract(pmod), 2,this.getWeapon()));
 
+        }
+        return firedProjectiles;
     }
     //control keys
     public void keyPressed(KeyEvent e) {

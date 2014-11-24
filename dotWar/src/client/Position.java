@@ -49,7 +49,6 @@ public class Position {
     public void moveRight(double r) {
         this.x += r;
     }
-
     //Move left l
     public void moveLeft(double l) {
         this.x -= l;
@@ -72,5 +71,25 @@ public class Position {
     public Position(Position p){
         this.setX(p.getX());
         this.setY(p.getY());
+    }
+    public String toString(){
+        return "X: " + this.getX() + " Y: "+this.getY();
+    }
+    public Position add(Position p){
+        System.out.println(this.toString());
+        System.out.println(p.toString());
+
+        Position pNew = new Position(this.getX() + p.getX(), this.getY() + p.getY());
+        System.out.println(pNew.toString());
+        return pNew;
+    }
+
+    public Position subtract(Position p){
+        System.out.println(this.toString());
+        System.out.println(p.toString());
+
+        Position pNew = new Position(this.getX() - p.getX(), this.getY() - p.getY());
+        System.out.println(pNew.toString());
+        return pNew;
     }
 }

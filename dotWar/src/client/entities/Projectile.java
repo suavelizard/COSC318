@@ -36,6 +36,8 @@ public class Projectile extends Entity{
     private int moveSpeed;
     private double angle;
     private boolean angleSet;
+    private Color color;
+
 
     public Position getTargetPos() {
         return targetPos;
@@ -61,21 +63,42 @@ public class Projectile extends Entity{
         this.moveSpeed = moveSpeed;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
     public Projectile() {
         super.setPosition(new Position(400.0, 400.0));
-        this.setMoveSpeed(50);
+        this.setMoveSpeed(10);
         this.setDamage(1);
         angleSet = false;
     }
 
-    public Projectile(Position position, Position targetPos, int moveSpeed, double damage) {
+    public Projectile(Position position, Position targetPos, double damage) {
         super.setPosition(position);
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);
-        this.setMoveSpeed(moveSpeed);
+        this.setMoveSpeed(10);
         this.setDamage(damage);
         angleSet = false;
+        this.setColor(new Color(78,205,196));
+    }
+    //with weapon modifer
+    public Projectile(Position position, Position targetPos, double damage,Weapon w) {
+        super.setPosition(position);
+        super.setWidth(3);
+        super.setHeight(3);
+        this.setTargetPos(targetPos);
+        this.setMoveSpeed(w.getMoveSpeedModifer());
+        this.setDamage(damage);
+        angleSet = false;
+        this.setColor(w.getColor());
+        this.setDamage(w.getDamageModifier());
     }
 
     public void move() {
@@ -95,7 +118,7 @@ public class Projectile extends Entity{
 
     }
     public void bounce(int direction){
-        if(direction == 1 || direction == 2){
+        if(direction == 1 || direction == 0){
             angle = angle -180;
         }
     }
@@ -103,7 +126,7 @@ public class Projectile extends Entity{
         //hardcoded shadow
 //        g.setColor(Color.darkGray);
 //        g.fillRect((int) this.getPosition().getX()-3, (int) this.getPosition().getY()-3, 4, 4);
-        g.setColor(new Color(78,205,196));
+        g.setColor(this.getColor());
         g.fillRect((int) this.getPosition().getX(), (int) this.getPosition().getY(), 4, 4);
     }
 }

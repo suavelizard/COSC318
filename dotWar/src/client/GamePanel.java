@@ -23,6 +23,7 @@
 package client;
 
 import client.entities.*;
+import client.entities.Weapon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +33,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by Nicholas on 20/11/2014.
@@ -43,6 +45,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
+    private ArrayList<Wall> wallArray = new ArrayList();
     private JLabel playerStats;
     private JLabel enemyStats;
     private JProgressBar playerHealth;
@@ -51,8 +54,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         this.setLayout(null);
         initPlayers();
+        initWalls(10);
         setPreferredSize(new Dimension(1000, 768));
-        setBounds(0, 0, 1000, 768);
+        setBounds(0, 0, 1000, 790);
         setFocusable(true);
         addKeyListener(this);
         addMouseListener(this);
@@ -91,15 +95,28 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         add(playerStats);
     }
 
+    public void initWalls(int numWalls){
+        Random rnd = new Random();
+        for(int i = 0; i < numWalls; i++) {
+            int r = rnd.nextInt(700-25) + 25;
+            int rposX = rnd.nextInt(768);
+            int rposY = rnd.nextInt(1000);
+            wallArray.add(new Wall(new Position(rposX,rposY),15,200,1));
+            wallArray.add(new Wall(new Position(rposX,rposY),400,15,0));
+
+        }
+    }
     public void initPlayers() {
         //Placeholders
 
         player = new Player(15,15,"Zane","1");
+        player.setWeapon(new Weapon(2,5,Color.RED));
         enemy = new Player(15,15,"Enemy","2");
         enemy.setHealth(90);
-        wall1 = new client.entities.Wall(new Position(400,300),15,300);
-        wall2 = new client.entities.Wall(new Position(200,300),15,300,1);
 
+        Position p1 = new Position(10,10);
+        Position p2 = new Position(10,10);
+        p1.add(p2);
 
         player.setPosition(new Position(20, 20));
         enemy.setPosition(new Position(950,690));
@@ -109,7 +126,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
-
+        for(Wall w:wallArray){
+            w.draw(g2d);
+        }
         if(enemy.isVisible()){
             enemy.draw(g2d);
         }
@@ -117,10 +136,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             player.draw(g2d);
         }
 
-        wall2.draw(g2d);
-
-        if(checkOutOfBounds(player.getPosition()) !=0){
-            switch (checkOutOfBounds(player.getPosition())){
+        if(checkOutOfBounds(player) !=0){
+            switch (checkOutOfBounds(player)){
                 case 1:
                     player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY()+15));
                     break;
@@ -143,7 +160,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             Projectile p = iterator.next();
             p.move();
             p.draw(g2d);
-            if(checkOutOfBounds(p.getPosition()) > 0) {
+            if(checkOutOfBounds(p) > 0) {
+                System.out.println("Projectile flew out of bounds!");
                 iterator.remove();
             }
             if(checkCollisions(p,enemy) ){
@@ -153,12 +171,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 //            if(checkCollisions(p, wall1)){
 //                p.bounce(wall1.getWallOrientation());
 //            }
-            if(checkCollisions(p, wall2)){
-                p.bounce(wall2.getWallOrientation());
+            for(Wall w :wallArray) {
+                if (checkCollisions(p, w)) {
+                    System.out.println("wall interaction");
+                    p.bounce(w.getWallOrientation());
+                }
             }
-            if(checkCollisions(player,wall2)){
 
-            }
         }
 
         Toolkit.getDefaultToolkit().sync();
@@ -185,17 +204,24 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     }
     //GENERAL COLLISION DETECTION FOR ALL ENTITIES
     public boolean checkCollisions(Entity e1, Entity e2) {
-        //TODO: Find bug that makes boundries weird
-        Rectangle r1 = e1.getBounds();
-        Rectangle r2 = e2.getBounds();
-        if(r1.intersects(r2)){
-            //collision occurred!
-            return true;
-        } else{
-            return false;
-        }
+        return e1.getBounds().intersects(e2.getBounds());
     }
+    public int checkWallCollision(Entity e1, Entity e2){
+        int direction = 1;
+        Position e1TopLeft = e1.getPosition();
+        Position e1TopRight = new Position(e1.getPosition().getX()+e1.getWidth(),e1.getPosition().getY());
+        Position e1BottomLeft = new Position(e1.getPosition().getX(),e1.getPosition().getY()+e1.getHeight());
+        Position e1BottomRight = new Position(e1.getPosition().getX()+e1.getWidth(),e1.getPosition().getY()+e1.getHeight());
 
+        Position e2TopLeft = e2.getPosition();
+        Position e2TopRight = new Position(e2.getPosition().getX()+e2.getWidth(),e2.getPosition().getY());
+        Position e2BottomLeft = new Position(e2.getPosition().getX(),e2.getPosition().getY()+e2.getHeight());
+        Position e2BottomRight = new Position(e2.getPosition().getX()+e2.getWidth(),e2.getPosition().getY()+e2.getHeight());
+
+
+
+        return direction;
+    }
     /*
     DEFAULT not out of bounds 0
     TOP 1
@@ -203,18 +229,18 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     RIGHT 3
     LEFT 4
     */
-    public int checkOutOfBounds(Position p){
+    public int checkOutOfBounds(Entity e){
         //TODO: move player width and height inside player object
-        if(p.getY() < 0) {
+        if(e.getPosition().getY() < 0) {
             return 1;
         }
-        if(p.getY()+player.getHeight() > this.getHeight()) {
+        if(e.getPosition().getY()+e.getHeight() > this.getHeight()) {
             return 2;
         }
-        if(p.getX()+player.getWidth() > this.getWidth()) {
+        if(e.getPosition().getX()+e.getWidth() > this.getWidth()) {
             return 3;
         }
-        if(p.getX() < 0) {
+        if(e.getPosition().getX() < 0) {
             return 4;
         }
         return 0;
@@ -242,7 +268,12 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     @Override
     public void mousePressed(MouseEvent e) {
         Position mousePos = new Position(e.getX(), e.getY());
-        projectileArray.add(new Projectile(player.getPosition(), mousePos, 5, 5));
+        //projectileArray.add(new Projectile(player.getPosition(), mousePos, 5, 5));
+        System.out.println("Attack");
+        for (Projectile p: player.attack(mousePos)){
+            projectileArray.add(p);
+        }
+
     }
 
     @Override
