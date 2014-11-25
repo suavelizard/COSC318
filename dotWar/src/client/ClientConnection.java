@@ -99,12 +99,16 @@ public class ClientConnection implements  Runnable{
                 //toServer.writeObject("NAME TEST");
                 if (line.startsWith("[SERVER]: Enter Player Name:")) {
                     toServer.writeObject(clientName);
+                    toServer.flush();
+                    System.out.println("[" +clientName + "]: " + clientName);
+
                 } else if (line.startsWith("[SERVER]: Name accepted.")) {
                     //textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
                     // messageArea.append(line.substring(8) + "\n");
                 }else if (line.startsWith("[SERVER]: Send Player Packet:")) {
                     toServer.writeObject("POSITION");
+                    toServer.flush();
                 }
             }
 
@@ -112,6 +116,16 @@ public class ClientConnection implements  Runnable{
             clnfe.printStackTrace();
         } catch (IOException ioe){
             ioe.printStackTrace();
+        } finally {
+            try {
+                toServer.writeObject("Disconnect");
+                toServer.flush();
+                toServer.close();
+                fromServer.close();
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -64,6 +64,8 @@ public class ClientManager implements Runnable{
             for(Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext();) {
                 ClientConnection cc = iterator.next();
                 cc.getPlayerInfo();
+                if(!cc.isOpen())
+                    iterator.remove();
             }
             elapsed = System.currentTimeMillis() - start;
             try {

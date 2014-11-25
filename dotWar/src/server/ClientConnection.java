@@ -14,6 +14,16 @@ public class ClientConnection implements Runnable{
     private ObjectOutputStream toClient;
     private Socket socket;
 
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+
+    private boolean open;
+
     public ObjectOutputStream getToClient() {
         return toClient;
     }
@@ -75,6 +85,7 @@ public class ClientConnection implements Runnable{
             System.out.println((String)fromClient.readObject());
         } catch (IOException ioe) {
             System.err.println(ioe);
+            ioe.printStackTrace();
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
         }
@@ -88,6 +99,7 @@ public class ClientConnection implements Runnable{
                 toClient.close();
             if (socket != null)
                 socket.close();
+            setOpen(false);
 
     }
 
