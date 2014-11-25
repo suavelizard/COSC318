@@ -164,6 +164,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         }
         for(Weapon w:weaponArray){
             if(w.isVisible()){
+                g.setColor(w.getColor());
                 w.draw(g);
             }
             if(checkCollisions(player, w)){

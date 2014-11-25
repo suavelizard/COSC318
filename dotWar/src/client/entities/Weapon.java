@@ -70,22 +70,22 @@ public class Weapon extends Entity{
     }
 
     public Weapon(){
-        super.setPosition(new Position(0, 0));
-        super.setWidth(3);
-        super.setHeight(3);
+        this.setPosition(new Position(0, 0));
+        this.setWidth(10);
+        this.setHeight(10);
         this.setType(0);
         this.setColor(Color.black);
     }
     public Weapon(int damageModifier,int moveSpeedModifer,int type, Color color){
-        super.setPosition(new Position(0, 0));
-        super.setWidth(3);
-        super.setHeight(3);
+        this.setPosition(new Position(0, 0));
+        this.setWidth(10);
+        this.setHeight(10);
         this.setColor(color);
         this.setDamageModifier(damageModifier);
         this.setMoveSpeedModifer(moveSpeedModifer);
         this.setType(type);
     }
     public void draw(Graphics g){
-        g.fillOval((int)this.getPosition().getX(),(int)this.getPosition().getY(),25,25);
+        g.fillOval((int)this.getPosition().getX(),(int)this.getPosition().getY(),this.getWidth(),this.getHeight());
     }
 }
