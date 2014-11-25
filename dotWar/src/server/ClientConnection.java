@@ -33,18 +33,21 @@ public class ClientConnection implements Runnable{
         }
     }
     public void process(Socket client) throws IOException {
-        fromClient = null;
-        toClient = null;
         try {
             /**
              * get the input and output streams associated with the socket.
              */
             toClient = new ObjectOutputStream(socket.getOutputStream());
-            fromClient = new ObjectInputStream(socket.getInputStream());
+            toClient.flush();
+            this.fromClient = new ObjectInputStream(socket.getInputStream());
+
             /** continually loop until the client closes the connection */
-            Object objectFromClient;
+            String objectFromClient = "Client Message Here";
             while (true) {
-                objectFromClient = fromClient.readObject();
+                if(fromClient.available() != 0) {
+                    objectFromClient = (String) fromClient.readObject();
+                    System.out.println(objectFromClient);
+                }
                 if(objectFromClient.toString().equals("Disconnect")){
                     //remove dc'd player
                     System.out.println("Client disconnected");

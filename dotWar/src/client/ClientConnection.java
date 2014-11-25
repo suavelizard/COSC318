@@ -48,22 +48,19 @@ public class ClientConnection implements  Runnable{
     }
 
     protected ClientConnection() {
-        try {
+        /*try {
             socket = new Socket(SERVER_ADDRESS,9264);
             fromServer = new ObjectInputStream(socket.getInputStream());
-            
             toServer = new ObjectOutputStream((socket.getOutputStream()));
         } catch (IOException ioe){
             ioe.printStackTrace();
-        }
+        }*/
     }
     public static ClientConnection getInstance(){
-        System.out.println("hello");
 
         if(instance == null){
             instance = new ClientConnection();
         }
-        System.out.println("hello1");
         return instance;
     }
     /**
@@ -74,10 +71,11 @@ public class ClientConnection implements  Runnable{
         // Make connection and initialize streams
 //        System.out.println("Server at:" + SERVER_ADDRESS );
 //
-//        Socket socket = new Socket(SERVER_ADDRESS, 9264);
-        try{
-            System.out.println("Attempting to connect to server at: " + getServerAddress());
 
+        try{
+
+            System.out.println("Attempting to connect to server at: " + getServerAddress());
+            socket = new Socket(SERVER_ADDRESS, 9264);
             System.out.println("New Socket created");
 
             fromServer = new ObjectInputStream(socket.getInputStream());
@@ -85,19 +83,22 @@ public class ClientConnection implements  Runnable{
 
             toServer = new ObjectOutputStream(socket.getOutputStream());
             System.out.println("New ObjectOutputStream");
+            toServer.flush();
 
-            String line;
+            String line = "Server Message Here";
             System.out.println("Beginning connection");
 
 
             // Process all messages from server, according to the protocol.
             while (true) {
-                line = fromServer.readObject().toString();
-                System.out.println(line);
+                if(fromServer.available() != 0) {
+                    line = fromServer.readObject().toString();
+                    System.out.println(line);
+                }
                 //processs packets!
-
+                toServer.writeObject("NAME TEST");
                 if (line.startsWith("[SERVER]: Enter Player Name:")) {
-                    //outputstream.writeObject((Object)getName());
+                    toServer.writeObject("NAME TEST");
                 } else if (line.startsWith("[SERVER]: Name accepted.")) {
                     //textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
@@ -108,6 +109,15 @@ public class ClientConnection implements  Runnable{
         } catch(ClassNotFoundException clnfe){
             clnfe.printStackTrace();
         } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+    }
+
+    public void sendName(String name) {
+        try {
+            toServer.writeObject(name.toString());
+            toServer.flush();
+        }catch(IOException ioe){
             ioe.printStackTrace();
         }
     }

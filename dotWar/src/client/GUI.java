@@ -46,7 +46,9 @@ public class GUI extends JFrame implements ActionListener{
     private int SERVER_PORT = 9264;
 
     private String serverIp;
+    private String name;
     private JTextArea chatHistory = null;
+    ClientConnection cc = ClientConnection.getInstance();
 
 
     // Class constructor
@@ -91,6 +93,9 @@ public class GUI extends JFrame implements ActionListener{
         setBounds(0,0, 1366, 768 );
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+
+        serverConnect();
 
         long start, elapsed, wait;
         while(true) {
@@ -142,20 +147,30 @@ public class GUI extends JFrame implements ActionListener{
 
         return menuBar;
     }
+
+    public void serverConnect() {
+        serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address");
+        name = JOptionPane.showInputDialog(this, "New Server Connection", "Enter Unique Name");
+
+        if(isValidIP(serverIp)){
+            try {
+                cc.setServerAddress(serverIp);
+                cc.run();
+
+
+                //ClientConnection.getInstance().run();
+
+            }catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     public void actionPerformed(ActionEvent e){
         JMenuItem source = (JMenuItem)(e.getSource());
         System.out.println(source.getText());
         if(source.getText().equals("Connect to Server")) {
-            serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address:");
-            if(isValidIP(serverIp)){
-                try {
-                    ClientConnection.getInstance().setServerAddress(serverIp);
-                    //ClientConnection.getInstance().run();
-
-                }catch(Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
+            serverConnect();
         }
     }
     public boolean isValidIP(String ip){

@@ -61,7 +61,8 @@ public class Server {
         System.out.println("Server started successfully on port: " + SERVER_SOCKET);
         try {
         while (SERVER_RUNNING) {
-                new ClientConnection(serverSocket.accept()).run();
+            server.ClientConnection cc = new server.ClientConnection(serverSocket.accept());
+            new Thread(cc).start();
             }
         } finally {
             serverSocket.close();
