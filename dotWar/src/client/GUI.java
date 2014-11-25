@@ -145,11 +145,12 @@ public class GUI extends JFrame implements ActionListener{
     public void actionPerformed(ActionEvent e){
         JMenuItem source = (JMenuItem)(e.getSource());
         System.out.println(source.getText());
-        if(source.getText() == "Connect to Server") {
+        if(source.getText().equals("Connect to Server")) {
             serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address:");
             if(isValidIP(serverIp)){
                 try {
-                    Socket clientSocket = new Socket(SERVER_ADDRESS, SERVER_PORT);
+                    ClientConnection.getInstance().setServerAddress(serverIp);
+                    //ClientConnection.getInstance().run();
 
                 }catch(Exception ex) {
                     ex.printStackTrace();

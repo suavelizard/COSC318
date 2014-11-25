@@ -31,47 +31,68 @@ import java.net.Socket;
  * Created by Zane on 2014-11-06.
  * Handles creating connection to server
  */
-public class ClientConnection {
-    private ObjectOutputStream outputstream;
-    private ObjectInputStream inputstream;
-    private String SERVER_ADDRESS;
+public class ClientConnection implements  Runnable{
+    private static ClientConnection instance = null;
+    static Socket socket;
+    static ObjectOutputStream toServer;
+    static ObjectInputStream fromServer;
+    static String SERVER_ADDRESS = "localhost";
     private int SERVER_PORT;
 
-    public ClientConnection(Socket clientSocket,String serverip) {
+    public static String getServerAddress() {
+        return SERVER_ADDRESS;
+    }
+
+    public static void setServerAddress(String serverAddress) {
+        SERVER_ADDRESS = serverAddress;
+    }
+
+    protected ClientConnection() {
         try {
-            clientSocket = new Socket(SERVER_ADDRESS, SERVER_PORT);
-            inputstream = new ObjectInputStream(clientSocket.getInputStream());
-            outputstream = new ObjectOutputStream((clientSocket.getOutputStream()));
-            this.SERVER_ADDRESS = serverip;
+            socket = new Socket(SERVER_ADDRESS,9264);
+            fromServer = new ObjectInputStream(socket.getInputStream());
+            
+            toServer = new ObjectOutputStream((socket.getOutputStream()));
         } catch (IOException ioe){
             ioe.printStackTrace();
         }
     }
+    public static ClientConnection getInstance(){
+        System.out.println("hello");
+
+        if(instance == null){
+            instance = new ClientConnection();
+        }
+        System.out.println("hello1");
+        return instance;
+    }
     /**
      * Connects to the server then enters the processing loop.
      */
-    private void run() throws IOException {
+    public void run(){
 
         // Make connection and initialize streams
-        System.out.println("Server at:" + SERVER_ADDRESS );
+//        System.out.println("Server at:" + SERVER_ADDRESS );
+//
+//        Socket socket = new Socket(SERVER_ADDRESS, 9264);
+        try{
+            System.out.println("Attempting to connect to server at: " + getServerAddress());
 
-        Socket socket = new Socket(SERVER_ADDRESS, 9264);
-        System.out.println("New Socket created");
+            System.out.println("New Socket created");
 
-        inputstream = new ObjectInputStream(socket.getInputStream());
-        System.out.println("New ObjectInputStream");
+            fromServer = new ObjectInputStream(socket.getInputStream());
+            System.out.println("New ObjectInputStream");
 
-        outputstream = new ObjectOutputStream(socket.getOutputStream());
-        System.out.println("New ObjectOutputStream");
+            toServer = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("New ObjectOutputStream");
 
-        String line;
-        System.out.println("Beginning connection");
+            String line;
+            System.out.println("Beginning connection");
 
 
-        // Process all messages from server, according to the protocol.
-        while (true) {
-            try {
-                line = inputstream.readObject().toString();
+            // Process all messages from server, according to the protocol.
+            while (true) {
+                line = fromServer.readObject().toString();
                 System.out.println(line);
                 //processs packets!
 
@@ -80,12 +101,14 @@ public class ClientConnection {
                 } else if (line.startsWith("[SERVER]: Name accepted.")) {
                     //textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
-                   // messageArea.append(line.substring(8) + "\n");
+                    // messageArea.append(line.substring(8) + "\n");
                 }
-            } catch(ClassNotFoundException clnfe){
-                clnfe.printStackTrace();
             }
 
+        } catch(ClassNotFoundException clnfe){
+            clnfe.printStackTrace();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
         }
     }
 }

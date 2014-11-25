@@ -87,6 +87,7 @@ public abstract class Entity {
     public void draw(Graphics g){
         g.fillOval(0,0,25,25);
     }
+
     public Entity(){
         this.setPosition(new Position(0,0));
         this.setWidth(10);

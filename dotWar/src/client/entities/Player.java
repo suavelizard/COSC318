@@ -148,13 +148,13 @@ public class Player extends Entity{
 
     public Player() {
         super();
-        super.setHeight(10);
-        super.setWidth(10);
+        this.setHeight(10);
+        this.setWidth(10);
         this.setHealth(100);
         this.setAlive(true);
         this.setScore(0);
         this.setMoveSpeed(3);
-        super.setPosition(new Position(400.0, 400.0));
+        this.setPosition(new Position(400.0, 400.0));
 
     }
     //constructor with player size

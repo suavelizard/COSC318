@@ -22,9 +22,6 @@
 
 package server;
 
-import server.models.players.Player;
-import server.models.players.PlayerHandler;
-
 import java.io.*;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -47,8 +44,7 @@ public class Server {
     private ObjectOutputStream out;
     private ObjectInputStream in;
 
-    private static ArrayList<Player> connectedPlayers = new ArrayList<Player>();
-    private static ArrayList<PlayerHandler> playerHandlers= new ArrayList<PlayerHandler>();
+    public static ArrayList<ClientConnection> connectedPlayers = new ArrayList<ClientConnection>();
     public static void main(String args[]) {
         //connectedPlayers = new ArrayList<Player>();
         try {
@@ -63,12 +59,12 @@ public class Server {
         serverSocket = new ServerSocket(SERVER_SOCKET);
         SERVER_RUNNING = true;
         System.out.println("Server started successfully on port: " + SERVER_SOCKET);
+        try {
         while (SERVER_RUNNING) {
-            try {
-                new PlayerHandler(serverSocket.accept(),connectedPlayers).start();
-            } finally {
-                serverSocket.close();
+                new ClientConnection(serverSocket.accept()).run();
             }
+        } finally {
+            serverSocket.close();
         }
     }
 
