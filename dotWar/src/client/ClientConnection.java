@@ -38,6 +38,7 @@ public class ClientConnection implements  Runnable{
     static ObjectInputStream fromServer;
     static String SERVER_ADDRESS = "localhost";
     private int SERVER_PORT;
+    private String clientName;
 
     public static String getServerAddress() {
         return SERVER_ADDRESS;
@@ -91,18 +92,19 @@ public class ClientConnection implements  Runnable{
 
             // Process all messages from server, according to the protocol.
             while (true) {
-                if(fromServer.available() != 0) {
-                    line = fromServer.readObject().toString();
-                    System.out.println(line);
-                }
+                line = fromServer.readObject().toString();
+                System.out.println(line);
+
                 //processs packets!
-                toServer.writeObject("NAME TEST");
+                //toServer.writeObject("NAME TEST");
                 if (line.startsWith("[SERVER]: Enter Player Name:")) {
-                    toServer.writeObject("NAME TEST");
+                    toServer.writeObject(clientName);
                 } else if (line.startsWith("[SERVER]: Name accepted.")) {
                     //textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
                     // messageArea.append(line.substring(8) + "\n");
+                }else if (line.startsWith("[SERVER]: Send Player Packet:")) {
+                    toServer.writeObject("POSITION");
                 }
             }
 
@@ -113,12 +115,7 @@ public class ClientConnection implements  Runnable{
         }
     }
 
-    public void sendName(String name) {
-        try {
-            toServer.writeObject(name.toString());
-            toServer.flush();
-        }catch(IOException ioe){
-            ioe.printStackTrace();
-        }
+    public void setName(String name) {
+        this.clientName = name;
     }
 }

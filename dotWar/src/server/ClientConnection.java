@@ -22,59 +22,73 @@ public class ClientConnection implements Runnable{
         this.toClient = toClient;
     }
 
-    public ClientConnection(Socket s){
+    public ClientConnection(Socket s) throws IOException{
         this.socket = s;
+        /**
+         * get the input and output streams associated with the socket.
+         */
+        try {
+            toClient = new ObjectOutputStream(socket.getOutputStream());
+            toClient.flush();
+            this.fromClient = new ObjectInputStream(socket.getInputStream());
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+        }
     }
     public void run() {
         try {
-            process(socket);
+            process();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void process(Socket client) throws IOException {
+
+    private void process() throws IOException {
+        getClientName();
+    }
+
+    public void getClientName() throws IOException {
         try {
-            /**
-             * get the input and output streams associated with the socket.
-             */
-            toClient = new ObjectOutputStream(socket.getOutputStream());
+
+            toClient.writeObject("[SERVER]: Enter Player Name:");
             toClient.flush();
-            this.fromClient = new ObjectInputStream(socket.getInputStream());
-
-            /** continually loop until the client closes the connection */
-            String objectFromClient = "Client Message Here";
-            while (true) {
-                if(fromClient.available() != 0) {
-                    objectFromClient = (String) fromClient.readObject();
-                    System.out.println(objectFromClient);
-                }
-                if(objectFromClient.toString().equals("Disconnect")){
-                    //remove dc'd player
-                    System.out.println("Client disconnected");
-                    Server.connectedPlayers.remove(this);
-                    break;
-                }
-                for (Iterator<ClientConnection> iterator = Server.connectedPlayers.iterator(); iterator.hasNext();) {
-                    ClientConnection cc = iterator.next();
-                    cc.sendObject(objectFromClient);
-                }
-
+            String objectFromClient = (String) fromClient.readObject();
+            System.out.println(objectFromClient + " now connected.");
+            if (objectFromClient.toString().equals("Disconnect")) {
+                //remove dc'd player
+                System.out.println("Client disconnected");
+                closeConnection();
             }
-        }
-        catch (IOException ioe) {
+
+
+        } catch (IOException ioe) {
             System.err.println(ioe);
-        } catch (ClassNotFoundException cnfe){
+        } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
         }
-        finally {
-            // close streams and socket
+    }
+
+    public void getPlayerInfo(){
+        try {
+            toClient.writeObject("[SERVER]: Send Player Packet:");
+            toClient.flush();
+            System.out.println((String)fromClient.readObject());
+        } catch (IOException ioe) {
+            System.err.println(ioe);
+        } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        }
+    }
+
+    public void closeConnection() throws IOException{
+
             if (fromClient != null)
                 fromClient.close();
             if (toClient != null)
                 toClient.close();
-            if (client != null)
-                client.close();
-        }
+            if (socket != null)
+                socket.close();
+
     }
 
     private void sendObject(Object o) {

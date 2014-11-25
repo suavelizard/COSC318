@@ -43,6 +43,7 @@ public class Server {
     //static ArrayList<Player> connectedPlayers;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private ClientManager cM = ClientManager.getInstance();
 
     public static ArrayList<ClientConnection> connectedPlayers = new ArrayList<ClientConnection>();
     public static void main(String args[]) {
@@ -59,10 +60,10 @@ public class Server {
         serverSocket = new ServerSocket(SERVER_SOCKET);
         SERVER_RUNNING = true;
         System.out.println("Server started successfully on port: " + SERVER_SOCKET);
+        new Thread(cM).start();
         try {
-        while (SERVER_RUNNING) {
-            server.ClientConnection cc = new server.ClientConnection(serverSocket.accept());
-            new Thread(cc).start();
+            while (SERVER_RUNNING) {
+                cM.newClient(serverSocket.accept());
             }
         } finally {
             serverSocket.close();

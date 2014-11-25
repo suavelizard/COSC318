@@ -48,7 +48,7 @@ public class GUI extends JFrame implements ActionListener{
     private String serverIp;
     private String name;
     private JTextArea chatHistory = null;
-    ClientConnection cc = ClientConnection.getInstance();
+    private ClientConnection cc = ClientConnection.getInstance();
 
 
     // Class constructor
@@ -155,8 +155,8 @@ public class GUI extends JFrame implements ActionListener{
         if(isValidIP(serverIp)){
             try {
                 cc.setServerAddress(serverIp);
-                cc.run();
-
+                cc.setName(name);
+                new Thread(cc).start();
 
                 //ClientConnection.getInstance().run();
 
