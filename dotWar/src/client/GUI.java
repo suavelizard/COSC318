@@ -149,7 +149,7 @@ public class GUI extends JFrame implements ActionListener{
     }
 
     public void serverConnect() {
-        serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "Enter server address");
+        serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "localhost");
         name = JOptionPane.showInputDialog(this, "New Server Connection", "Enter Unique Name");
 
         if(isValidIP(serverIp)){

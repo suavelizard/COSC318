@@ -33,7 +33,8 @@ import java.util.Iterator;
  */
 public class ClientManager implements Runnable{
     private static ClientManager instance = null;
-    ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
+     static ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
+    //static ArrayList<String> stringarr = new ArrayList<String>();
 
     protected ClientManager() {
 
@@ -47,8 +48,14 @@ public class ClientManager implements Runnable{
 
     public void newClient(Socket s) {
         try {
-            ccArr.add(new server.ClientConnection(s));
+//            server.ClientConnection scc = new server.ClientConnection(s);
+//            ccArr.add(scc);
+//            ccArr.add(new server.ClientConnection(s));
+//            stringarr.add("Hello");
             new Thread(ccArr.get(ccArr.size()-1)).start();
+            //System.out.println("Number of strings in string array: " +stringarr.size());
+
+            System.out.println("Number of connected clients: " +ccArr.size());
         }
         catch(Exception e){
             e.printStackTrace();
@@ -63,9 +70,13 @@ public class ClientManager implements Runnable{
             start = System.currentTimeMillis();
             for(Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext();) {
                 ClientConnection cc = iterator.next();
+                //System.out.println("After iterator next");
+
                 cc.getPlayerInfo();
-                if(!cc.isOpen())
+                if(!cc.isOpen()) {
+                    System.out.println("Client DC'd");
                     iterator.remove();
+                }
             }
             elapsed = System.currentTimeMillis() - start;
             try {
@@ -79,6 +90,7 @@ public class ClientManager implements Runnable{
             catch(Exception ex) {
                 ex.printStackTrace();
             }
+//            System.out.println("end of the loop");
         }
     }
 }

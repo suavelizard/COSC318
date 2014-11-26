@@ -22,7 +22,7 @@ public class ClientConnection implements Runnable{
         this.open = open;
     }
 
-    private boolean open;
+    private boolean open = true;
 
     public ObjectOutputStream getToClient() {
         return toClient;
@@ -33,6 +33,7 @@ public class ClientConnection implements Runnable{
     }
 
     public ClientConnection(Socket s) throws IOException{
+        //System.out.println("New client constructor");
         this.socket = s;
         /**
          * get the input and output streams associated with the socket.
@@ -63,7 +64,7 @@ public class ClientConnection implements Runnable{
             toClient.writeObject("[SERVER]: Enter Player Name:");
             toClient.flush();
             String objectFromClient = (String) fromClient.readObject();
-            System.out.println(objectFromClient + " now connected.");
+            System.out.println(objectFromClient + " is now connected.");
             if (objectFromClient.toString().equals("Disconnect")) {
                 //remove dc'd player
                 System.out.println("Client disconnected");
@@ -77,12 +78,15 @@ public class ClientConnection implements Runnable{
             cnfe.printStackTrace();
         }
     }
-
+    //requests client update
     public void getPlayerInfo(){
         try {
             toClient.writeObject("[SERVER]: Send Player Packet:");
+            //System.out.println("hello");
             toClient.flush();
             System.out.println((String)fromClient.readObject());
+            //System.out.println("hello1");
+
         } catch (IOException ioe) {
             System.err.println(ioe);
             ioe.printStackTrace();
@@ -106,6 +110,7 @@ public class ClientConnection implements Runnable{
     private void sendObject(Object o) {
         try {
             toClient.writeObject(o);
+            toClient.flush();
         }catch(IOException ioe){
             ioe.printStackTrace();
         }
