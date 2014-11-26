@@ -1,6 +1,14 @@
-COSC318
+COSC318 - dotWar
 =======
 
 COSC318 Network Programming - Final Project
 
-Implementing a multi-user application using sockets
+A 2D top down multiplayer arena shooter using Java Sockets
+
+Controls
+======
+Movement: WASD
+Aim: Mouse movement
+Fire: Left Click
+
+
