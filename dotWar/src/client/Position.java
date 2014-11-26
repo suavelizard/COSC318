@@ -86,4 +86,6 @@ public class Position {
         System.out.println("Doing math: "+this.toString()+"  "+ p.toString() + " = "+pNew.toString());
         return pNew;
     }
+
+
 }

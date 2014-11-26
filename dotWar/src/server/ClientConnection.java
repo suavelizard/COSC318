@@ -34,16 +34,15 @@ public class ClientConnection implements Runnable{
 
     public ClientConnection(Socket s) throws IOException{
         //System.out.println("New client constructor");
-
         this.socket = s;
         /**
          * get the input and output streams associated with the socket.
          */
         try {
-            Thread.sleep(200);
             toClient = new ObjectOutputStream(socket.getOutputStream());
             toClient.flush();
             this.fromClient = new ObjectInputStream(socket.getInputStream());
+            Thread.sleep(200);
         }catch(IOException ioe){
             ioe.printStackTrace();
         }catch (InterruptedException ie){
@@ -64,16 +63,15 @@ public class ClientConnection implements Runnable{
 
     public void getClientName() throws IOException {
         try {
-
-            toClient.writeObject("[SERVER]: Enter Player Name:");
-            toClient.flush();
-            String objectFromClient = (String) fromClient.readObject();
-            System.out.println(objectFromClient + " is now connected.");
-            if (objectFromClient.toString().equals("Disconnect")) {
-                //remove dc'd player
-                System.out.println("Client disconnected");
-                closeConnection();
-            }
+                toClient.writeObject("[SERVER]: Enter Player Name:");
+                toClient.flush();
+                String objectFromClient = (String) fromClient.readObject();
+                System.out.println(objectFromClient + " is now connected.");
+                if (objectFromClient.toString().equals("Disconnect")) {
+                    //remove dc'd player
+                    System.out.println("Client disconnected");
+                    closeConnection();
+                }
 
 
         } catch (IOException ioe) {
@@ -83,17 +81,18 @@ public class ClientConnection implements Runnable{
         }
     }
     //requests client update
-    public void getPlayerInfo(){
+    public void sendPlayerInfo(String s){
         try {
-            toClient.writeObject("[SERVER]: Send Player Packet:");
-            //System.out.println("hello");
+            toClient.writeObject("[SERVER]:" + s.toString());
+            System.out.println("send post write");
             toClient.flush();
             System.out.println((String)fromClient.readObject());
-            //System.out.println("hello1");
+            System.out.println("send post read");
 
         } catch (IOException ioe) {
             System.err.println(ioe);
             ioe.printStackTrace();
+            setOpen(false);
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
         }

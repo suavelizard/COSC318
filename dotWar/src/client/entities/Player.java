@@ -86,6 +86,30 @@ public class Player extends Entity{
         this.rightMove = rightMove;
     }
 
+    public int getLeftMove() {
+        return leftMove;
+    }
+
+    public void setLeftMove(int leftMove) {
+        this.leftMove = leftMove;
+    }
+
+    public int getUpMove() {
+        return upMove;
+    }
+
+    public void setUpMove(int upMove) {
+        this.upMove = upMove;
+    }
+
+    public int getDownMove() {
+        return downMove;
+    }
+
+    public void setDownMove(int downMove) {
+        this.downMove = downMove;
+    }
+
     public int getHealth() {
         return health;
     }
@@ -374,4 +398,17 @@ public class Player extends Entity{
 //    public void mouseDragged(MouseEvent e) {
 //
 //    }
+
+
+    public String toString(){
+        String s;
+        s = "[Player]";
+        s += "," + getName();
+        s += "," + getHealth();
+        s += "," + isAlive();
+        s += "," + getWeapon();
+        s += "," + getPosition().toString();
+        s += "," + isVisible();
+        return s;
+    }
 }

@@ -24,6 +24,8 @@ package client;
 
 import client.entities.*;
 import client.entities.Weapon;
+import server.*;
+import server.ClientConnection;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +44,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private Player player;
     private Wall wall1;
     private Wall wall2;
-
+    //private client.ClientConnection cc = client.ClientConnection.getInstance();
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
     private ArrayList<Wall> wallArray = new ArrayList();
@@ -54,7 +56,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private JProgressBar playerHealth;
     public GamePanel() {
         //Get player information from server
-
+        //player.setName(cc.getName());
         this.setLayout(null);
         initPlayers();
         initWalls(10);
@@ -196,8 +198,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             }
             player.updatePosition();
         } else{
+            player.updatePosition();
             for(Wall wall: wallArray) {
                 if (checkCollisions(player, wall)) {
+                    /*
                     System.out.println("Collision with wall");
                     System.out.println(player.getPosition());
                     System.out.println(player.getPreviousPosition());
@@ -206,6 +210,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         System.out.println("New: "+player.getPosition());
                         //System.out.println("Player hit wall on the X, position-previous ="+(player.getPosition().getX() - player.getPreviousPosition().getX()));
                         player.setPosition(player.getPosition().subtract(new Position(5, 5)));
+                    /*if (player.getPosition().getX() - player.getPreviousPosition().getX() > 0) {
+                        System.out.println("Player hit wall on the X, position-previous ="+(player.getPosition().getX() - player.getPreviousPosition().getX()));
+                        player.setPosition(player.getPosition().subtract(new Position(5, 0)));
                     } else if(player.getPosition().getY() - player.getPreviousPosition().getY() > 0 ){
                         //System.out.println("Player hit wall "+player.getPosition().getY());
 
@@ -215,10 +222,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     } else if(player.getPosition().getY() - player.getPreviousPosition().getY() > 0){
                         System.out.println("Player hit wall from bottom");
                         player.setPosition(player.getPreviousPosition().add(new Position(0, 5)));
-                    }
+                    }*/
+                    player.setPosition(player.getPosition().subtract(new Position((player.getRightMove()-player.getLeftMove())*2,(player.getDownMove()-player.getUpMove())*2)));
+                    System.out.println("Player hit wall ");
+
                 }
             }
-            player.updatePosition();
+
         }
 
         for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext();) {

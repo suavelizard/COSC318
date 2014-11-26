@@ -22,10 +22,13 @@
 
 package client;
 
+import client.entities.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 /**
  * Created by Zane on 2014-11-06.
@@ -39,6 +42,13 @@ public class ClientConnection implements  Runnable{
     static String SERVER_ADDRESS = "localhost";
     private int SERVER_PORT;
     private String clientName;
+    private Player player;
+
+
+    private ArrayList<Projectile> projectileArray = new ArrayList();
+    private ArrayList<Wall> wallArray = new ArrayList();
+    private ArrayList<Player> playerArray = new ArrayList();
+    private ArrayList<client.entities.Weapon> weaponArray = new ArrayList();
 
     public static String getServerAddress() {
         return SERVER_ADDRESS;
@@ -56,6 +66,7 @@ public class ClientConnection implements  Runnable{
         } catch (IOException ioe){
             ioe.printStackTrace();
         }*/
+        player = new Player();
     }
     public static ClientConnection getInstance(){
 
@@ -89,6 +100,14 @@ public class ClientConnection implements  Runnable{
             String line = "Server Message Here";
             System.out.println("Beginning connection");
 
+            line = fromServer.readObject().toString();
+            System.out.println(line);
+            if (line.startsWith("[SERVER]: Enter Player Name:")) {
+                toServer.writeObject(clientName);
+                toServer.flush();
+                System.out.println("[" +clientName + "]: " + clientName);
+                player.setName(clientName);
+            }
 
             // Process all messages from server, according to the protocol.
             while (true) {
@@ -97,16 +116,18 @@ public class ClientConnection implements  Runnable{
 
                 //processs packets!
                 //toServer.writeObject("NAME TEST");
-                if (line.startsWith("[SERVER]: Enter Player Name:")) {
-                    toServer.writeObject(clientName);
-                    toServer.flush();
-                    System.out.println("[" +clientName + "]: " + clientName);
-
-                } else if (line.startsWith("[SERVER]: Name accepted.")) {
+                 if (line.startsWith("[SERVER]: Name accepted.")) {
                     //textField.setEditable(true);
                 } else if (line.startsWith("MESSAGE")) {
                     // messageArea.append(line.substring(8) + "\n");
-                }else if (line.startsWith("[SERVER]: Send Player Packet:")) {
+                }else if (line.startsWith("[SERVER]:[Player]")) {
+                     String [] playerPacket = line.split(",");
+                     if(playerPacket[1] != getName()){
+
+                     }
+                     else {
+                         System.out.println("Self recieved");
+                     }
                     toServer.writeObject("POSITION");
                     toServer.flush();
                 }
@@ -131,5 +152,9 @@ public class ClientConnection implements  Runnable{
 
     public void setName(String name) {
         this.clientName = name;
+    }
+
+    public String getName(){
+        return clientName;
     }
 }

@@ -34,6 +34,9 @@ import java.util.Iterator;
 public class ClientManager implements Runnable{
     private static ClientManager instance = null;
      static ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
+    static ArrayList<String> playerArray = new ArrayList<String>();
+    static ArrayList<String> projectileArray = new ArrayList<String>();
+    static ArrayList<String> weaponArray = new ArrayList<String>();
     //static ArrayList<String> stringarr = new ArrayList<String>();
 
     protected ClientManager() {
@@ -50,7 +53,7 @@ public class ClientManager implements Runnable{
         try {
 //            server.ClientConnection scc = new server.ClientConnection(s);
 //            ccArr.add(scc);
-           ccArr.add(new server.ClientConnection(s));
+            ccArr.add(new server.ClientConnection(s));
 //            stringarr.add("Hello");
             new Thread(ccArr.get(ccArr.size()-1)).start();
             //System.out.println("Number of strings in string array: " +stringarr.size());
@@ -70,9 +73,13 @@ public class ClientManager implements Runnable{
             start = System.currentTimeMillis();
             for(Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext();) {
                 ClientConnection cc = iterator.next();
-                //System.out.println("After iterator next");
+                System.out.println("After iterator next");
+                for(Iterator<String> inIt = playerArray.iterator(); inIt.hasNext();) {
+                    String s = inIt.next();
+                    System.out.println("After inner iterator next");
+                    cc.sendPlayerInfo(s);
+                }
 
-                cc.getPlayerInfo();
                 if(!cc.isOpen()) {
                     System.out.println("Client DC'd");
                     iterator.remove();

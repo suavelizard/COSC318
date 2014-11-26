@@ -57,7 +57,7 @@ public class GUI extends JFrame implements ActionListener{
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
-
+        //serverConnect();
         JPanel game = new GamePanel();
         JScrollPane chatScroll = new JScrollPane();
         JPanel chatPane = new JPanel();
@@ -95,7 +95,7 @@ public class GUI extends JFrame implements ActionListener{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
 
-        serverConnect();
+
 
         long start, elapsed, wait;
         while(true) {
