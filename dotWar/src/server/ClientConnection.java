@@ -34,16 +34,20 @@ public class ClientConnection implements Runnable{
 
     public ClientConnection(Socket s) throws IOException{
         //System.out.println("New client constructor");
+
         this.socket = s;
         /**
          * get the input and output streams associated with the socket.
          */
         try {
+            Thread.sleep(200);
             toClient = new ObjectOutputStream(socket.getOutputStream());
             toClient.flush();
             this.fromClient = new ObjectInputStream(socket.getInputStream());
         }catch(IOException ioe){
             ioe.printStackTrace();
+        }catch (InterruptedException ie){
+            ie.printStackTrace();
         }
     }
     public void run() {

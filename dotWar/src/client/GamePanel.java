@@ -194,9 +194,26 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     break;
             }
             player.updatePosition();
-        } else {
+        } else{
+            for(Wall wall: wallArray) {
+                if (checkCollisions(player, wall)) {
+                    if (player.getPosition().getX() - player.getPreviousPosition().getX() > 0) {
+                        System.out.println("Player hit wall on the X, position-previous ="+(player.getPosition().getX() - player.getPreviousPosition().getX()));
+                        player.setPosition(player.getPosition().subtract(new Position(5, 0)));
+                    } else if(player.getPosition().getY() - player.getPreviousPosition().getY() > 0 ){
+                        //System.out.println("Player hit wall "+player.getPosition().getY());
+                        System.out.println("Player hit wall on the Y, position-previous ="+(player.getPosition().getY() - player.getPreviousPosition().getY()));
+
+                        player.setPosition(player.getPreviousPosition().subtract(new Position(0, 5)));
+                    } else if(player.getPosition().getY() - player.getPreviousPosition().getY() > 0){
+                        System.out.println("Player hit wall from bottom");
+                        player.setPosition(player.getPreviousPosition().add(new Position(0, 5)));
+                    }
+                }
+            }
             player.updatePosition();
         }
+
         for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext();) {
             Projectile p = iterator.next();
             p.move();

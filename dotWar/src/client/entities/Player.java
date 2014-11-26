@@ -50,6 +50,7 @@ public class Player extends Entity{
     private Position position;
     private String name;
     private boolean isVisible= true;
+    private Position previousPosition;
 
     private String playerImageString = "default";
 
@@ -131,6 +132,14 @@ public class Player extends Entity{
 
     public void setWeapon(Weapon weapon) {
         this.weapon = weapon;
+    }
+
+    public Position getPreviousPosition() {
+        return previousPosition;
+    }
+
+    public void setPreviousPosition(Position previousPosition) {
+        this.previousPosition = previousPosition;
     }
 
     //calculates damage
@@ -233,8 +242,12 @@ public class Player extends Entity{
     //I don't think we need this, I added methods to the position class to handle movement
     public void updatePosition(){
         //movement
+        this.setPreviousPosition(this.getPosition());
+        System.out.println("Previous: "+this.getPreviousPosition());
         position.moveRight(rightMove - leftMove);
         position.moveDown(downMove - upMove);
+        System.out.println("New: "+this.getPosition());
+
     }
     public ArrayList<Projectile> attack(Position mousePos){
         //attack

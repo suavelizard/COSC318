@@ -50,7 +50,7 @@ public class ClientManager implements Runnable{
         try {
 //            server.ClientConnection scc = new server.ClientConnection(s);
 //            ccArr.add(scc);
-//            ccArr.add(new server.ClientConnection(s));
+           ccArr.add(new server.ClientConnection(s));
 //            stringarr.add("Hello");
             new Thread(ccArr.get(ccArr.size()-1)).start();
             //System.out.println("Number of strings in string array: " +stringarr.size());
