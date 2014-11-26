@@ -243,10 +243,10 @@ public class Player extends Entity{
     public void updatePosition(){
         //movement
         this.setPreviousPosition(this.getPosition());
-        System.out.println("Previous: "+this.getPreviousPosition());
+        //System.out.println("Previous: "+this.getPreviousPosition());
         position.moveRight(rightMove - leftMove);
         position.moveDown(downMove - upMove);
-        System.out.println("New: "+this.getPosition());
+        //System.out.println("New: "+this.getPosition());
 
     }
     public ArrayList<Projectile> attack(Position mousePos){

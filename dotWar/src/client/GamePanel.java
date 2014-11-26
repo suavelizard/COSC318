@@ -144,6 +144,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         p1.add(p2);
 
         player.setPosition(new Position(20, 20));
+        player.updatePosition();
        // enemy.setPosition(new Position(950,690));
 
     }
@@ -178,7 +179,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             player.draw(g2d);
         }
 
-        if(checkOutOfBounds(player) !=0){
+        if(checkOutOfBounds(player) != 0){
             switch (checkOutOfBounds(player)){
                 case 1:
                     player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY()+15));
@@ -197,12 +198,18 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         } else{
             for(Wall wall: wallArray) {
                 if (checkCollisions(player, wall)) {
+                    System.out.println("Collision with wall");
+                    System.out.println(player.getPosition());
+                    System.out.println(player.getPreviousPosition());
                     if (player.getPosition().getX() - player.getPreviousPosition().getX() > 0) {
-                        System.out.println("Player hit wall on the X, position-previous ="+(player.getPosition().getX() - player.getPreviousPosition().getX()));
-                        player.setPosition(player.getPosition().subtract(new Position(5, 0)));
+                        System.out.println("Previous: "+player.getPreviousPosition());
+                        System.out.println("New: "+player.getPosition());
+                        //System.out.println("Player hit wall on the X, position-previous ="+(player.getPosition().getX() - player.getPreviousPosition().getX()));
+                        player.setPosition(player.getPosition().subtract(new Position(5, 5)));
                     } else if(player.getPosition().getY() - player.getPreviousPosition().getY() > 0 ){
                         //System.out.println("Player hit wall "+player.getPosition().getY());
-                        System.out.println("Player hit wall on the Y, position-previous ="+(player.getPosition().getY() - player.getPreviousPosition().getY()));
+
+                        //System.out.println("Player hit wall on the Y, position-previous ="+(player.getPosition().getY() - player.getPreviousPosition().getY()));
 
                         player.setPosition(player.getPreviousPosition().subtract(new Position(0, 5)));
                     } else if(player.getPosition().getY() - player.getPreviousPosition().getY() > 0){
