@@ -57,7 +57,8 @@ public class GUI extends JFrame implements ActionListener{
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
-        //serverConnect();
+        serverConnect();
+        System.out.println("Connected to Server. Starting game.");
         JPanel game = new GamePanel();
         JScrollPane chatScroll = new JScrollPane();
         JPanel chatPane = new JPanel();
@@ -157,7 +158,7 @@ public class GUI extends JFrame implements ActionListener{
                 cc.setServerAddress(serverIp);
                 cc.setName(name);
                 new Thread(cc).start();
-
+                Thread.sleep(1000);
                 //ClientConnection.getInstance().run();
 
             }catch(Exception ex) {

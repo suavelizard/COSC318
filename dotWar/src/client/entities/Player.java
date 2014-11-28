@@ -34,10 +34,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class Player extends Entity{
+public class Player extends Entity implements Serializable{
     private int health;
     private int moveSpeed;
     private int rightMove;
@@ -76,6 +77,10 @@ public class Player extends Entity{
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public void setPosition(int X, int Y) {
+        this.position = new Position(X,Y);
     }
 
     public int getRightMove() {
@@ -233,6 +238,27 @@ public class Player extends Entity{
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
     }
+
+    public Player(Player p){
+        super.setWidth(p.getWidth());
+        super.setHeight(p.getHeight());
+        this.setName(p.getName());
+        this.setHealth(p.getHealth());
+        this.setAlive(p.isAlive());
+        this.setWeapon(p.getWeapon());
+        super.setPosition(p.getPosition());
+        this.setPosition(p.getPosition());
+        this.setVisible(p.isVisible());
+        this.setPlayerImageString(p.getPlayerImageString());
+        ImageIcon ii = new ImageIcon(this.getClass().getResource(playerImageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH);
+        super.setImage(newimg);
+        this.setScore(0);
+        this.setMoveSpeed(3);
+    }
+
+
     public void draw(Graphics g){
         //draw player
         //HARDCODED SHADOW
@@ -399,7 +425,6 @@ public class Player extends Entity{
 //
 //    }
 
-
     public String toString(){
         String s;
         s = "[Player]";
@@ -409,6 +434,15 @@ public class Player extends Entity{
         s += "," + getWeapon();
         s += "," + getPosition().toString();
         s += "," + isVisible();
+        s += "," + getPlayerImageString();
         return s;
+    }
+
+    public boolean equals(Object other){
+        Player p = new Player((Player)other);
+        if(this.getName().equals(p.getName())){
+            return true;
+        }
+        return false;
     }
 }

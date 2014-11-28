@@ -24,6 +24,7 @@ package client.entities;
 
 import client.Position;
 
+import javax.swing.*;
 import java.awt.*;
 
 /**
@@ -79,6 +80,12 @@ public abstract class Entity {
         this.visible = visible;
     }
 
+    public void initImage(String imageString){
+        ImageIcon ii = new ImageIcon(this.getClass().getResource(imageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
+        setImage(new ImageIcon(newimg).getImage());
+    }
     //calculates and returns the boundries of an enttiy
     public Rectangle getBounds() {
         return new Rectangle((int)this.getPosition().getX(), (int)this.getPosition().getY(), this.getWidth(), this.getHeight());

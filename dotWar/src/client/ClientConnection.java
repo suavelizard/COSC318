@@ -24,11 +24,14 @@ package client;
 
 import client.entities.*;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by Zane on 2014-11-06.
@@ -106,31 +109,64 @@ public class ClientConnection implements  Runnable{
                 toServer.writeObject(clientName);
                 toServer.flush();
                 System.out.println("[" +clientName + "]: " + clientName);
-                player.setName(clientName);
+                //player.setName(clientName);
             }
+            player = new Player((Player)fromServer.readObject());
+            player.setName("FUCK YOU");
+            //System.out.println(player.toString());
+            //player.initImage(player.getPlayerImageString());
+            toServer.writeObject(player);
+            toServer.flush();
+           /* System.out.println(line);
+            if (line.startsWith("[SERVER]:[Player]")) {
+                String [] playerPacket = line.split(",");
+                if(playerPacket[1].equals(getName())){
+                    System.out.println("Self recieved");
+                    player.setHealth(Integer.parseInt(playerPacket[2]));
+                    player.setAlive(Boolean.parseBoolean(playerPacket[3]));
+                    player.setWeapon(null);
+                    player.setPosition(new Position(Integer.parseInt(playerPacket[5]), Integer.parseInt(playerPacket[6])));
+                    player.setVisible(true);
+                    player.setPlayerImageString(playerPacket[8]);
+                    ImageIcon ii = new ImageIcon(player.getPlayerImageString());
+                    Image img = ii.getImage();
+                    Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH);
+                    player.setImage(newimg);
+                    System.out.println(player.toString());
+                }
+                toServer.writeObject("Player initialized");
+                toServer.flush();
+            }*/
 
             // Process all messages from server, according to the protocol.
             while (true) {
-                line = fromServer.readObject().toString();
-                System.out.println(line);
+                Player p;
+                p = new Player((Player)fromServer.readObject());
+                //line = fromServer.readObject().toString();
+                //System.out.println(line);
 
                 //processs packets!
                 //toServer.writeObject("NAME TEST");
-                 if (line.startsWith("[SERVER]: Name accepted.")) {
-                    //textField.setEditable(true);
-                } else if (line.startsWith("MESSAGE")) {
-                    // messageArea.append(line.substring(8) + "\n");
-                }else if (line.startsWith("[SERVER]:[Player]")) {
-                     String [] playerPacket = line.split(",");
-                     if(playerPacket[1] != getName()){
+                if (!p.getName().equals(getName())) {
+                    if(playerArray.contains(p)){
+                        System.out.println("Updating:"+p.getName());
+                        playerArray.get(playerArray.indexOf(p)).setPosition(p.getPosition());
+                        System.out.println(playerArray.get(playerArray.indexOf(p)).getPosition().toString());
+                    }
+                    else {
+                        playerArray.add(p);
+                        System.out.println("Adding "+p.getName());
+                    }
 
-                     }
-                     else {
-                         System.out.println("Self recieved");
-                     }
-                    toServer.writeObject("POSITION");
-                    toServer.flush();
                 }
+                else {
+                    System.out.println("Self recieved");
+                }
+                toServer.writeObject(player);
+                System.out.println("Client:" + player.getPosition().toString());
+                System.out.println("Server:" + p.getPosition().toString());
+                toServer.flush();
+
             }
 
         } catch(ClassNotFoundException clnfe){
@@ -157,4 +193,21 @@ public class ClientConnection implements  Runnable{
     public String getName(){
         return clientName;
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public void updatePlayerPosition(Position p) {
+        player.setPosition(p);
+    }
+
+    public ArrayList<Player> getPlayerArray() {
+        return playerArray;
+    }
 }
+

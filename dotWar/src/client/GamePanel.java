@@ -44,12 +44,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private Player player;
     private Wall wall1;
     private Wall wall2;
-    //private client.ClientConnection cc = client.ClientConnection.getInstance();
+    private client.ClientConnection cc = client.ClientConnection.getInstance();
     private Player enemy;
     private ArrayList<Projectile> projectileArray = new ArrayList();
     private ArrayList<Wall> wallArray = new ArrayList();
     private ArrayList<Player> playerArray = new ArrayList();
     private ArrayList<Weapon> weaponArray = new ArrayList();
+
 
     private JLabel playerStats;
     private JLabel enemyStats;
@@ -115,12 +116,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         //Placeholders
         Random rnd = new Random();
 
-        player = new Player(15,15,"Zane","1");
+        //player = new Player(15,15,"Zane","1");
+        //System.out.println("Game panel initPlayer");
+        player = new Player(cc.getPlayer());
+        //System.out.println(player.toString());
         //player.setWeapon(new Weapon(2,10,1,Color.RED));
-        playerArray.add(new Player(15, 15, "Enemy", "" + (rnd.nextInt(3))));
+        /*playerArray.add(new Player(15, 15, "Enemy", "" + (rnd.nextInt(3))));
         playerArray.add(new Player(15,15,"Bob",""+(rnd.nextInt(3))));
-        playerArray.add(new Player(15,15,"Steve",""+(rnd.nextInt(3))));
-
+        playerArray.add(new Player(15,15,"Steve",""+(rnd.nextInt(3))));*/
+        playerArray = cc.getPlayerArray();
         Weapon w = new Weapon(5,15,0,Color.ORANGE);
         Weapon w1 = new Weapon(10,5,1,Color.RED);
         Weapon w2 = new Weapon(5,20,2,Color.BLUE);
@@ -135,7 +139,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 //        enemy = new Player(15,15,"Joe","2");
 //        enemy.setHealth(90);
 
-        player.setPosition(new Position(20, 20));
+        //player.setPosition(new Position(20, 20));
         for(Player eP:playerArray){
             int rposX = rnd.nextInt(768);
             int rposY = rnd.nextInt(1000);
@@ -145,8 +149,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Position p2 = new Position(10,10);
         p1.add(p2);
 
-        player.setPosition(new Position(20, 20));
-        player.updatePosition();
+        //player.setPosition(new Position(20, 20));
+        //player.updatePosition();
        // enemy.setPosition(new Position(950,690));
 
     }
@@ -197,8 +201,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     break;
             }
             player.updatePosition();
+            cc.updatePlayerPosition(player.getPosition());
         } else{
             player.updatePosition();
+            cc.updatePlayerPosition(player.getPosition());
             for(Wall wall: wallArray) {
                 if (checkCollisions(player, wall)) {
                     /*
@@ -267,6 +273,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                 }
             }
         }
+        playerArray = cc.getPlayerArray();
         Toolkit.getDefaultToolkit().sync();
         g2d.dispose();
     }

@@ -1,5 +1,7 @@
 package server;
 
+import client.entities.Player;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Iterator;
@@ -13,6 +15,15 @@ public class ClientConnection implements Runnable{
     private ObjectInputStream fromClient;
     private ObjectOutputStream toClient;
     private Socket socket;
+    private Player p;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public boolean isOpen() {
         return open;
@@ -66,7 +77,8 @@ public class ClientConnection implements Runnable{
                 toClient.writeObject("[SERVER]: Enter Player Name:");
                 toClient.flush();
                 String objectFromClient = (String) fromClient.readObject();
-                System.out.println(objectFromClient + " is now connected.");
+                setName(objectFromClient);
+
                 if (objectFromClient.toString().equals("Disconnect")) {
                     //remove dc'd player
                     System.out.println("Client disconnected");
@@ -84,10 +96,8 @@ public class ClientConnection implements Runnable{
     public void sendPlayerInfo(String s){
         try {
             toClient.writeObject("[SERVER]:" + s.toString());
-            System.out.println("send post write");
             toClient.flush();
             System.out.println((String)fromClient.readObject());
-            System.out.println("send post read");
 
         } catch (IOException ioe) {
             System.err.println(ioe);
@@ -110,12 +120,24 @@ public class ClientConnection implements Runnable{
 
     }
 
-    private void sendObject(Object o) {
+    public void sendObject(Object o) {
         try {
             toClient.writeObject(o);
+            Player test = new Player((Player)o);
+            System.out.println("To client:" + test.getPosition().toString());
             toClient.flush();
+            p = null;
+            p = new Player((Player)fromClient.readObject());
+            System.out.println("From client:" + p.getPosition().toString());
         }catch(IOException ioe){
             ioe.printStackTrace();
+            setOpen(false);
+        } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
         }
+    }
+
+    public Player getPlayer() {
+        return p;
     }
 }

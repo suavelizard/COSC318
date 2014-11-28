@@ -22,10 +22,12 @@
 
 package client;
 
+import java.io.Serializable;
+
 /**
  * Created by Zane on 2014-11-06.
  */
-public class Position {
+public class Position implements Serializable{
     private double x;
     private double y;
 
@@ -73,7 +75,7 @@ public class Position {
         this.setY(p.getY());
     }
     public String toString(){
-        return "X: " + this.getX() + " Y: "+this.getY();
+        return (int)this.getX() + ","+(int)this.getY();
     }
     public Position add(Position p){
         Position pNew = new Position(this.getX() + p.getX(), this.getY() + p.getY());
@@ -87,5 +89,9 @@ public class Position {
         return pNew;
     }
 
+    public void setPosition(Position p){
+        this.x = p.getX();
+        this.y = p.getY();
+    }
 
 }

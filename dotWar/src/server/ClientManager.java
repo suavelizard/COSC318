@@ -22,11 +22,16 @@
 
 package server;
 
+import client.Position;
+import client.entities.Player;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by Nicholas on 24/11/2014.
@@ -37,7 +42,7 @@ public class ClientManager implements Runnable{
     static ArrayList<String> playerArray = new ArrayList<String>();
     static ArrayList<String> projectileArray = new ArrayList<String>();
     static ArrayList<String> weaponArray = new ArrayList<String>();
-    //static ArrayList<String> stringarr = new ArrayList<String>();
+    static ArrayList<Player> players = new ArrayList<Player>();
 
     protected ClientManager() {
 
@@ -59,11 +64,19 @@ public class ClientManager implements Runnable{
             //System.out.println("Number of strings in string array: " +stringarr.size());
 
             System.out.println("Number of connected clients: " +ccArr.size());
+            Thread.sleep(200);
+            Random rnd = new Random(System.currentTimeMillis());
+            Player p = new Player(15, 15, ccArr.get(ccArr.size()-1).getName(), "" + (rnd.nextInt(3)));
+            p.setPosition(rnd.nextInt(400), rnd.nextInt(400));
+            //playerArray.add(p.toString());
+            players.add(p);
         }
         catch(Exception e){
             e.printStackTrace();
         }
     }
+
+
 
     @Override
     public void run() {
@@ -73,16 +86,22 @@ public class ClientManager implements Runnable{
             start = System.currentTimeMillis();
             for(Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext();) {
                 ClientConnection cc = iterator.next();
-                System.out.println("After iterator next");
-                for(Iterator<String> inIt = playerArray.iterator(); inIt.hasNext();) {
-                    String s = inIt.next();
-                    System.out.println("After inner iterator next");
-                    cc.sendPlayerInfo(s);
-                }
+                for(Iterator<Player> inIt = players.iterator(); inIt.hasNext();) {
+                    Player p = inIt.next();
+                    if(p.getName()!=null)
+                        cc.sendObject(p);
 
-                if(!cc.isOpen()) {
-                    System.out.println("Client DC'd");
-                    iterator.remove();
+System.out.println(p.getName());
+                    System.out.println(cc.getPlayer().getName());
+
+                    if (!cc.isOpen()) {
+                        System.out.println("Client DC'd");
+                        iterator.remove();
+                        inIt.remove();
+                    }
+                    if(p.getName().equals(cc.getName())) {
+                        p.setPosition(cc.getPlayer().getPosition());
+                    }
                 }
             }
             elapsed = System.currentTimeMillis() - start;
