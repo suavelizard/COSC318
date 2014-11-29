@@ -54,23 +54,24 @@ public class GUI extends JFrame implements ActionListener{
     // Class constructor
     public GUI( String titleText, Socket clientSocket ) throws IOException, ClassNotFoundException{
         super(titleText);
+        this.setIconImage(new ImageIcon(getClass().getResource("/assets/dotwar_favicon.png")).getImage());
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));
         serverConnect();
         System.out.println("Connected to Server. Starting game.");
         JPanel game = new GamePanel();
-        JScrollPane chatScroll = new JScrollPane();
-        JPanel chatPane = new JPanel();
-        JPanel composePanel = new JPanel();
-        chatPane.setLayout(new BoxLayout(chatPane,BoxLayout.Y_AXIS));
+        //JScrollPane chatScroll = new JScrollPane();
+        //JPanel chatPane = new JPanel();
+        //JPanel composePanel = new JPanel();
+        //chatPane.setLayout(new BoxLayout(chatPane,BoxLayout.Y_AXIS));
         //chatPane.setPreferredSize(new Dimension(366,768));
-        JTextField sendMessageField = new JTextField();
-        JButton sendButton = new JButton("Send");
-        chatHistory = new JTextArea();
+        //JTextField sendMessageField = new JTextField();
+        //JButton sendButton = new JButton("Send");
+        //chatHistory = new JTextArea();
         //chatScroll.setBounds(0,0,360,400);
-        chatScroll.add(chatHistory);
-        chatHistory.setEditable(true);
+        //chatScroll.add(chatHistory);
+        //chatHistory.setEditable(true);
         //chatHistory.setBackground(Color.black);
         //chatHistory.setRows(20);
         //sendMessageField.setBackground(Color.red);
@@ -78,20 +79,21 @@ public class GUI extends JFrame implements ActionListener{
         game.setBackground(new Color(85,98,112));
 
         cp.add(game);
-        chatPane.add(chatScroll);
-        chatPane.add(sendMessageField);
-        chatPane.add(sendButton);
+        //chatPane.add(chatScroll);
+        //chatPane.add(sendMessageField);
+        //chatPane.add(sendButton);
 //
         //chatPane.add(chatScroll);
 //        composePanel.setBounds(0,401,360,200);
 //        composePanel.add(sendMessageField,BorderLayout.NORTH);
 //        composePanel.add(sendButton,BorderLayout.SOUTH);
 //        chatPane.add(composePanel,BorderLayout.NORTH);
-        chatHistory.setText("hello");
+        //chatHistory.setText("hello");
         //statusTextarea.setText("heel");
-        cp.add(chatPane);
+        //cp.add(chatPane);
         setResizable(false);
         setBounds(0,0, 1366, 768 );
+
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -150,6 +152,7 @@ public class GUI extends JFrame implements ActionListener{
     }
 
     public void serverConnect() {
+
         serverIp = JOptionPane.showInputDialog(this, "New Server Connection", "localhost");
         name = JOptionPane.showInputDialog(this, "New Server Connection", "Enter Unique Name");
 

@@ -25,6 +25,7 @@
  */
 package client.entities;
 
+import client.GamePanel;
 import client.Position;
 import client.Settings;
 
@@ -176,10 +177,8 @@ public class Player extends Entity implements Serializable{
     public void takeDamage(double damage){
 
         if(this.getHealth() - damage <= 0){
-            setAlive(false);
             this.setHealth(0);
-            this.setAlive(false);
-            this.setVisible(false);
+            die();
         }else {
             this.setHealth(this.getHealth() - (int) damage);
         }
@@ -445,5 +444,13 @@ public class Player extends Entity implements Serializable{
             return true;
         }
         return false;
+    }
+    public void die(){
+        setVisible(false);
+        setAlive(false);
+
+    }
+    public void respawn(){
+        //recreate player
     }
 }

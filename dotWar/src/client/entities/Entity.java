@@ -81,6 +81,7 @@ public abstract class Entity{
         this.visible = visible;
     }
 
+    //Calculates and returns the boundries of an enttiy
     public void initImage(String imageString){
         ImageIcon ii = new ImageIcon(this.getClass().getResource(imageString));
         Image img = ii.getImage();
@@ -107,6 +108,7 @@ public abstract class Entity{
         this.setWidth(10);
         this.setHeight(10);
     }
+
     public Entity(Position p, int w, int h){
         this.setPosition(p);
         this.setWidth(w);

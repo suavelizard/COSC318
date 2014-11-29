@@ -77,9 +77,10 @@ public class Position implements Serializable{
     public String toString(){
         return (int)this.getX() + ","+(int)this.getY();
     }
+
     public Position add(Position p){
         Position pNew = new Position(this.getX() + p.getX(), this.getY() + p.getY());
-        System.out.println("Doing math: "+this.toString()+" + "+ p.toString() + " = "+pNew.toString());
+        System.out.println("Doing math: " + this.toString() + " + " + p.toString() + " = " + pNew.toString());
         return pNew;
     }
 
