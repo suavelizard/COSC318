@@ -46,7 +46,7 @@ public class ClientConnection implements  Runnable{
     private int SERVER_PORT;
     private String clientName;
     private Player player;
-
+    
 
     private ArrayList<Projectile> projectileArray = new ArrayList();
     private ArrayList<Wall> wallArray = new ArrayList();
@@ -111,12 +111,15 @@ public class ClientConnection implements  Runnable{
                 System.out.println("[" +clientName + "]: " + clientName);
                 //player.setName(clientName);
             }
+
             player = new Player((Player)fromServer.readObject());
-            player.setName("FUCK YOU");
-            //System.out.println(player.toString());
-            //player.initImage(player.getPlayerImageString());
             toServer.writeObject(player);
             toServer.flush();
+           // player.setName("FUCK YOU");
+            //System.out.println(player.toString());
+            //player.initImage(player.getPlayerImageString());
+            //toServer.writeObject(player);
+            //toServer.flush();
            /* System.out.println(line);
             if (line.startsWith("[SERVER]:[Player]")) {
                 String [] playerPacket = line.split(",");
@@ -162,9 +165,9 @@ public class ClientConnection implements  Runnable{
                 else {
                     System.out.println("Self recieved");
                 }
-                toServer.writeObject(player);
-                System.out.println("Client:" + player.getPosition().toString());
-                System.out.println("Server:" + p.getPosition().toString());
+                toServer.writeObject(new Player(player));
+                //System.out.println("Client:" + player.toString());
+                //System.out.println("Server:" + p.toString());
                 toServer.flush();
 
             }
@@ -210,4 +213,3 @@ public class ClientConnection implements  Runnable{
         return playerArray;
     }
 }
-

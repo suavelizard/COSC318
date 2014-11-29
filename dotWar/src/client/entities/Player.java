@@ -76,7 +76,8 @@ public class Player extends Entity implements Serializable{
     }
 
     public void setPosition(Position position) {
-        this.position = position;
+        this.position = new Position(position);
+        super.setPosition(position);
     }
 
     public void setPosition(int X, int Y) {
@@ -432,7 +433,7 @@ public class Player extends Entity implements Serializable{
         s += "," + getHealth();
         s += "," + isAlive();
         s += "," + getWeapon();
-        s += "," + getPosition().toString();
+        s += "," + this.getPosition().toString();
         s += "," + isVisible();
         s += "," + getPlayerImageString();
         return s;

@@ -45,7 +45,7 @@ public abstract class Entity {
     }
 
     public void setPosition(Position position) {
-        this.position = position;
+        this.position = new Position(position);
     }
 
     public int getWidth() {

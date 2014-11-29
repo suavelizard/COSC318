@@ -122,13 +122,12 @@ public class ClientConnection implements Runnable{
 
     public void sendObject(Object o) {
         try {
-            toClient.writeObject(o);
+            toClient.writeObject(new Player((Player)o));
             Player test = new Player((Player)o);
-            System.out.println("To client:" + test.getPosition().toString());
+            System.out.println("To client:" + test.toString());
             toClient.flush();
-            p = null;
             p = new Player((Player)fromClient.readObject());
-            System.out.println("From client:" + p.getPosition().toString());
+            System.out.println("From client:" + p.toString());
         }catch(IOException ioe){
             ioe.printStackTrace();
             setOpen(false);

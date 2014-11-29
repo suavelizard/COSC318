@@ -68,7 +68,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         addMouseListener(this);
 
 
-        initLabels();
+        //initLabels();
         
     }
 

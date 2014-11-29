@@ -56,27 +56,33 @@ public class ClientManager implements Runnable{
 
     public void newClient(Socket s) {
         try {
-//            server.ClientConnection scc = new server.ClientConnection(s);
-//            ccArr.add(scc);
-            ccArr.add(new server.ClientConnection(s));
-//            stringarr.add("Hello");
-            new Thread(ccArr.get(ccArr.size()-1)).start();
-            //System.out.println("Number of strings in string array: " +stringarr.size());
+            synchronized (ccArr) {
+                ccArr.add(new server.ClientConnection(s));
 
-            System.out.println("Number of connected clients: " +ccArr.size());
-            Thread.sleep(200);
-            Random rnd = new Random(System.currentTimeMillis());
-            Player p = new Player(15, 15, ccArr.get(ccArr.size()-1).getName(), "" + (rnd.nextInt(3)));
-            p.setPosition(rnd.nextInt(400), rnd.nextInt(400));
-            //playerArray.add(p.toString());
-            players.add(p);
+                new Thread(ccArr.get(ccArr.size() - 1)).start();
+                //System.out.println("Number of strings in string array: " +stringarr.size());
+
+                System.out.println("Number of connected clients: " + ccArr.size());
+                Thread.sleep(200);
+
+                Random rnd = new Random(System.currentTimeMillis());
+                Player p = new Player(15, 15, ccArr.get(ccArr.size() - 1).getName(), "" + (rnd.nextInt(3)));
+                p.setPosition(rnd.nextInt(400), rnd.nextInt(400));
+                //playerArray.add(p.toString());
+                synchronized (players) {
+                    players.add(p);
+
+
+                    ccArr.get(ccArr.size() - 1).sendObject(p);
+
+                }
+            }
+
         }
         catch(Exception e){
             e.printStackTrace();
         }
     }
-
-
 
     @Override
     public void run() {
@@ -84,24 +90,25 @@ public class ClientManager implements Runnable{
 
         while(true) {
             start = System.currentTimeMillis();
-            for(Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext();) {
-                ClientConnection cc = iterator.next();
-                for(Iterator<Player> inIt = players.iterator(); inIt.hasNext();) {
-                    Player p = inIt.next();
-                    if(p.getName()!=null)
-                        cc.sendObject(p);
-
-System.out.println(p.getName());
-                    System.out.println(cc.getPlayer().getName());
-
-                    if (!cc.isOpen()) {
-                        System.out.println("Client DC'd");
-                        iterator.remove();
-                        inIt.remove();
+            synchronized (ccArr) {
+                for (Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext(); ) {
+                    ClientConnection cc = iterator.next();
+                    synchronized (players) {
+                        for (Iterator<Player> inIt = players.iterator(); inIt.hasNext(); ) {
+                            Player p = inIt.next();
+                            if (p.getName() != null)
+                                cc.sendObject(p);
+                            if (p.getName().equals(cc.getName())) {
+                                p.setPosition(cc.getPlayer().getPosition());
+                            }
+                            if (!cc.isOpen()) {
+                                System.out.println("Client DC'd");
+                                iterator.remove();
+                                inIt.remove();
+                            }
+                        }
                     }
-                    if(p.getName().equals(cc.getName())) {
-                        p.setPosition(cc.getPlayer().getPosition());
-                    }
+
                 }
             }
             elapsed = System.currentTimeMillis() - start;
