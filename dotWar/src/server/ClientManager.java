@@ -24,6 +24,7 @@ package server;
 
 import client.Position;
 import client.entities.Player;
+import client.entities.Wall;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -42,10 +43,11 @@ public class ClientManager implements Runnable{
     static ArrayList<String> playerArray = new ArrayList<String>();
     static ArrayList<String> projectileArray = new ArrayList<String>();
     static ArrayList<String> weaponArray = new ArrayList<String>();
+    static ArrayList<Wall> wallArray = new ArrayList<Wall>();
     static ArrayList<Player> players = new ArrayList<Player>();
 
     protected ClientManager() {
-
+        initWalls(10);
     }
 
     public static ClientManager getInstance(){
@@ -69,11 +71,16 @@ public class ClientManager implements Runnable{
                 Player p = new Player(15, 15, ccArr.get(ccArr.size() - 1).getName(), "" + (rnd.nextInt(3)));
                 p.setPosition(rnd.nextInt(400), rnd.nextInt(400));
                 //playerArray.add(p.toString());
+
                 synchronized (players) {
                     players.add(p);
 
 
                     ccArr.get(ccArr.size() - 1).sendObject(p);
+
+                    ccArr.get(ccArr.size() - 1).readObject();
+                    //ccArr.get(ccArr.size() - 1).sendObject(new Wall(new Position(20,20),20,20).getBounds());
+                    ccArr.get(ccArr.size() - 1).sendWalls(wallArray);
 
                 }
             }
@@ -96,8 +103,10 @@ public class ClientManager implements Runnable{
                     synchronized (players) {
                         for (Iterator<Player> inIt = players.iterator(); inIt.hasNext(); ) {
                             Player p = inIt.next();
-                            if (p.getName() != null)
+                            if (p.getName() != null) {
                                 cc.sendObject(p);
+                                cc.readObject();
+                            }
                             if (p.getName().equals(cc.getName())) {
                                 p.setPosition(cc.getPlayer().getPosition());
                             }
@@ -124,6 +133,18 @@ public class ClientManager implements Runnable{
                 ex.printStackTrace();
             }
 //            System.out.println("end of the loop");
+        }
+    }
+
+    public void initWalls(int numWalls){
+        Random rnd = new Random();
+        for(int i = 0; i < numWalls; i++) {
+            int r = rnd.nextInt(700-25) + 25;
+            int rposX = rnd.nextInt(700);
+            int rposY = rnd.nextInt(900);
+            wallArray.add(new Wall(new Position(rposX,rposY),15,200,1));
+            wallArray.add(new Wall(new Position(rposX,rposY),400,15,0));
+
         }
     }
 }

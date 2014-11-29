@@ -27,11 +27,12 @@ import client.Position;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
 /**
  * Created by Zane on 2014-11-08.
  */
-public class Wall extends Entity {
+public class Wall extends Entity implements Serializable{
 
     private String type;
     private String wallImageString = "/assets/walls/wall1.gif";
@@ -63,6 +64,24 @@ public class Wall extends Entity {
         this.setWallOrientation(wallOrientation);
     }
 
+    public Wall(Wall w){
+        super(w.getPosition(), w.getWidth(), w.getHeight());
+        ImageIcon ii = new ImageIcon(this.getClass().getResource(wallImageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
+        super.setImage(new ImageIcon(newimg).getImage());
+        this.setWallOrientation(w.getWallOrientation());
+    }
+
+    public Wall(Rectangle r){
+        super(new Position(r.getX(), r.getY()), (int)r.getWidth(), (int)r.getHeight());
+        ImageIcon ii = new ImageIcon(this.getClass().getResource(wallImageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
+        super.setImage(new ImageIcon(newimg).getImage());
+        this.setWallOrientation(0);
+    }
+
     public void draw(Graphics g) {
 
 //        BufferedImage bim = new BufferedImage(10,21,BufferedImage.TYPE_INT_RGB);
@@ -76,4 +95,8 @@ public class Wall extends Entity {
         //g.drawImage(img, x, y, null);
     }
 
+    public String toString() {
+        String s = super.getPosition().toString();
+        return s;
+    }
 }

@@ -1,9 +1,11 @@
 package server;
 
 import client.entities.Player;
+import client.entities.Wall;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -122,10 +124,34 @@ public class ClientConnection implements Runnable{
 
     public void sendObject(Object o) {
         try {
-            toClient.writeObject(new Player((Player)o));
-            Player test = new Player((Player)o);
-            System.out.println("To client:" + test.toString());
+            toClient.writeObject(o);
+            System.out.println(o.toString());
             toClient.flush();
+            toClient.reset();
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+            setOpen(false);
+        }
+    }
+
+    public void sendWalls(Object o) {
+        try {
+            ArrayList<Wall> walls = new ArrayList<Wall>((ArrayList<Wall>)o);
+            for(Iterator<Wall> iterator = walls.iterator();iterator.hasNext();) {
+                Wall wall = iterator.next();
+                toClient.writeObject(wall.getBounds());
+                toClient.flush();
+                toClient.reset();
+                System.out.println(wall.toString());
+            }
+        }catch(IOException ioe){
+            ioe.printStackTrace();
+            setOpen(false);
+        }
+    }
+
+    public void readObject(){
+        try {
             p = new Player((Player)fromClient.readObject());
             System.out.println("From client:" + p.toString());
         }catch(IOException ioe){

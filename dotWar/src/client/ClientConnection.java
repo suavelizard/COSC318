@@ -23,6 +23,7 @@
 package client;
 
 import client.entities.*;
+import client.entities.Weapon;
 
 import javax.swing.*;
 import java.awt.*;
@@ -115,32 +116,16 @@ public class ClientConnection implements  Runnable{
             player = new Player((Player)fromServer.readObject());
             toServer.writeObject(player);
             toServer.flush();
-           // player.setName("FUCK YOU");
-            //System.out.println(player.toString());
-            //player.initImage(player.getPlayerImageString());
-            //toServer.writeObject(player);
-            //toServer.flush();
-           /* System.out.println(line);
-            if (line.startsWith("[SERVER]:[Player]")) {
-                String [] playerPacket = line.split(",");
-                if(playerPacket[1].equals(getName())){
-                    System.out.println("Self recieved");
-                    player.setHealth(Integer.parseInt(playerPacket[2]));
-                    player.setAlive(Boolean.parseBoolean(playerPacket[3]));
-                    player.setWeapon(null);
-                    player.setPosition(new Position(Integer.parseInt(playerPacket[5]), Integer.parseInt(playerPacket[6])));
-                    player.setVisible(true);
-                    player.setPlayerImageString(playerPacket[8]);
-                    ImageIcon ii = new ImageIcon(player.getPlayerImageString());
-                    Image img = ii.getImage();
-                    Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH);
-                    player.setImage(newimg);
-                    System.out.println(player.toString());
-                }
-                toServer.writeObject("Player initialized");
-                toServer.flush();
-            }*/
-
+            toServer.reset();
+            //Object o = fromServer.readObject();
+            //System.out.println(o.getClass().toString());
+            for(Object o = fromServer.readObject(); o.getClass().toString().equals("class java.awt.Rectangle");o = fromServer.readObject()) {
+                wallArray.add(new Wall((Rectangle)o));
+                System.out.println(o.toString());
+            }
+            toServer.writeObject(player);
+            toServer.flush();
+            toServer.reset();
             // Process all messages from server, according to the protocol.
             while (true) {
                 Player p;
@@ -165,10 +150,11 @@ public class ClientConnection implements  Runnable{
                 else {
                     System.out.println("Self recieved");
                 }
-                toServer.writeObject(new Player(player));
+                toServer.writeObject(player);
                 //System.out.println("Client:" + player.toString());
                 //System.out.println("Server:" + p.toString());
                 toServer.flush();
+                toServer.reset();
 
             }
 
@@ -211,5 +197,17 @@ public class ClientConnection implements  Runnable{
 
     public ArrayList<Player> getPlayerArray() {
         return playerArray;
+    }
+
+    public ArrayList<Weapon> getWeaponArray() {
+        return weaponArray;
+    }
+
+    public ArrayList<Wall> getWallArray() {
+        return wallArray;
+    }
+
+    public ArrayList<Projectile> getProjectileArray() {
+        return projectileArray;
     }
 }

@@ -60,7 +60,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         //player.setName(cc.getName());
         this.setLayout(null);
         initPlayers();
-        initWalls(10);
+        //initWalls(10);
+        wallArray.addAll(cc.getWallArray());
         setPreferredSize(new Dimension(1000, 768));
         setBounds(0, 0, 1000, 790);
         setFocusable(true);

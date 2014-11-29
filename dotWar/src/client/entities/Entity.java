@@ -26,6 +26,7 @@ import client.Position;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Created by Zane on 2014-11-21.
@@ -34,7 +35,7 @@ import java.awt.*;
 /**
  * This class is used to create game entities like walls, players, bullets, powerups, etc.
  */
-public abstract class Entity {
+public abstract class Entity{
     private Position position;
     private int width;
     private int height;
@@ -89,6 +90,12 @@ public abstract class Entity {
     //calculates and returns the boundries of an enttiy
     public Rectangle getBounds() {
         return new Rectangle((int)this.getPosition().getX(), (int)this.getPosition().getY(), this.getWidth(), this.getHeight());
+    }
+
+    public void setBounds(Rectangle r) {
+        setPosition(new Position(r.getX(),r.getY()));
+        setHeight((int)r.getHeight());
+        setWidth((int)r.getWidth());
     }
 
     public void draw(Graphics g){
