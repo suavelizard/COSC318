@@ -260,7 +260,7 @@ public class Player extends Entity implements Serializable{
         super.setImage(newimg);
         this.setScore(0);
         this.setMoveSpeed(3);
-        
+
     }
 
 

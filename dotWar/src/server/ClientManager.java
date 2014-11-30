@@ -35,6 +35,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.concurrent.SynchronousQueue;
 
 /**
  * Created by Nicholas on 24/11/2014.
@@ -69,6 +70,9 @@ public class ClientManager implements Runnable{
                 //System.out.println("Number of strings in string array: " +stringarr.size());
 
                 System.out.println("Number of connected clients: " + ccArr.size());
+                for (ClientConnection client: ccArr){
+                    System.out.println(client.getName() + "\n");
+                }
                 Thread.sleep(200);
 
                 Random rnd = new Random(System.currentTimeMillis());
