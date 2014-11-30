@@ -266,6 +266,8 @@ public class Player extends Entity implements Serializable{
 //        g.fillOval((int) this.getPosition().getX() - 5, (int) this.getPosition().getY() - 3, 15, 15);
         g.setColor(Settings.getSHADOW_COLOR());
         g.fillRect((int) this.getPosition().getX() + 5, (int) this.getPosition().getY() - 8, 50, 5);
+        Font font = new Font("Tahoma", Font.PLAIN, 15);
+        g.setFont(font);
         g.drawString("" + this.getName(), (int) this.getPosition().getX() + 5, (int) this.getPosition().getY() - 10);
 
         //END SHADOW
@@ -446,8 +448,9 @@ public class Player extends Entity implements Serializable{
         return false;
     }
     public void die(){
-        setVisible(false);
-        setAlive(false);
+        //TODO: implement death animation
+        this.setVisible(false);
+        this.setAlive(false);
 
     }
     public void respawn(){

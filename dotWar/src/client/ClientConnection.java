@@ -109,7 +109,7 @@ public class ClientConnection implements  Runnable{
             if (line.startsWith("[SERVER]: Enter Player Name:")) {
                 toServer.writeObject(clientName);
                 toServer.flush();
-                System.out.println("[" +clientName + "]: " + clientName);
+                System.out.println("[" + clientName + "]: " + clientName);
                 //player.setName(clientName);
             }
 
@@ -137,18 +137,18 @@ public class ClientConnection implements  Runnable{
                 //toServer.writeObject("NAME TEST");
                 if (!p.getName().equals(getName())) {
                     if(playerArray.contains(p)){
-                        System.out.println("Updating:"+p.getName());
+                        System.out.println("Updating: " + p.getName());
                         playerArray.get(playerArray.indexOf(p)).setPosition(p.getPosition());
                         System.out.println(playerArray.get(playerArray.indexOf(p)).getPosition().toString());
                     }
                     else {
                         playerArray.add(p);
-                        System.out.println("Adding "+p.getName());
+                        System.out.println("Adding " + p.getName());
                     }
 
                 }
                 else {
-                    System.out.println("Self recieved");
+                    System.out.println("Self received");
                 }
                 toServer.writeObject(player);
                 //System.out.println("Client:" + player.toString());

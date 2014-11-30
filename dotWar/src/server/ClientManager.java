@@ -74,10 +74,7 @@ public class ClientManager implements Runnable{
 
                 synchronized (players) {
                     players.add(p);
-
-
                     ccArr.get(ccArr.size() - 1).sendObject(p);
-
                     ccArr.get(ccArr.size() - 1).readObject();
                     //ccArr.get(ccArr.size() - 1).sendObject(new Wall(new Position(20,20),20,20).getBounds());
                     ccArr.get(ccArr.size() - 1).sendWalls(wallArray);
@@ -94,7 +91,7 @@ public class ClientManager implements Runnable{
     @Override
     public void run() {
         long start, elapsed, wait;
-
+        int deadPlayers = 0;
         while(true) {
             start = System.currentTimeMillis();
             synchronized (ccArr) {
@@ -103,6 +100,9 @@ public class ClientManager implements Runnable{
                     synchronized (players) {
                         for (Iterator<Player> inIt = players.iterator(); inIt.hasNext(); ) {
                             Player p = inIt.next();
+                            if(!p.isAlive()){
+                                deadPlayers++;
+                            }
                             if (p.getName() != null) {
                                 cc.sendObject(p);
                                 cc.readObject();
@@ -114,6 +114,7 @@ public class ClientManager implements Runnable{
                                 System.out.println("Client DC'd");
                                 iterator.remove();
                                 inIt.remove();
+                                break;
                             }
                         }
                     }

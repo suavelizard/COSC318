@@ -160,104 +160,139 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
         if(!player.isAlive()){
-            // respawn code
+            // Respawn code
+            //TODO: Respawn menu
+            hideAll();
 
-        }
-        for(Wall w:wallArray){
-            w.draw(g2d);
-        }
+            g.setColor(new Color(255, 107, 107));
+            g.setColor(new Color(199,244,100));
+            Font font = new Font("Tahoma", Font.PLAIN, 96);
+            g.setFont(font);
+            g.drawString("YOU LOSE!",(this.getWidth()/2)-220,500);
+            System.out.println("You Died");
+        } else {
+            System.out.println("Player is alive");
+            //If player isn't dead we care about everything else
+            int remainingPlayers = playerArray.size();
+            for (Player eP : playerArray) {
+                if (eP.isAlive()) {
+                    eP.draw(g2d);
+                } else {
+                    remainingPlayers--;
+                    if (remainingPlayers == 0 && player.isAlive()) {
+                        //TODO: Implement victory animation
+                        hideAll();
+                        //Victory conditions satisfied
+                        System.out.println("Victory for " + player.getName());
+//                    player.setVisible(false);
+                        //g2d.setColor(new Color(85, 98, 112));
+                        //g2d.fillRect(0, 0, 1366, 768, null);
+//                        g.setColor(this.getBackground());
+//                        g.fillRect(0, 0, 1366, 768);
+                        g.setColor(new Color(199,244,100));
+                        Font font = new Font("Tahoma", Font.PLAIN, 96);
+                        g.setFont(font);
+                        g.drawString("YOU WIN!",(this.getWidth()/2)-220,500);
+                        g.drawImage(new ImageIcon("C:\\Users\\Zane\\Documents\\IdeaProjects\\COSC318\\dotWar\\src\\assets\\dotwarlogo.png").getImage(), (this.getWidth()/2)-279, 200, null);
+                    }
+                }
+            }
+
+
+            for (Wall w : wallArray) {
+                if(w.isVisible()){
+                    w.draw(g2d);
+                }
+            }
 //        if(enemy.isVisible()){
 //            enemy.draw(g2d);
 //        }
-        for(Player eP:playerArray){
-            if(eP.isVisible()) {
 
-                eP.draw(g2d);
-            }
-        }
-        for (Iterator<Weapon> iterator = weaponArray.iterator(); iterator.hasNext();) {
-            Weapon w = iterator.next();
-            if(w.isVisible()){
-                g.setColor(w.getColor());
-                w.draw(g);
-            }
 
-            if(checkCollisions(player, w)){
-                player.setWeapon(w);
-                w.setVisible(false);
-                iterator.remove();
-                System.out.println(player.getName()+" picked up a power up");
+            for (Iterator<Weapon> iterator = weaponArray.iterator(); iterator.hasNext(); ) {
+                Weapon w = iterator.next();
+                if (w.isVisible()) {
+                    g.setColor(w.getColor());
+                    w.draw(g);
+                }
 
-            }
-        }
-        if(player.isVisible()){
-            player.draw(g2d);
-        }
-
-        if(checkOutOfBounds(player) != 0){
-            switch (checkOutOfBounds(player)){
-                case 1:
-                    player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY()+15));
-                    break;
-                case 2:
-                    player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY() - 15));
-                    break;
-                case 3:
-                    player.setPosition(new Position(player.getPosition().getX() -15, player.getPosition().getY()));
-                    break;
-                case 4:
-                    player.setPosition(new Position(player.getPosition().getX()+15, player.getPosition().getY()));
-                    break;
-            }
-            player.updatePosition();
-            cc.updatePlayerPosition(player.getPosition());
-        } else{
-            player.updatePosition();
-            cc.updatePlayerPosition(player.getPosition());
-            for(Wall wall: wallArray) {
-                if (checkCollisions(player, wall)) {
-
-                    player.setPosition(player.getPosition().subtract(new Position((player.getRightMove()-player.getLeftMove())*2,(player.getDownMove()-player.getUpMove())*2)));
-                    System.out.println("Player hit wall ");
+                if (checkCollisions(player, w)) {
+                    player.setWeapon(w);
+                    w.setVisible(false);
+                    iterator.remove();
+                    System.out.println(player.getName() + " picked up a power up");
 
                 }
             }
-
-        }
-
-        for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext();) {
-            Projectile p = iterator.next();
-            p.move();
-            p.draw(g2d);
-            if (checkOutOfBounds(p) > 0) {
-                System.out.println("Projectile flew out of bounds!");
-                iterator.remove();
+            if (player.isVisible()) {
+                player.draw(g2d);
             }
-            for (Wall w : wallArray) {
-                if (checkCollisions(p, w)) {
-                    System.out.println("Projectile bounced off wall!");
-                    p.bounce(w.getWallOrientation());
+
+            if (checkOutOfBounds(player) != 0) {
+                switch (checkOutOfBounds(player)) {
+                    case 1:
+                        player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY() + 15));
+                        break;
+                    case 2:
+                        player.setPosition(new Position(player.getPosition().getX(), player.getPosition().getY() - 15));
+                        break;
+                    case 3:
+                        player.setPosition(new Position(player.getPosition().getX() - 15, player.getPosition().getY()));
+                        break;
+                    case 4:
+                        player.setPosition(new Position(player.getPosition().getX() + 15, player.getPosition().getY()));
+                        break;
                 }
+                player.updatePosition();
+                cc.updatePlayerPosition(player.getPosition());
+            } else {
+                player.updatePosition();
+                cc.updatePlayerPosition(player.getPosition());
+                for (Wall wall : wallArray) {
+                    if (checkCollisions(player, wall)) {
+
+                        player.setPosition(player.getPosition().subtract(new Position((player.getRightMove() - player.getLeftMove()) * 2, (player.getDownMove() - player.getUpMove()) * 2)));
+                        System.out.println("Player hit wall ");
+
+                    }
+                }
+
             }
-            for (Player eP : playerArray) {
-                if (checkCollisions(p, eP)) {
-                    System.out.println("Projectile hit " + eP.getName());
-                    eP.takeDamage(p.getDamage());
+
+            for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
+                Projectile p = iterator.next();
+                p.move();
+                p.draw(g2d);
+                if (checkOutOfBounds(p) > 0) {
+                    System.out.println("Projectile flew out of bounds!");
                     iterator.remove();
                 }
-            }
-            //Hacky code to limit range!
-            if(player.getWeapon().getType() == 1){
-                if(Math.abs(player.getPosition().getX() - p.getPosition().getX())> 200 ||Math.abs(player.getPosition().getY() - p.getPosition().getY())> 200){
-                    iterator.remove();
+                for (Wall w : wallArray) {
+                    if (checkCollisions(p, w)) {
+                        System.out.println("Projectile bounced off wall!");
+                        p.bounce(w.getWallOrientation());
+                    }
                 }
-            } else if(player.getWeapon().getType() == 0){
-                if(Math.abs(player.getPosition().getX() - p.getPosition().getX())> 1000 ||Math.abs(player.getPosition().getY() - p.getPosition().getY())> 1000) {
-                    iterator.remove();
+                for (Player eP : playerArray) {
+                    if (checkCollisions(p, eP)) {
+                        System.out.println("Projectile hit " + eP.getName());
+                        eP.takeDamage(p.getDamage());
+                        iterator.remove();
+                    }
                 }
-            }else if(player.getWeapon().getType() == 2) {
-                if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 400) {
-                    iterator.remove();
+                //Hacky code to limit range!
+                if (player.getWeapon().getType() == 1) {
+                    if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 200 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 200) {
+                        iterator.remove();
+                    }
+                } else if (player.getWeapon().getType() == 0) {
+                    if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 1000 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 1000) {
+                        iterator.remove();
+                    }
+                } else if (player.getWeapon().getType() == 2) {
+                    if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 400) {
+                        iterator.remove();
+                    }
                 }
             }
         }
@@ -312,7 +347,6 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     LEFT 4
     */
     public int checkOutOfBounds(Entity e){
-        //TODO: move player width and height inside player object
         if(e.getPosition().getY() < 0) {
             return 1;
         }
@@ -373,4 +407,16 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
     }
 
+    public void hideAll(){
+        player.setVisible(false);
+        for (Player p:playerArray){
+            p.setVisible(false);
+        }
+        for(Wall w: wallArray){
+            w.setVisible(false);
+        }
+        for(Weapon w: weaponArray){
+            w.setVisible(false);
+        }
+    }
 }
