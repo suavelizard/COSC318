@@ -105,38 +105,36 @@ public class ClientManager implements Runnable{
             synchronized (ccArr) {
                 for (Iterator<ClientConnection> iterator = ccArr.iterator(); iterator.hasNext(); ) {
                     ClientConnection cc = iterator.next();
-                    synchronized (players) {
-                        for (Iterator<Player> inIt = players.iterator(); inIt.hasNext(); ) {
-                            Player p = inIt.next();
-                            if(!p.isAlive()){
-                                deadPlayers++;
-                            }
-                            if (p.getName() != null) {
-                                cc.sendObject(p);
-                                Object o = cc.readObject();
-                                if(o.getClass().toString().equals("class client.entities.Projectile")){
-                                    synchronized (projectileArray) {
-                                        projectileArray.add((Projectile) o);
-                                        System.out.println("Got projectile");
+                    if(cc.isOpen()) {
+                        synchronized (players) {
+                            for (Iterator<Player> inIt = players.iterator(); inIt.hasNext(); ) {
+                                Player p = inIt.next();
+                                if (!p.isAlive()) {
+                                    deadPlayers++;
+                                }
+                                if (p.getName() != null) {
+                                    cc.sendObject(p);
+                                    Object o = cc.readObject();
+                                    if (o.getClass().toString().equals("class client.entities.Projectile")) {
+                                        synchronized (projectileArray) {
+                                            projectileArray.add((Projectile) o);
+                                            System.out.println("Got projectile");
+                                        }
+                                    } else if (o.getClass().toString().equals("class client.entities.Player")) {
+                                        if (p.getName().equals(cc.getName())) {
+                                            p.setEqual(cc.getPlayer());
+                                        }
                                     }
                                 }
-                                else if(o.getClass().toString().equals("class client.entities.Player")){
-                                    if (p.getName().equals(cc.getName())) {
-                                        p.setEqual(cc.getPlayer());
-                                    }
-                                }
-                            }
-                            if (!cc.isOpen()) {
-                                System.out.println("Client DC'd");
-                                iterator.remove();
-                                inIt.remove();
-                                break;
                             }
                         }
+                        cc.sendObject(projectileArray);
+                        cc.readObject();
+                    } else {
+                        System.out.println("Client DC'd");
+                        iterator.remove();
+                        players.remove(cc.getPlayer());
                     }
-                    cc.sendObject(projectileArray);
-                    cc.readObject();
-
                 }
             }
             synchronized (projectileArray) {

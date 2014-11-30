@@ -120,7 +120,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         //player = new Player(15,15,"Zane","1");
         //System.out.println("Game panel initPlayer");
-        player = new Player(cc.getPlayer());
+        player = cc.getPlayer();
         //System.out.println(player.toString());
         //player.setWeapon(new Weapon(2,10,1,Color.RED));
         /*playerArray.add(new Player(15, 15, "Enemy", "" + (rnd.nextInt(3))));
@@ -163,6 +163,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         if (!player.isAlive()) {
             // Respawn code
             //TODO: Respawn menu
+            player.setWinner(false);
             hideAll();
             g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
             g.setColor(new Color(255, 107, 107));
@@ -182,6 +183,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     remainingPlayers--;
                     if (remainingPlayers == 0 && player.isAlive()) {
                         //TODO: Implement victory animation
+                        player.setWinner(true);
                         hideAll();
                         //Victory conditions satisfied
                         System.out.println("Victory for " + player.getName());
@@ -374,7 +376,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        if(!player.isAlive()){
+            System.out.println("Repawn");
+        }
     }
 
     @Override

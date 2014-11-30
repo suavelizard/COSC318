@@ -53,6 +53,15 @@ public class Player extends Entity implements Serializable{
     private String name;
     private boolean isVisible= true;
     private Position previousPosition;
+    private boolean isWinner = false;
+
+    public boolean isWinner() {
+        return isWinner;
+    }
+
+    public void setWinner(boolean isWinner) {
+        this.isWinner = isWinner;
+    }
 
     private String playerImageString = "default";
 
