@@ -193,6 +193,7 @@ public class Player extends Entity implements Serializable{
         this.setScore(0);
         this.setMoveSpeed(3);
         this.setPosition(new Position(400.0, 400.0));
+        this.setWeapon(new Weapon());
 
     }
     //constructor with player size
@@ -204,6 +205,7 @@ public class Player extends Entity implements Serializable{
         this.setScore(0);
         this.setMoveSpeed(3);
         super.setPosition(new Position(400.0, 400.0));
+        this.setWeapon(new Weapon());
     }
     //
     public Player(int width, int height,String name){
@@ -220,6 +222,7 @@ public class Player extends Entity implements Serializable{
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
+        this.setWeapon(new Weapon());
 
     }
     //FULL CONSTRUCTOR
@@ -237,6 +240,7 @@ public class Player extends Entity implements Serializable{
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
+        this.setWeapon(new Weapon());
     }
 
     public Player(Player p){
@@ -256,6 +260,7 @@ public class Player extends Entity implements Serializable{
         super.setImage(newimg);
         this.setScore(0);
         this.setMoveSpeed(3);
+        
     }
 
 
@@ -433,7 +438,7 @@ public class Player extends Entity implements Serializable{
         s += "," + getName();
         s += "," + getHealth();
         s += "," + isAlive();
-        s += "," + getWeapon();
+        s += "," + getWeapon().getType();
         s += "," + this.getPosition().toString();
         s += "," + isVisible();
         s += "," + getPlayerImageString();

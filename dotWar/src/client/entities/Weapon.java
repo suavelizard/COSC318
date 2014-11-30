@@ -3,11 +3,12 @@ package client.entities;
 import client.Position;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Created by Zane on 2014-11-23.
  */
-public class Weapon extends Entity{
+public class Weapon extends Entity implements Serializable{
     private int damageModifier;
     /*weapon types:
     0 = default
