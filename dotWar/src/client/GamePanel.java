@@ -128,7 +128,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         playerArray = cc.getPlayerArray();
         Weapon w = new Weapon(5,15,0,Color.ORANGE);
         Weapon w1 = new Weapon(10,5,1,Color.RED);
-        Weapon w2 = new Weapon(5,20,2,Color.BLUE);
+        Weapon w2 = new Weapon(5,20,2,new Color(199,244,100));
         w.setPosition(new Position(300,400));
         w1.setPosition(new Position(400,200));
         w2.setPosition(new Position(200,500));
@@ -163,9 +163,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             // Respawn code
             //TODO: Respawn menu
             hideAll();
-
+            g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
             g.setColor(new Color(255, 107, 107));
-            g.setColor(new Color(199,244,100));
+
             Font font = new Font("Tahoma", Font.PLAIN, 96);
             g.setFont(font);
             g.drawString("YOU LOSE!",(this.getWidth()/2)-220,500);
@@ -193,21 +193,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         Font font = new Font("Tahoma", Font.PLAIN, 96);
                         g.setFont(font);
                         g.drawString("YOU WIN!",(this.getWidth()/2)-220,500);
-                        g.drawImage(new ImageIcon("C:\\Users\\Zane\\Documents\\IdeaProjects\\COSC318\\dotWar\\src\\assets\\dotwarlogo.png").getImage(), (this.getWidth()/2)-279, 200, null);
+                        g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth()/2)-279, 200, null);
                     }
                 }
             }
-
-
             for (Wall w : wallArray) {
                 if(w.isVisible()){
                     w.draw(g2d);
                 }
             }
-//        if(enemy.isVisible()){
-//            enemy.draw(g2d);
-//        }
-
 
             for (Iterator<Weapon> iterator = weaponArray.iterator(); iterator.hasNext(); ) {
                 Weapon w = iterator.next();
@@ -252,7 +246,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     if (checkCollisions(player, wall)) {
 
                         player.setPosition(player.getPosition().subtract(new Position((player.getRightMove() - player.getLeftMove()) * 2, (player.getDownMove() - player.getUpMove()) * 2)));
-                        System.out.println("Player hit wall ");
+                        System.out.println(player.getName() + " hit wall ");
 
                     }
                 }
@@ -323,22 +317,23 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public boolean checkCollisions(Entity e1, Entity e2) {
         return e1.getBounds().intersects(e2.getBounds());
     }
-    public int checkWallCollision(Entity e1, Entity e2){
-        int direction = 1;
-        Position e1TopLeft = e1.getPosition();
-        Position e1TopRight = new Position(e1.getPosition().getX()+e1.getWidth(),e1.getPosition().getY());
-        Position e1BottomLeft = new Position(e1.getPosition().getX(),e1.getPosition().getY()+e1.getHeight());
-        Position e1BottomRight = new Position(e1.getPosition().getX()+e1.getWidth(),e1.getPosition().getY()+e1.getHeight());
-
-        Position e2TopLeft = e2.getPosition();
-        Position e2TopRight = new Position(e2.getPosition().getX()+e2.getWidth(),e2.getPosition().getY());
-        Position e2BottomLeft = new Position(e2.getPosition().getX(),e2.getPosition().getY()+e2.getHeight());
-        Position e2BottomRight = new Position(e2.getPosition().getX()+e2.getWidth(),e2.getPosition().getY()+e2.getHeight());
-
-
-
-        return direction;
-    }
+    //TODO: Remove this
+//    public int checkWallCollision(Entity e1, Entity e2){
+//        int direction = 1;
+//        Position e1TopLeft = e1.getPosition();
+//        Position e1TopRight = new Position(e1.getPosition().getX()+e1.getWidth(),e1.getPosition().getY());
+//        Position e1BottomLeft = new Position(e1.getPosition().getX(),e1.getPosition().getY()+e1.getHeight());
+//        Position e1BottomRight = new Position(e1.getPosition().getX()+e1.getWidth(),e1.getPosition().getY()+e1.getHeight());
+//
+//        Position e2TopLeft = e2.getPosition();
+//        Position e2TopRight = new Position(e2.getPosition().getX()+e2.getWidth(),e2.getPosition().getY());
+//        Position e2BottomLeft = new Position(e2.getPosition().getX(),e2.getPosition().getY()+e2.getHeight());
+//        Position e2BottomRight = new Position(e2.getPosition().getX()+e2.getWidth(),e2.getPosition().getY()+e2.getHeight());
+//
+//
+//
+//        return direction;
+//    }
     /*
     DEFAULT not out of bounds 0
     TOP 1

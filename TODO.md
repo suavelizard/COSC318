@@ -1,4 +1,0 @@
-CLIENT
-
-SERVER
-
