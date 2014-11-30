@@ -167,7 +167,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
             g.setColor(new Color(255, 107, 107));
 
-            Font font = new Font("Tahoma", Font.PLAIN, 96);
+            Font font = new Font("Tahoma", Font.BOLD, 96);
             g.setFont(font);
             g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
             System.out.println("You Died");
@@ -191,7 +191,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 //                        g.setColor(this.getBackground());
 //                        g.fillRect(0, 0, 1366, 768);
                         g.setColor(new Color(199, 244, 100));
-                        Font font = new Font("Tahoma", Font.PLAIN, 96);
+                        Font font = new Font("Tahoma", Font.BOLD, 96);
                         g.setFont(font);
                         g.drawString("YOU WIN!", (this.getWidth() / 2) - 220, 500);
                         g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);

@@ -156,7 +156,21 @@ public class ClientManager implements Runnable{
                             eP.takeDamage(p.getDamage());
                             iterator.remove();
                         }
+                        if (eP.getWeapon().getType() == 1) {
+                            if (Math.abs(eP.getPosition().getX() - p.getPosition().getX()) > 200 || Math.abs(eP.getPosition().getY() - p.getPosition().getY()) > 200) {
+                                iterator.remove();
+                            }
+                        } else if (eP.getWeapon().getType() == 0) {
+                            if (Math.abs(eP.getPosition().getX() - p.getPosition().getX()) > 1000 || Math.abs(eP.getPosition().getY() - p.getPosition().getY()) > 1000) {
+                                iterator.remove();
+                            }
+                        } else if (eP.getWeapon().getType() == 2) {
+                            if (Math.abs(eP.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(eP.getPosition().getY() - p.getPosition().getY()) > 400) {
+                                iterator.remove();
+                            }
+                        }
                     }
+
                 }
 
 
