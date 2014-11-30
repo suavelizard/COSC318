@@ -160,7 +160,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         super.paint(g2d);
-        if(!player.isAlive()){
+        if (!player.isAlive()) {
             // Respawn code
             //TODO: Respawn menu
             hideAll();
@@ -169,7 +169,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
             Font font = new Font("Tahoma", Font.PLAIN, 96);
             g.setFont(font);
-            g.drawString("YOU LOSE!",(this.getWidth()/2)-220,500);
+            g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
             System.out.println("You Died");
         } else {
             System.out.println("Player is alive");
@@ -190,16 +190,16 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         //g2d.fillRect(0, 0, 1366, 768, null);
 //                        g.setColor(this.getBackground());
 //                        g.fillRect(0, 0, 1366, 768);
-                        g.setColor(new Color(199,244,100));
+                        g.setColor(new Color(199, 244, 100));
                         Font font = new Font("Tahoma", Font.PLAIN, 96);
                         g.setFont(font);
-                        g.drawString("YOU WIN!",(this.getWidth()/2)-220,500);
-                        g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth()/2)-279, 200, null);
+                        g.drawString("YOU WIN!", (this.getWidth() / 2) - 220, 500);
+                        g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
                     }
                 }
             }
             for (Wall w : wallArray) {
-                if(w.isVisible()){
+                if (w.isVisible()) {
                     w.draw(g2d);
                 }
             }
@@ -254,10 +254,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
             }
             synchronized (projectileArray) {
-            for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
-                Projectile p = iterator.next();
-               // p.move();
-                p.draw(g2d);/*
+                for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
+                    Projectile p = iterator.next();
+                    // p.move();
+                    p.draw(g2d);/*
                 if (checkOutOfBounds(p) > 0) {
                     System.out.println("Projectile flew out of bounds!");
                     iterator.remove();
@@ -289,13 +289,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         iterator.remove();
                     }
                 }*/
+                }
             }
+            playerArray = cc.getPlayerArray();
         }
-        playerArray = cc.getPlayerArray();
-        Toolkit.getDefaultToolkit().sync();
-        g2d.dispose();
-    }
-
+            Toolkit.getDefaultToolkit().sync();
+            g2d.dispose();
+        }
     public boolean collision(Position p1,Position p2) {
         boolean collide = true;
         //Check if left side of p1 is more than right side of p2
