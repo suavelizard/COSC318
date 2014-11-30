@@ -121,40 +121,54 @@ public class ClientConnection implements  Runnable{
             //System.out.println(o.getClass().toString());
             for(Object o = fromServer.readObject(); o.getClass().toString().equals("class java.awt.Rectangle");o = fromServer.readObject()) {
                 wallArray.add(new Wall((Rectangle)o));
-                System.out.println(o.toString());
+                //System.out.println(o.toString());
             }
             toServer.writeObject(player);
             toServer.flush();
             toServer.reset();
             // Process all messages from server, according to the protocol.
             while (true) {
-                Player p;
-                p = new Player((Player)fromServer.readObject());
-                //line = fromServer.readObject().toString();
-                //System.out.println(line);
+                Object o;
+                o = fromServer.readObject();
+                System.out.println(o.getClass().toString());
+                if(o.getClass().toString().equals("class client.entities.Player")) {
+                    Player p = new Player((Player) o);
+                    //line = fromServer.readObject().toString();
+                    //System.out.println(line);
 
-                //processs packets!
-                //toServer.writeObject("NAME TEST");
-                if (!p.getName().equals(getName())) {
-                    if(playerArray.contains(p)){
-                        System.out.println("Updating: " + p.getName());
-                        playerArray.get(playerArray.indexOf(p)).setPosition(p.getPosition());
-                        System.out.println(playerArray.get(playerArray.indexOf(p)).getPosition().toString());
-                    }
-                    else {
-                        playerArray.add(p);
-                        System.out.println("Adding " + p.getName());
-                    }
+                    //processs packets!
+                    //toServer.writeObject("NAME TEST");
+                    if (!p.getName().equals(getName())) {
+                        if (playerArray.indexOf(p) != -1) {
+                            System.out.println("Updating:" + p.getName());
+                            playerArray.get(playerArray.indexOf(p)).setEqual(p);
+                            System.out.println(playerArray.get(playerArray.indexOf(p)).getPosition().toString());
+                        } else {
+                            playerArray.add(p);
+                            System.out.println("Adding " + p.getName());
+                        }
 
+                    } else {
+                        player.setEqual(p);
+                        System.out.println("Self recieved");
+                    }
                 }
-                else {
-                    System.out.println("Self received");
+                else if((o.getClass().toString().equals("class java.util.ArrayList"))){
+                    synchronized (projectileArray) {
+                        projectileArray.clear();
+                        for(Iterator<Projectile> iterator = ((ArrayList<Projectile>)o).iterator();iterator.hasNext();) {
+                            Projectile projectile = iterator.next();
+                            projectileArray.add(projectile);
+                        }
+                    }
                 }
-                toServer.writeObject(player);
-                //System.out.println("Client:" + player.toString());
-                //System.out.println("Server:" + p.toString());
-                toServer.flush();
-                toServer.reset();
+                /*synchronized (toServer) {
+                    toServer.writeObject(player);
+                    //System.out.println("Client:" + player.toString());
+                    //System.out.println("Server:" + p.toString());
+                    toServer.flush();
+                    toServer.reset();
+                }*/
 
             }
 
@@ -193,6 +207,7 @@ public class ClientConnection implements  Runnable{
 
     public void updatePlayerPosition(Position p) {
         player.setPosition(p);
+        sendObject(player);
     }
 
     public ArrayList<Player> getPlayerArray() {
@@ -209,5 +224,19 @@ public class ClientConnection implements  Runnable{
 
     public ArrayList<Projectile> getProjectileArray() {
         return projectileArray;
+    }
+
+    public void sendObject(Object o) {
+        synchronized (toServer) {
+            try {
+                toServer.writeObject(o);
+                System.out.println(o.toString());
+                toServer.flush();
+                toServer.reset();
+                //fromServer.readObject();
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
     }
 }

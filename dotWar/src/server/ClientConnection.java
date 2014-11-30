@@ -150,16 +150,21 @@ public class ClientConnection implements Runnable{
         }
     }
 
-    public void readObject(){
+    public Object readObject(){
+        Object o = null;
         try {
-            p = new Player((Player)fromClient.readObject());
-            System.out.println("From client:" + p.toString());
+            o = fromClient.readObject();
+            if(o.getClass().toString().equals("class client.entities.Player")){
+                p = new Player((Player)o);
+            }
+
         }catch(IOException ioe){
             ioe.printStackTrace();
             setOpen(false);
         } catch (ClassNotFoundException cnfe) {
             cnfe.printStackTrace();
         }
+        return o;
     }
 
     public Player getPlayer() {

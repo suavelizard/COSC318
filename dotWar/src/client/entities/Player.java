@@ -447,6 +447,26 @@ public class Player extends Entity implements Serializable{
         }
         return false;
     }
+
+    public void setEqual(Player p) {
+        super.setWidth(p.getWidth());
+        super.setHeight(p.getHeight());
+        this.setName(p.getName());
+        this.setHealth(p.getHealth());
+        this.setAlive(p.isAlive());
+        this.setWeapon(p.getWeapon());
+        super.setPosition(p.getPosition());
+        this.setPosition(p.getPosition());
+        this.setVisible(p.isVisible());
+        //this.setPlayerImageString(p.getPlayerImageString());
+        /*ImageIcon ii = new ImageIcon(this.getClass().getResource(playerImageString));
+        Image img = ii.getImage();
+        Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH);
+        super.setImage(newimg);*/
+        this.setScore(p.getScore());
+        this.setMoveSpeed(p.getMoveSpeed());
+    }
+
     public void die(){
         //TODO: implement death animation
         this.setVisible(false);

@@ -23,7 +23,9 @@
 package server;
 
 import client.Position;
+import client.entities.Entity;
 import client.entities.Player;
+import client.entities.Projectile;
 import client.entities.Wall;
 
 import java.io.IOException;
@@ -38,10 +40,12 @@ import java.util.Random;
  * Created by Nicholas on 24/11/2014.
  */
 public class ClientManager implements Runnable{
+    private static final int HEIGHT = 790;
+    private static final int WIDTH = 1000;
     private static ClientManager instance = null;
-     static ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
+    static ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
     static ArrayList<String> playerArray = new ArrayList<String>();
-    static ArrayList<String> projectileArray = new ArrayList<String>();
+    static ArrayList<Projectile> projectileArray = new ArrayList<Projectile>();
     static ArrayList<String> weaponArray = new ArrayList<String>();
     static ArrayList<Wall> wallArray = new ArrayList<Wall>();
     static ArrayList<Player> players = new ArrayList<Player>();
@@ -105,10 +109,18 @@ public class ClientManager implements Runnable{
                             }
                             if (p.getName() != null) {
                                 cc.sendObject(p);
-                                cc.readObject();
-                            }
-                            if (p.getName().equals(cc.getName())) {
-                                p.setPosition(cc.getPlayer().getPosition());
+                                Object o = cc.readObject();
+                                if(o.getClass().toString().equals("class client.entities.Projectile")){
+                                    synchronized (projectileArray) {
+                                        projectileArray.add((Projectile) o);
+                                        System.out.println("Got projectile");
+                                    }
+                                }
+                                else if(o.getClass().toString().equals("class client.entities.Player")){
+                                    if (p.getName().equals(cc.getName())) {
+                                        p.setEqual(cc.getPlayer());
+                                    }
+                                }
                             }
                             if (!cc.isOpen()) {
                                 System.out.println("Client DC'd");
@@ -118,23 +130,72 @@ public class ClientManager implements Runnable{
                             }
                         }
                     }
+                    cc.sendObject(projectileArray);
+                    cc.readObject();
 
                 }
             }
-            elapsed = System.currentTimeMillis() - start;
-            try {
-                if (elapsed < 20) {
-                    Thread.sleep(20 - elapsed);
-                } else {
-                    // don't starve the garbage collector
-                    Thread.sleep(5);
+            synchronized (projectileArray) {
+                for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
+                    Projectile p = iterator.next();
+                    p.move();
+                    if (checkOutOfBounds(p) > 0) {
+                        System.out.println("Projectile flew out of bounds!");
+                        iterator.remove();
+                    }
+                    for (Wall w : wallArray) {
+
+                        if (checkCollisions(p, w)) {
+                            System.out.println("Projectile bounced off wall!");
+                            p.bounce(w.getWallOrientation());
+                        }
+                    }
+                    for (Player eP : players) {
+                        if (checkCollisions(p, eP)) {
+                            System.out.println("Projectile hit " + eP.getName());
+                            eP.takeDamage(p.getDamage());
+                            iterator.remove();
+                        }
+                    }
                 }
-            }
-            catch(Exception ex) {
-                ex.printStackTrace();
-            }
-//            System.out.println("end of the loop");
+
+
         }
+        elapsed = System.currentTimeMillis() - start;
+        try {
+            if (elapsed < 20) {
+                Thread.sleep(20 - elapsed);
+            } else {
+                // don't starve the garbage collector
+                Thread.sleep(5);
+            }
+        }
+        catch(Exception ex) {
+            ex.printStackTrace();
+        }
+//            System.out.println("end of the loop");
+    }
+}
+    public boolean checkCollisions(Entity e1, Entity e2) {
+        return e1.getBounds().intersects(e2.getBounds());
+
+    }
+
+    public int checkOutOfBounds(Entity e){
+        //TODO: move player width and height inside player object
+        if(e.getPosition().getY() < 0) {
+            return 1;
+        }
+        if(e.getPosition().getY()+e.getHeight() > HEIGHT) {
+            return 2;
+        }
+        if(e.getPosition().getX()+e.getWidth() > WIDTH) {
+            return 3;
+        }
+        if(e.getPosition().getX() < 0) {
+            return 4;
+        }
+        return 0;
     }
 
     public void initWalls(int numWalls){

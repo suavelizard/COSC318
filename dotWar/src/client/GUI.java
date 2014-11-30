@@ -54,7 +54,7 @@ public class GUI extends JFrame implements ActionListener{
     // Class constructor
     public GUI( String titleText, Socket clientSocket ) throws IOException, ClassNotFoundException{
         super(titleText);
-        this.setIconImage(new ImageIcon(getClass().getResource("/assets/dotwar_favicon.png")).getImage());
+        //this.setIconImage(new ImageIcon(getClass().getResource("/assets/dotwar_favicon.png")).getImage());
         setJMenuBar(buildMenuBar());
         Container cp = getContentPane();
         cp.setLayout(new BoxLayout(cp, BoxLayout.X_AXIS));

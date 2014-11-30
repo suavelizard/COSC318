@@ -25,12 +25,14 @@ package client.entities;
 import client.Position;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * Created by Zane on 2014-11-06.
  */
 
-public class Projectile extends Entity{
+public class Projectile extends Entity implements Serializable{
+    private Position position;
     private double damage;
     private Position targetPos;
     private int moveSpeed;
@@ -72,14 +74,14 @@ public class Projectile extends Entity{
     }
 
     public Projectile() {
-        super.setPosition(new Position(400.0, 400.0));
+        this.setPosition(new Position(400.0, 400.0));
         this.setMoveSpeed(10);
         this.setDamage(1);
         angleSet = false;
     }
 
     public Projectile(Position position, Position targetPos) {
-        super.setPosition(position);
+        this.setPosition(position);
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);
@@ -90,7 +92,7 @@ public class Projectile extends Entity{
     }
     //with weapon modifer
     public Projectile(Position position, Position targetPos,Weapon w) {
-        super.setPosition(position);
+        this.setPosition(position);
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);
@@ -118,8 +120,11 @@ public class Projectile extends Entity{
 
     }
     public void bounce(int direction){
-        if(direction == 1 || direction == 0){
-            angle = angle -180;
+        if(direction == 1){
+            angle = angle -90;
+        }
+        else if(direction == 0){
+            angle = angle +90;
         }
     }
     public void draw(Graphics g){
@@ -128,5 +133,13 @@ public class Projectile extends Entity{
 //        g.fillRect((int) this.getPosition().getX()-3, (int) this.getPosition().getY()-3, 4, 4);
         g.setColor(this.getColor());
         g.fillRect((int) this.getPosition().getX(), (int) this.getPosition().getY(), 4, 4);
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = new Position(position);
     }
 }
