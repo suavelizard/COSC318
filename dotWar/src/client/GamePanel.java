@@ -71,13 +71,13 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         projectileArray = cc.getProjectileArray();
         //initLabels();
-        
+
     }
 
     public void initLabels() {
         int width = this.getWidth();
         int height = this.getHeight();
-        
+
 //        JLabel enemyLabel = new JLabel("Enemy Health:");
 //        enemyLabel.setSize(100, 25);
 //        enemyLabel.setLocation(width - 130, height - 150);
@@ -127,9 +127,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         playerArray.add(new Player(15,15,"Bob",""+(rnd.nextInt(3))));
         playerArray.add(new Player(15,15,"Steve",""+(rnd.nextInt(3))));*/
         playerArray = cc.getPlayerArray();
-        Weapon w = new Weapon(5,15,0,Color.ORANGE);
-        Weapon w1 = new Weapon(10,5,1,Color.RED);
-        Weapon w2 = new Weapon(5,20,2,new Color(199,244,100));
+        Weapon w = new Weapon(new Position(200,500),5,15,0,Color.ORANGE);
+        Weapon w1 = new Weapon(new Position(200,500),10,5,1,Color.RED);
+        Weapon w2 = new Weapon(new Position(200,500),5,20,2,new Color(199,244,100));
         w.setPosition(new Position(300,400));
         w1.setPosition(new Position(400,200));
         w2.setPosition(new Position(200,500));
@@ -153,7 +153,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         //player.setPosition(new Position(20, 20));
         //player.updatePosition();
-       // enemy.setPosition(new Position(950,690));
+        // enemy.setPosition(new Position(950,690));
 
     }
 
@@ -172,6 +172,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             g.setFont(font);
             g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
             System.out.println("You Died");
+            player.updatePosition();
+            cc.updatePlayerPosition(player.getPosition());
         } else {
             System.out.println("Player is alive");
             //If player isn't dead we care about everything else
@@ -197,6 +199,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         g.setFont(font);
                         g.drawString("YOU WIN!", (this.getWidth() / 2) - 220, 500);
                         g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
+                        player.updatePosition();
+                        cc.updatePlayerPosition(player.getPosition());
                     }
                 }
             }
@@ -258,46 +262,50 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             synchronized (projectileArray) {
                 for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
                     Projectile p = iterator.next();
-                     p.move();
+                    p.move();
                     p.draw(g2d);
-                if (checkOutOfBounds(p) > 0) {
-                    System.out.println("Projectile flew out of bounds!");
-                    iterator.remove();
-                }
-                for (Wall w : wallArray) {
-                    if (checkCollisions(p, w)) {
-                        System.out.println("Projectile bounced off wall!");
-                        p.bounce(w.getWallOrientation());
-                    }
-                }
-                for (Player eP : playerArray) {
-                    if (checkCollisions(p, eP)) {
-                        System.out.println("Projectile hit " + eP.getName());
-                        eP.takeDamage(p.getDamage());
+                    if (checkOutOfBounds(p) > 0) {
+                        System.out.println("Projectile flew out of bounds!");
                         iterator.remove();
                     }
-                }
-                //Hacky code to limit range!
-                if (player.getWeapon().getType() == 1) {
-                    if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 200 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 200) {
+                    for (Wall w : wallArray) {
+                        if (checkCollisions(p, w)) {
+                            System.out.println("Projectile bounced off wall!");
+                            p.bounce(w.getWallOrientation());
+                        }
+                    }
+                    for (Player eP : playerArray) {
+                        if (checkCollisions(p, eP)) {
+                            System.out.println("Projectile hit " + eP.getName());
+                            eP.takeDamage(p.getDamage());
+                            iterator.remove();
+                        }
+                    }
+                    if(checkCollisions(p,player)){
+                        player.takeDamage(p.getDamage());
                         iterator.remove();
                     }
-                } else if (player.getWeapon().getType() == 0) {
-                    if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 1000 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 1000) {
-                        iterator.remove();
+                    //Hacky code to limit range!
+                    if (player.getWeapon().getType() == 1) {
+                        if (Math.abs(p.getStartPosition().getX() - p.getPosition().getX()) > 200 || Math.abs(p.getStartPosition().getY() - p.getPosition().getY()) > 200) {
+                            iterator.remove();
+                        }
+                    } else if (player.getWeapon().getType() == 0) {
+                        if (Math.abs(p.getStartPosition().getX() - p.getPosition().getX()) > 1000 || Math.abs(p.getStartPosition().getY() - p.getPosition().getY()) > 1000) {
+                            iterator.remove();
+                        }
+                    } else if (player.getWeapon().getType() == 2) {
+                        if (Math.abs(p.getStartPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(p.getStartPosition().getY() - p.getPosition().getY()) > 400) {
+                            iterator.remove();
+                        }
                     }
-                } else if (player.getWeapon().getType() == 2) {
-                    if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 400) {
-                        iterator.remove();
-                    }
-                }
                 }
             }
             playerArray = cc.getPlayerArray();
         }
-            Toolkit.getDefaultToolkit().sync();
-            g2d.dispose();
-        }
+        Toolkit.getDefaultToolkit().sync();
+        g2d.dispose();
+    }
     public boolean collision(Position p1,Position p2) {
         boolean collide = true;
         //Check if left side of p1 is more than right side of p2

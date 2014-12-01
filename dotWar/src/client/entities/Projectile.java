@@ -33,6 +33,7 @@ import java.io.Serializable;
 
 public class Projectile extends Entity implements Serializable{
     private Position position;
+    private Position startPosition;
     private double damage;
     private Position targetPos;
     private int moveSpeed;
@@ -40,6 +41,13 @@ public class Projectile extends Entity implements Serializable{
     private boolean angleSet;
     private Color color;
 
+    public Position getStartPosition() {
+        return startPosition;
+    }
+
+    public void setStartPosition(Position startPosition) {
+        this.startPosition = startPosition;
+    }
 
     public Position getTargetPos() {
         return targetPos;
@@ -75,6 +83,7 @@ public class Projectile extends Entity implements Serializable{
 
     public Projectile() {
         this.setPosition(new Position(400.0, 400.0));
+        this.setStartPosition(new Position(400.0, 400.0));
         this.setMoveSpeed(10);
         this.setDamage(1);
         angleSet = false;
@@ -82,6 +91,7 @@ public class Projectile extends Entity implements Serializable{
 
     public Projectile(Position position, Position targetPos) {
         this.setPosition(position);
+        this.setStartPosition(new Position(position));
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);
@@ -93,6 +103,7 @@ public class Projectile extends Entity implements Serializable{
     //with weapon modifer
     public Projectile(Position position, Position targetPos,Weapon w) {
         this.setPosition(position);
+        this.setStartPosition(new Position(position));
         super.setWidth(3);
         super.setHeight(3);
         this.setTargetPos(targetPos);

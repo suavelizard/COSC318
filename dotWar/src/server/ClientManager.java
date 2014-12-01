@@ -55,12 +55,10 @@ public class ClientManager implements Runnable{
     }
 
     private void initWeapons(int i) {
-        Weapon w = new Weapon(5,15,0, Color.ORANGE);
-        Weapon w1 = new Weapon(10,5,1,Color.RED);
-        Weapon w2 = new Weapon(5,20,2,new Color(199,244,100));
-        w.setPosition(new Position(300,400));
-        w1.setPosition(new Position(400,200));
-        w2.setPosition(new Position(200,500));
+        Weapon w = new Weapon(new Position(300,400),5,15,0, Color.ORANGE);
+        Weapon w1 = new Weapon(new Position(400,200),10,5,1,Color.RED);
+        Weapon w2 = new Weapon(new Position(200,500),5,20,2,new Color(199,244,100));
+
 
         weaponArray.add(w);
         weaponArray.add(w1);
@@ -113,6 +111,7 @@ public class ClientManager implements Runnable{
     public void run() {
         long start, elapsed, wait;
         int deadPlayers = 0;
+        int sentProjectiles = 0;
         while(true) {
             start = System.currentTimeMillis();
             synchronized (ccArr) {
@@ -142,14 +141,19 @@ public class ClientManager implements Runnable{
                             }
                         }
                         cc.sendObject(projectileArray);
+                        sentProjectiles++;
                         cc.readObject();
+                        if(sentProjectiles >= ccArr.size()) {
+                            projectileArray.clear();
+                            sentProjectiles = 0;
+                        }
                     } else {
                         System.out.println("Client DC'd");
                         iterator.remove();
                         players.remove(cc.getPlayer());
                     }
                 }
-                projectileArray.clear();
+
             }
             /*synchronized (projectileArray) {
                 for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
@@ -193,8 +197,8 @@ public class ClientManager implements Runnable{
         }*/
         elapsed = System.currentTimeMillis() - start;
         try {
-            if (elapsed < 20) {
-                Thread.sleep(20 - elapsed);
+            if (elapsed < 10) {
+                Thread.sleep(10 - elapsed);
             } else {
                 // don't starve the garbage collector
                 Thread.sleep(5);
