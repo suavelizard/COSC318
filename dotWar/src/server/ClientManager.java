@@ -27,7 +27,9 @@ import client.entities.Entity;
 import client.entities.Player;
 import client.entities.Projectile;
 import client.entities.Wall;
+import client.entities.Weapon;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -47,13 +49,28 @@ public class ClientManager implements Runnable{
     static ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
     static ArrayList<String> playerArray = new ArrayList<String>();
     static ArrayList<Projectile> projectileArray = new ArrayList<Projectile>();
-    static ArrayList<String> weaponArray = new ArrayList<String>();
+    static ArrayList<Weapon> weaponArray = new ArrayList<Weapon>();
     static ArrayList<Wall> wallArray = new ArrayList<Wall>();
     static ArrayList<Player> players = new ArrayList<Player>();
 
     protected ClientManager() {
         initWalls(10);
+        initWeapons(6);
     }
+
+    private void initWeapons(int i) {
+        Weapon w = new Weapon(5,15,0, Color.ORANGE);
+        Weapon w1 = new Weapon(10,5,1,Color.RED);
+        Weapon w2 = new Weapon(5,20,2,new Color(199,244,100));
+        w.setPosition(new Position(300,400));
+        w1.setPosition(new Position(400,200));
+        w2.setPosition(new Position(200,500));
+
+        weaponArray.add(w);
+        weaponArray.add(w1);
+        weaponArray.add(w2);
+    }
+
 
     public static ClientManager getInstance(){
         if(instance==null)
@@ -136,8 +153,9 @@ public class ClientManager implements Runnable{
                         players.remove(cc.getPlayer());
                     }
                 }
+                projectileArray.clear();
             }
-            synchronized (projectileArray) {
+            /*synchronized (projectileArray) {
                 for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
                     Projectile p = iterator.next();
                     p.move();
@@ -176,7 +194,7 @@ public class ClientManager implements Runnable{
                 }
 
 
-        }
+        }*/
         elapsed = System.currentTimeMillis() - start;
         try {
             if (elapsed < 20) {

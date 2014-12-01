@@ -155,7 +155,7 @@ public class ClientConnection implements  Runnable{
                 }
                 else if((o.getClass().toString().equals("class java.util.ArrayList"))){
                     synchronized (projectileArray) {
-                        projectileArray.clear();
+                        //projectileArray.clear();
                         for(Iterator<Projectile> iterator = ((ArrayList<Projectile>)o).iterator();iterator.hasNext();) {
                             Projectile projectile = iterator.next();
                             projectileArray.add(projectile);
