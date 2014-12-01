@@ -121,6 +121,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         //player = new Player(15,15,"Zane","1");
         //System.out.println("Game panel initPlayer");
         player = new Player(cc.getPlayer());
+        //player.die();
         //System.out.println(player.toString());
         //player.setWeapon(new Weapon(2,10,1,Color.RED));
         /*playerArray.add(new Player(15, 15, "Enemy", "" + (rnd.nextInt(3))));
@@ -165,16 +166,23 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             //TODO: Respawn menu
             player.setWinner(false);
             hideAll();
-            g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
+            g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 100, null);
             g.setColor(new Color(255, 107, 107));
 
             Font font = new Font("Tahoma", Font.BOLD, 96);
             g.setFont(font);
-            g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
+            g.drawString("YOU DIED!", (this.getWidth() / 2) - 250, 350);
             System.out.println("You Died");
-            font = new Font("Tahoma", Font.PLAIN, 40);
+            font = new Font("Tahoma", Font.PLAIN, 20);
             g.setFont(font);
-            g.drawString(player.getLives()+"lives remaining! \nClick to respawn", (this.getWidth() / 2) - 220, 600);
+            g.setColor(new Color(78,205,196));
+            g.drawString(player.getLives()+" lives remaining! Click to respawn", (this.getWidth() / 2) - 135, 500);
+            for(int i = 0; i < playerArray.size()-1;i++){
+                if(!playerArray.get(i-1).isAlive()){
+                    //System.out.println(playerArray.get(i).getName() + " - " + playerArray.get(i).getLives());
+                    g.drawString(playerArray.get(i-1).getName() + " - " + playerArray.get(i-1).getLives(), (this.getWidth() / 2) - 135, 500+(20*(i+1)));
+                }
+            }
             player.updatePosition();
             cc.updatePlayer(player);
         } else {

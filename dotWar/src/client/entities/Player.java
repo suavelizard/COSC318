@@ -499,6 +499,7 @@ public class Player extends Entity implements Serializable{
         //recreate player
         this.setVisible(true);
         this.setAlive(true);
+        this.setHealth(100);
         lives--;
     }
 }
