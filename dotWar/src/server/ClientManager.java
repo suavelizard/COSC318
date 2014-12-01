@@ -23,11 +23,7 @@
 package server;
 
 import client.Position;
-import client.entities.Entity;
-import client.entities.Player;
-import client.entities.Projectile;
-import client.entities.Wall;
-import client.entities.Weapon;
+import client.entities.*;
 
 import java.awt.*;
 import java.io.IOException;
