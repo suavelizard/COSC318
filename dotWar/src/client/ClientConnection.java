@@ -92,6 +92,7 @@ public class ClientConnection implements  Runnable{
 
             System.out.println("Attempting to connect to server at: " + getServerAddress());
             socket = new Socket(SERVER_ADDRESS, 9264);
+            socket.setTcpNoDelay(false);
             System.out.println("New Socket created");
 
             fromServer = new ObjectInputStream(socket.getInputStream());

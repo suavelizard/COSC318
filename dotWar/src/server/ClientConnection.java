@@ -48,6 +48,7 @@ public class ClientConnection implements Runnable{
     public ClientConnection(Socket s) throws IOException{
         //System.out.println("New client constructor");
         this.socket = s;
+        this.socket.setTcpNoDelay(false);
         /**
          * get the input and output streams associated with the socket.
          */

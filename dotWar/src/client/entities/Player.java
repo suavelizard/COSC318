@@ -54,7 +54,7 @@ public class Player extends Entity implements Serializable{
     private boolean isVisible= true;
     private Position previousPosition;
     private boolean isWinner = false;
-
+    private int lives = 3;
     public boolean isWinner() {
         return isWinner;
     }
@@ -180,6 +180,14 @@ public class Player extends Entity implements Serializable{
 
     public void setPreviousPosition(Position previousPosition) {
         this.previousPosition = previousPosition;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 
     //calculates damage
@@ -489,5 +497,8 @@ public class Player extends Entity implements Serializable{
     }
     public void respawn(){
         //recreate player
+        this.setVisible(true);
+        this.setAlive(true);
+        lives--;
     }
 }

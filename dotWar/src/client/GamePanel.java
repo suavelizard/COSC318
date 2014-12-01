@@ -172,6 +172,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             g.setFont(font);
             g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
             System.out.println("You Died");
+            font = new Font("Tahoma", Font.PLAIN, 40);
+            g.setFont(font);
+            g.drawString(player.getLives()+"lives remaining! \nClick to respawn", (this.getWidth() / 2) - 220, 600);
             player.updatePosition();
             cc.updatePlayer(player);
         } else {
@@ -198,6 +201,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         Font font = new Font("Tahoma", Font.BOLD, 96);
                         g.setFont(font);
                         g.drawString("YOU WIN!", (this.getWidth() / 2) - 220, 500);
+                        g.setColor(new Color(199, 244, 100));
+                        font = new Font("Tahoma", Font.PLAIN, 40);
+                        g.setFont(font);
+                        g.drawString("Click to Continue", (this.getWidth() / 2) - 220, 600);
                         g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
                         player.updatePosition();
                         cc.updatePlayer(player);
@@ -385,7 +392,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if(!player.isAlive()){
-            System.out.println("Repawn");
+            System.out.println("Respawn");
+            player.respawn();
         }
     }
 
