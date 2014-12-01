@@ -23,11 +23,9 @@
 package server;
 
 import client.Position;
-import client.entities.Entity;
-import client.entities.Player;
-import client.entities.Projectile;
-import client.entities.Wall;
+import client.entities.*;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -47,7 +45,7 @@ public class ClientManager implements Runnable{
     static ArrayList<ClientConnection> ccArr = new ArrayList<ClientConnection>();
     static ArrayList<String> playerArray = new ArrayList<String>();
     static ArrayList<Projectile> projectileArray = new ArrayList<Projectile>();
-    static ArrayList<String> weaponArray = new ArrayList<String>();
+    static ArrayList<Weapon> weaponArray = new ArrayList<Weapon>();
     static ArrayList<Wall> wallArray = new ArrayList<Wall>();
     static ArrayList<Player> players = new ArrayList<Player>();
 

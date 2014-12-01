@@ -77,7 +77,7 @@ public class Weapon extends Entity implements Serializable{
         this.setType(0);
         this.setColor(Color.black);
     }
-    public Weapon(int damageModifier,int moveSpeedModifer,int type, Color color){
+    public Weapon(Position p,int damageModifier,int moveSpeedModifer,int type, Color color){
         this.setPosition(new Position(0, 0));
         this.setWidth(10);
         this.setHeight(10);
