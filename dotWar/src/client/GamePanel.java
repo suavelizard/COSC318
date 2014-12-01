@@ -120,7 +120,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
         //player = new Player(15,15,"Zane","1");
         //System.out.println("Game panel initPlayer");
-        player = cc.getPlayer();
+        player = new Player(cc.getPlayer());
         //System.out.println(player.toString());
         //player.setWeapon(new Weapon(2,10,1,Color.RED));
         /*playerArray.add(new Player(15, 15, "Enemy", "" + (rnd.nextInt(3))));
@@ -258,8 +258,8 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             synchronized (projectileArray) {
                 for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
                     Projectile p = iterator.next();
-                    // p.move();
-                    p.draw(g2d);/*
+                     p.move();
+                    p.draw(g2d);
                 if (checkOutOfBounds(p) > 0) {
                     System.out.println("Projectile flew out of bounds!");
                     iterator.remove();
@@ -290,7 +290,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     if (Math.abs(player.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(player.getPosition().getY() - p.getPosition().getY()) > 400) {
                         iterator.remove();
                     }
-                }*/
+                }
                 }
             }
             playerArray = cc.getPlayerArray();
