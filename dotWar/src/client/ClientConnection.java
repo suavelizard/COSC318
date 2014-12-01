@@ -205,8 +205,8 @@ public class ClientConnection implements  Runnable{
         this.player = player;
     }
 
-    public void updatePlayerPosition(Position p) {
-        player.setPosition(p);
+    public void updatePlayer(Player p) {
+        player.setEqual(p);
         sendObject(player);
     }
 

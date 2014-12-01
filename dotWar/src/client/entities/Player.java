@@ -268,7 +268,7 @@ public class Player extends Entity implements Serializable{
         Image newimg = img.getScaledInstance(15, 15,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(newimg);
         this.setScore(0);
-        this.setMoveSpeed(3);
+        this.setMoveSpeed(p.getMoveSpeed());
 
     }
 

@@ -197,12 +197,12 @@ public class ClientManager implements Runnable{
         }*/
         elapsed = System.currentTimeMillis() - start;
         try {
-            if (elapsed < 10) {
-                Thread.sleep(10 - elapsed);
-            } else {
+           // if (elapsed < 10) {
+               // Thread.sleep(10 - elapsed);
+           // } else {
                 // don't starve the garbage collector
-                Thread.sleep(5);
-            }
+                Thread.sleep(0,5);
+           // }
         }
         catch(Exception ex) {
             ex.printStackTrace();

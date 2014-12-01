@@ -173,7 +173,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
             System.out.println("You Died");
             player.updatePosition();
-            cc.updatePlayerPosition(player.getPosition());
+            cc.updatePlayer(player);
         } else {
             System.out.println("Player is alive");
             //If player isn't dead we care about everything else
@@ -200,7 +200,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         g.drawString("YOU WIN!", (this.getWidth() / 2) - 220, 500);
                         g.drawImage(new ImageIcon(this.getClass().getResource("/assets/dotwarlogo.png")).getImage(), (this.getWidth() / 2) - 279, 200, null);
                         player.updatePosition();
-                        cc.updatePlayerPosition(player.getPosition());
+                        cc.updatePlayer(player);
                     }
                 }
             }
@@ -245,10 +245,10 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         break;
                 }
                 player.updatePosition();
-                cc.updatePlayerPosition(player.getPosition());
+                cc.updatePlayer(player);
             } else {
                 player.updatePosition();
-                cc.updatePlayerPosition(player.getPosition());
+                cc.updatePlayer(player);
                 for (Wall wall : wallArray) {
                     if (checkCollisions(player, wall)) {
 
