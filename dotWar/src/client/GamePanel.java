@@ -286,15 +286,15 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                         iterator.remove();
                     }
                     //Hacky code to limit range!
-                    if (player.getWeapon().getType() == 1) {
+                    if (p.getType() == 1) {
                         if (Math.abs(p.getStartPosition().getX() - p.getPosition().getX()) > 200 || Math.abs(p.getStartPosition().getY() - p.getPosition().getY()) > 200) {
                             iterator.remove();
                         }
-                    } else if (player.getWeapon().getType() == 0) {
+                    } else if (p.getType() == 0) {
                         if (Math.abs(p.getStartPosition().getX() - p.getPosition().getX()) > 1000 || Math.abs(p.getStartPosition().getY() - p.getPosition().getY()) > 1000) {
                             iterator.remove();
                         }
-                    } else if (player.getWeapon().getType() == 2) {
+                    } else if (p.getType() == 2) {
                         if (Math.abs(p.getStartPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(p.getStartPosition().getY() - p.getPosition().getY()) > 400) {
                             iterator.remove();
                         }

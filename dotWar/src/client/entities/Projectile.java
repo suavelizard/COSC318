@@ -40,6 +40,15 @@ public class Projectile extends Entity implements Serializable{
     private double angle;
     private boolean angleSet;
     private Color color;
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public Position getStartPosition() {
         return startPosition;
@@ -112,6 +121,7 @@ public class Projectile extends Entity implements Serializable{
         angleSet = false;
         this.setColor(w.getColor());
         this.setDamage(w.getDamageModifier());
+        this.setType(w.getType());
     }
 
     public void move() {
