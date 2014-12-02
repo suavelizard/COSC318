@@ -31,25 +31,30 @@ public class ClientConnectionThread extends Thread {
     }
 
     public void run() {
-
+        System.out.println("Run");
         while (moreInfo) {
             try {
-                byte[] buffer = new byte[9000];
+                System.out.println("Try");
+                byte[] buffer = new byte[512];
                 //DatagramPacket packet = new DatagramPacket(buffer, buffer.length );
                 //socket.send(packet);
-                byte[] buf = new byte[9000];
-                byte[] rbuf = new byte[9000];
+                byte[] buf = new byte[1024];
+                byte[] rbuf = new byte[512];
+                System.out.println("rBuf");
                     // receive request
                 DatagramPacket packet = new DatagramPacket(rbuf, rbuf.length);
-                dsocket.receive(packet);
+                System.out.println("packet");
+
+
+                System.out.println("Receive");
                 ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                 this.fromClient = new ObjectInputStream(bais);
-
+                System.out.println("obj output");
                     // figure out response
                 Object dObject = null;
                 String request = new String(packet.getData());
                 System.out.println(request);
-
+                System.out.println("request");
 
                 if (Integer.parseInt(request) == 0) {
                     System.out.println("hello1");
@@ -59,6 +64,7 @@ public class ClientConnectionThread extends Thread {
                     System.out.println("hello2");
                     dObject = getNext();
                 }
+                System.out.println("After if");
                 buf = dObject.toString().getBytes();
 
 		    // send the response to the client at "address" and "port"
@@ -66,12 +72,14 @@ public class ClientConnectionThread extends Thread {
                 int port = packet.getPort();
                 packet = new DatagramPacket(buf, buf.length, address, port);
                 dsocket.send(packet);
+                System.out.println("Send");
             } catch (IOException e) {
                 e.printStackTrace();
 		moreInfo = false;
             }
         }
         dsocket.close();
+        System.out.println("Close");
     }
 
     protected Object getNext() {
