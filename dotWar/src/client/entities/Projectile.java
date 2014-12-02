@@ -41,6 +41,9 @@ public class Projectile extends Entity implements Serializable{
     private boolean angleSet;
     private Color color;
     private int type;
+    //private int direction;
+    private double xMove;
+    private double yMove;
 
     public int getType() {
         return type;
@@ -132,21 +135,27 @@ public class Projectile extends Entity implements Serializable{
             angle = (float) Math.atan2(differenceY, differenceX);
 
             angleSet = true;
+            xMove = Math.cos(angle) * moveSpeed;
+            yMove = Math.sin(angle) * moveSpeed;
         }
         
 //        this.setPosition(new Position(this.getPosition().getX() - Math.cos(angle * Math.PI / 180) * moveSpeed,
 //                this.getPosition().getY() - Math.sin(angle * Math.PI / 180) * moveSpeed));
-        this.setPosition(new Position(this.getPosition().getX() - Math.cos(angle) * moveSpeed,
-                this.getPosition().getY() - Math.sin(angle) * moveSpeed));
+        this.setPosition(new Position(this.getPosition().getX() - xMove,
+                this.getPosition().getY() - yMove));
 
     }
     public void bounce(int direction){
         if(direction == 1){
-            angle = angle -90;
+           // angle = angle -90;
+            yMove = yMove * -1;
+
         }
         else if(direction == 0){
-            angle = angle +90;
+            //angle = angle +90;
+            xMove = xMove * -1;
         }
+
     }
     public void draw(Graphics g){
         //hardcoded shadow
