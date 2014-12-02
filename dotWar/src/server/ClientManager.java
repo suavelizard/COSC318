@@ -50,7 +50,8 @@ public class ClientManager implements Runnable{
     static ArrayList<Player> players = new ArrayList<Player>();
 
     protected ClientManager() {
-        initWalls(10);
+        //initWalls(10);
+        initMap();
         initWeapons(6);
     }
 
@@ -218,5 +219,23 @@ public class ClientManager implements Runnable{
             wall.add(new Wall(new Position(p.getX(),p.getY()+h-2),w,2,1));
         }
         return wall;
+    }
+
+    public void initMap(){
+        //Bottom Left
+        wallArray.addAll(wallBox(new Position(430, HEIGHT - 230),15,200));
+        wallArray.addAll(wallBox(new Position(30, HEIGHT - 230),400,15));
+        //Bottom Right
+        wallArray.addAll(wallBox(new Position(WIDTH - 430, HEIGHT - 230),15,200));
+        wallArray.addAll(wallBox(new Position(WIDTH - 430, HEIGHT - 230),400,15));
+        //Top Left
+        wallArray.addAll(wallBox(new Position(430, 30),15,200));
+        wallArray.addAll(wallBox(new Position(30, 230),415,15));
+        //Top Right
+        wallArray.addAll(wallBox(new Position(WIDTH - 430, 30),15,200));
+        wallArray.addAll(wallBox(new Position(WIDTH - 430, 230),400,15));
+        //Middle cross
+        wallArray.addAll(wallBox(new Position((WIDTH/2), (HEIGHT/2)-92.5),15,200));
+        wallArray.addAll(wallBox(new Position((WIDTH/2)-192.5, (HEIGHT/2)),400,15));
     }
 }
