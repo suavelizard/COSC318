@@ -150,7 +150,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         Position p1 = new Position(10,10);
         Position p2 = new Position(10,10);
         p1.add(p2);
-
+       // player.die();
         //player.setPosition(new Position(20, 20));
         //player.updatePosition();
         // enemy.setPosition(new Position(950,690));
@@ -170,12 +170,17 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
             Font font = new Font("Tahoma", Font.BOLD, 96);
             g.setFont(font);
-            g.drawString("YOU LOSE!", (this.getWidth() / 2) - 220, 500);
+            g.drawString("YOU LOSE!", (this.getWidth() / 2) - 250, 500);
             System.out.println("You Died");
             font = new Font("Tahoma", Font.PLAIN, 40);
             g.setFont(font);
             if(player.getLives() > 0) {
-                g.drawString(player.getLives() + "lives remaining! \nClick to respawn", (this.getWidth() / 2) - 220, 600);
+                g.drawString(player.getLives() + " lives remaining! \nClick to respawn", (this.getWidth() / 2) - 300, 600);
+                font = new Font("Tahoma", Font.PLAIN, 20);
+                g.setFont(font);
+                for(Player p: playerArray){
+                    ((Graphics2D) g).drawString(p.getName() + " - " + p.getLives()+" lives",this.getWidth()/2-180,625);
+                }
             }
             if(start == 0)
                 start = System.currentTimeMillis();
