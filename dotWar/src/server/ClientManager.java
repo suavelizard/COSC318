@@ -27,6 +27,7 @@ import client.entities.*;
 
 import java.awt.*;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Time;
@@ -72,7 +73,7 @@ public class ClientManager implements Runnable{
         return instance;
     }
 
-    public void newClient(Socket s) {
+    public void newClient(DatagramSocket s) {
         try {
             synchronized (ccArr) {
                 ccArr.add(new server.ClientConnection(s));

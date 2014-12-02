@@ -27,9 +27,10 @@ import client.entities.Weapon;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,11 +41,12 @@ import java.util.Iterator;
  */
 public class ClientConnection implements  Runnable{
     private static ClientConnection instance = null;
-    static Socket socket;
+    static DatagramSocket socket;
     static ObjectOutputStream toServer;
     static ObjectInputStream fromServer;
     static String SERVER_ADDRESS = "localhost";
     private int SERVER_PORT;
+    byte[] buffer;
     private String clientName;
     private Player player;
     
@@ -91,14 +93,17 @@ public class ClientConnection implements  Runnable{
         try{
 
             System.out.println("Attempting to connect to server at: " + getServerAddress());
-            socket = new Socket(SERVER_ADDRESS, 9264);
-            socket.setTcpNoDelay(false);
+            socket = new DatagramSocket();
+            //socket.setTcpNoDelay(false);
             System.out.println("New Socket created");
 
-            fromServer = new ObjectInputStream(socket.getInputStream());
+            buffer = new byte[9000];
+            ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+            fromServer = new ObjectInputStream(bais);
             System.out.println("New ObjectInputStream");
 
-            toServer = new ObjectOutputStream(socket.getOutputStream());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(9000);
+            toServer = new ObjectOutputStream(baos);
             System.out.println("New ObjectOutputStream");
             toServer.flush();
 
@@ -117,7 +122,7 @@ public class ClientConnection implements  Runnable{
             player = new Player((Player)fromServer.readObject());
             toServer.writeObject(player);
             toServer.flush();
-            toServer.reset();
+            //toServer.reset();
             //Object o = fromServer.readObject();
             //System.out.println(o.getClass().toString());
             for(Object o = fromServer.readObject(); o.getClass().toString().equals("class java.awt.Rectangle");o = fromServer.readObject()) {
@@ -126,7 +131,7 @@ public class ClientConnection implements  Runnable{
             }
             toServer.writeObject(player);
             toServer.flush();
-            toServer.reset();
+            //toServer.reset();
             // Process all messages from server, according to the protocol.
             while (true) {
                 Object o;
@@ -181,8 +186,8 @@ public class ClientConnection implements  Runnable{
             try {
                 toServer.writeObject("Disconnect");
                 toServer.flush();
-                toServer.close();
-                fromServer.close();
+                //toServer.close();
+                //fromServer.close();
             }
             catch (IOException e) {
                 e.printStackTrace();

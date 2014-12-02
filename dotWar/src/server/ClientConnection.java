@@ -2,8 +2,11 @@ package server;
 
 import client.entities.Player;
 import client.entities.Wall;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 import java.io.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +19,8 @@ public class ClientConnection implements Runnable{
     private String name;
     private ObjectInputStream fromClient;
     private ObjectOutputStream toClient;
-    private Socket socket;
+    //private Socket socket;
+    private DatagramSocket socket;
     private Player p;
 
     public String getName() {
@@ -45,17 +49,22 @@ public class ClientConnection implements Runnable{
         this.toClient = toClient;
     }
 
-    public ClientConnection(Socket s) throws IOException{
+    public ClientConnection(DatagramSocket s) throws IOException{
         //System.out.println("New client constructor");
         this.socket = s;
-        this.socket.setTcpNoDelay(false);
+       // this.socket.setTcpNoDelay(false);
         /**
          * get the input and output streams associated with the socket.
          */
         try {
-            toClient = new ObjectOutputStream(socket.getOutputStream());
-            toClient.flush();
-            this.fromClient = new ObjectInputStream(socket.getInputStream());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(9000);
+            toClient = new ObjectOutputStream(baos);
+            //toClient.flush();
+            byte[] buffer = new byte[9000];
+            DatagramPacket packet = new DatagramPacket(buffer, buffer.length );
+            //socket.send(packet);
+            ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
+            this.fromClient = new ObjectInputStream(bais);
             Thread.sleep(200);
         }catch(IOException ioe){
             ioe.printStackTrace();
@@ -79,7 +88,8 @@ public class ClientConnection implements Runnable{
         try {
                 toClient.writeObject("[SERVER]: Enter Player Name:");
                 toClient.flush();
-                String objectFromClient = (String) fromClient.readObject();
+                //String objectFromClient = (String) fromClient.readObject();
+                String objectFromClient = (String)fromClient.readObject();
                 setName(objectFromClient);
 
                 if (objectFromClient.toString().equals("Disconnect")) {

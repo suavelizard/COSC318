@@ -23,10 +23,7 @@
 package server;
 
 import java.io.*;
-import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -38,7 +35,7 @@ public class Server {
     static boolean SERVER_RUNNING = false;
     static int SERVER_SOCKET = 9264;
 
-    static ServerSocket serverSocket = null;
+    static DatagramSocket serverSocket = null;
     static Socket clientSocket = null;
     //static ArrayList<Player> connectedPlayers;
     private ObjectOutputStream out;
@@ -57,13 +54,13 @@ public class Server {
 
     public Server() throws IOException {
         System.out.println("Starting Server..");
-        serverSocket = new ServerSocket(SERVER_SOCKET);
+        serverSocket = new DatagramSocket(SERVER_SOCKET);
         SERVER_RUNNING = true;
         System.out.println("Server started successfully on port: " + SERVER_SOCKET);
         new Thread(cM).start();
         try {
             while (SERVER_RUNNING) {
-                cM.newClient(serverSocket.accept());
+                cM.newClient(serverSocket);
             }
         } finally {
             serverSocket.close();
