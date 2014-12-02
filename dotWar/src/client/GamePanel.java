@@ -50,7 +50,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
     private ArrayList<Wall> wallArray = new ArrayList();
     private ArrayList<Player> playerArray = new ArrayList();
     private ArrayList<Weapon> weaponArray = new ArrayList();
-
+    private long start, elapsed, wait;
 
     private JLabel playerStats;
     private JLabel enemyStats;
@@ -127,9 +127,9 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         playerArray.add(new Player(15,15,"Bob",""+(rnd.nextInt(3))));
         playerArray.add(new Player(15,15,"Steve",""+(rnd.nextInt(3))));*/
         playerArray = cc.getPlayerArray();
-        Weapon w = new Weapon(new Position(200,500),5,15,0,Color.ORANGE);
-        Weapon w1 = new Weapon(new Position(200,500),10,5,1,Color.RED);
-        Weapon w2 = new Weapon(new Position(200,500),5,20,2,new Color(199,244,100));
+        Weapon w = new Weapon(new Position(200,500),5,12,0,Color.ORANGE);
+        Weapon w1 = new Weapon(new Position(200,500),10,8,1,Color.RED);
+        Weapon w2 = new Weapon(new Position(200,500),5,16,2,new Color(199,244,100));
         w.setPosition(new Position(300,400));
         w1.setPosition(new Position(400,200));
         w2.setPosition(new Position(200,500));
@@ -174,7 +174,11 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
             System.out.println("You Died");
             font = new Font("Tahoma", Font.PLAIN, 40);
             g.setFont(font);
-            g.drawString(player.getLives()+"lives remaining! \nClick to respawn", (this.getWidth() / 2) - 220, 600);
+            if(player.getLives() > 0) {
+                g.drawString(player.getLives() + "lives remaining! \nClick to respawn", (this.getWidth() / 2) - 220, 600);
+            }
+            if(start == 0)
+                start = System.currentTimeMillis();
             player.updatePosition();
             cc.updatePlayer(player);
         } else {
@@ -277,7 +281,7 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
                     }
                     for (Wall w : wallArray) {
                         if (checkCollisions(p, w)) {
-                            System.out.println("Projectile bounced off wall!");
+                            System.out.println("Projectile bounced off wall!" + w.getWallOrientation());
                             p.bounce(w.getWallOrientation());
                         }
                     }
@@ -391,9 +395,25 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if(!player.isAlive()){
-            System.out.println("Respawn");
-            player.respawn();
+        if(!player.isAlive()) {
+            if (player.getLives() > 0) {
+                System.out.println("Respawn");
+
+                elapsed = System.currentTimeMillis() - start;
+                try {
+                    if (elapsed > 1000) {
+
+                        player.respawn();
+                        showAll();
+                        start = 0;
+                    }
+
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
+
         }
     }
 
@@ -434,6 +454,21 @@ public class GamePanel extends JPanel implements KeyListener, MouseListener {
         }
         for(Weapon w: weaponArray){
             w.setVisible(false);
+        }
+    }
+
+    public void showAll(){
+        player.setVisible(true);
+        for (Player p:playerArray){
+            if(p.isAlive()) {
+                p.setVisible(true);
+            }
+        }
+        for(Wall w: wallArray){
+            w.setVisible(true);
+        }
+        for(Weapon w: weaponArray){
+            w.setVisible(true);
         }
     }
 }

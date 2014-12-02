@@ -37,6 +37,7 @@ import java.awt.event.MouseMotionListener;
 import java.awt.geom.Ellipse2D;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.TimerTask;
 
 public class Player extends Entity implements Serializable{
@@ -344,6 +345,10 @@ public class Player extends Entity implements Serializable{
             firedProjectiles.add(new Projectile(position, mousePos,this.getWeapon()));
 
         }
+        for(Projectile p:firedProjectiles){
+            p.move();
+            p.move();
+        }
         return firedProjectiles;
     }
     //control keys
@@ -499,6 +504,10 @@ public class Player extends Entity implements Serializable{
         //recreate player
         this.setVisible(true);
         this.setAlive(true);
+        this.setHealth(100);
+        this.setWeapon(new Weapon());
+        Random rnd = new Random();
+        this.setPosition(rnd.nextInt(400),rnd.nextInt(400));
         lives--;
     }
 }

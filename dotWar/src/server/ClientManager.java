@@ -155,46 +155,6 @@ public class ClientManager implements Runnable{
                 }
 
             }
-            /*synchronized (projectileArray) {
-                for (Iterator<Projectile> iterator = projectileArray.iterator(); iterator.hasNext(); ) {
-                    Projectile p = iterator.next();
-                    p.move();
-                    if (checkOutOfBounds(p) > 0) {
-                        System.out.println("Projectile flew out of bounds!");
-                        iterator.remove();
-                    }
-                    for (Wall w : wallArray) {
-
-                        if (checkCollisions(p, w)) {
-                            System.out.println("Projectile bounced off wall!");
-                            p.bounce(w.getWallOrientation());
-                        }
-                    }
-                    for (Player eP : players) {
-                        if (checkCollisions(p, eP)) {
-                            System.out.println("Projectile hit " + eP.getName());
-                            eP.takeDamage(p.getDamage());
-                            iterator.remove();
-                        }
-                        if (eP.getWeapon().getType() == 1) {
-                            if (Math.abs(eP.getPosition().getX() - p.getPosition().getX()) > 200 || Math.abs(eP.getPosition().getY() - p.getPosition().getY()) > 200) {
-                                iterator.remove();
-                            }
-                        } else if (eP.getWeapon().getType() == 0) {
-                            if (Math.abs(eP.getPosition().getX() - p.getPosition().getX()) > 1000 || Math.abs(eP.getPosition().getY() - p.getPosition().getY()) > 1000) {
-                                iterator.remove();
-                            }
-                        } else if (eP.getWeapon().getType() == 2) {
-                            if (Math.abs(eP.getPosition().getX() - p.getPosition().getX()) > 400 || Math.abs(eP.getPosition().getY() - p.getPosition().getY()) > 400) {
-                                iterator.remove();
-                            }
-                        }
-                    }
-
-                }
-
-
-        }*/
         elapsed = System.currentTimeMillis() - start;
         try {
            // if (elapsed < 10) {
@@ -238,9 +198,25 @@ public class ClientManager implements Runnable{
             int r = rnd.nextInt(700-25) + 25;
             int rposX = rnd.nextInt(700);
             int rposY = rnd.nextInt(900);
-            wallArray.add(new Wall(new Position(rposX,rposY),15,200,1));
-            wallArray.add(new Wall(new Position(rposX,rposY),400,15,0));
+            //wallArray.add(new Wall(new Position(rposX,rposY),15,200,1));
+            //wallArray.add(new Wall(new Position(rposX,rposY),400,15,0));
+            wallArray.addAll(wallBox(new Position(rposX,rposY),15,200));
+            wallArray.addAll(wallBox(new Position(rposX,rposY),400,15));
 
         }
+    }
+
+    public ArrayList<Wall> wallBox(Position p , int w, int h){
+        ArrayList<Wall> wall = new ArrayList<Wall>();
+        wall.add(new Wall(p,w,h));
+        if(w>h){
+            wall.add(new Wall(p,2,h,1));
+            wall.add(new Wall(new Position(p.getX()+w-2,p.getY()),2,h,0));
+        }
+        else{
+            wall.add(new Wall(p,w,2,0));
+            wall.add(new Wall(new Position(p.getX(),p.getY()+h-2),w,2,1));
+        }
+        return wall;
     }
 }

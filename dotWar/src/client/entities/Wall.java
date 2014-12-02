@@ -79,7 +79,10 @@ public class Wall extends Entity implements Serializable{
         Image img = ii.getImage();
         Image newimg = img.getScaledInstance(10, 21,  java.awt.Image.SCALE_SMOOTH);
         super.setImage(new ImageIcon(newimg).getImage());
-        this.setWallOrientation(0);
+        if(r.getWidth() > r.getHeight())
+            this.setWallOrientation(1);
+        else
+            this.setWallOrientation(0);
     }
 
     public void draw(Graphics g) {
