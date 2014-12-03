@@ -88,7 +88,7 @@ public class ClientManager implements Runnable{
                 Thread.sleep(200);
 
                 Random rnd = new Random(System.currentTimeMillis());
-                Player p = new Player(15, 15, ccArr.get(ccArr.size() - 1).getName(), "" + (rnd.nextInt(3)));
+                Player p = new Player(20, 20, ccArr.get(ccArr.size() - 1).getName(), "" + (rnd.nextInt(7)-1));
                 p.setPosition(rnd.nextInt(400), rnd.nextInt(400));
                 //playerArray.add(p.toString());
 

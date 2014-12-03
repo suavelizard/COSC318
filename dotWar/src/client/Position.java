@@ -89,7 +89,12 @@ public class Position implements Serializable{
         System.out.println("Doing math: "+this.toString()+"  "+ p.toString() + " = "+pNew.toString());
         return pNew;
     }
-
+    public boolean equals(Position p){
+        if(this.getX() == p.getX() && this.getY() == p.getY()){
+            return true;
+        }
+        return false;
+    }
     public void setPosition(Position p){
         this.x = p.getX();
         this.y = p.getY();
